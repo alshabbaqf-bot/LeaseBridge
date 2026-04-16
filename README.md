@@ -1,2 +1,2 @@
-# Loomis Management
+# LeaseBridge
 Property Leasing &amp; Maintenance Platform
