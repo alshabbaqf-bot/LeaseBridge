@@ -19,6 +19,10 @@ public partial class Notification
 
     public DateTime CreatedAt { get; set; }
 
+    public string NotificationType { get; set; } = null!;
+
+    public string? TargetUrl { get; set; }
+
     public virtual Application? Application { get; set; }
 
     public virtual MaintenanceRequest? MaintenanceRequest { get; set; }

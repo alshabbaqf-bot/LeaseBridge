@@ -15,5 +15,9 @@ public partial class Feedback
 
     public DateTime CreatedAt { get; set; }
 
+    public int? RequestId { get; set; }
+
+    public virtual MaintenanceRequest? Request { get; set; }
+
     public virtual AppUser Tenant { get; set; } = null!;
 }

@@ -15,6 +15,10 @@ public partial class Application
 
     public int StatusId { get; set; }
 
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ApplicationStatus Status { get; set; } = null!;

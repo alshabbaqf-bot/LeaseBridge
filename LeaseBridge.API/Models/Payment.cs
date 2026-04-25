@@ -19,6 +19,12 @@ public partial class Payment
 
     public DateTime DueDate { get; set; }
 
+    public string? TransactionReference { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual Lease Lease { get; set; } = null!;
 
     public virtual PaymentMethod Method { get; set; } = null!;

@@ -11,5 +11,7 @@ public partial class MaintenanceStatus
 
     public virtual ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
 
-    public virtual ICollection<MaintenanceUpdate> MaintenanceUpdates { get; set; } = new List<MaintenanceUpdate>();
+    public virtual ICollection<MaintenanceUpdate> MaintenanceUpdateNewStatuses { get; set; } = new List<MaintenanceUpdate>();
+
+    public virtual ICollection<MaintenanceUpdate> MaintenanceUpdateOldStatuses { get; set; } = new List<MaintenanceUpdate>();
 }

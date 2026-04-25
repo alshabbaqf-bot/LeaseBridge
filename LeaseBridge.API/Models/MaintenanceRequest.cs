@@ -27,9 +27,15 @@ public partial class MaintenanceRequest
 
     public DateTime? UpdatedAt { get; set; }
 
+    public DateTime? CompletedAt { get; set; }
+
     public virtual MaintenanceCategory Category { get; set; } = null!;
 
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
     public virtual ICollection<MaintenanceAssignment> MaintenanceAssignments { get; set; } = new List<MaintenanceAssignment>();
+
+    public virtual ICollection<MaintenanceAttachment> MaintenanceAttachments { get; set; } = new List<MaintenanceAttachment>();
 
     public virtual ICollection<MaintenanceUpdate> MaintenanceUpdates { get; set; } = new List<MaintenanceUpdate>();
 

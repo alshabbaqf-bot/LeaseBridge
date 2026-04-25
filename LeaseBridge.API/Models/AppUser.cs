@@ -15,8 +15,6 @@ public partial class AppUser
 
     public string PhoneNumber { get; set; } = null!;
 
-    public int RoleId { get; set; }
-
     public bool? IsAvailable { get; set; }
 
     public string? IdentityUserId { get; set; }
@@ -31,9 +29,11 @@ public partial class AppUser
 
     public virtual ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
 
+    public virtual ICollection<MaintenanceUpdate> MaintenanceUpdates { get; set; } = new List<MaintenanceUpdate>();
+
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual ICollection<Property> Properties { get; set; } = new List<Property>();
 
-    public virtual ICollection<StaffSkill> StaffSkills { get; set; } = new List<StaffSkill>();
+    public virtual ICollection<Skill> Skills { get; set; } = new List<Skill>();
 }
