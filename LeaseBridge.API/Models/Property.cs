@@ -13,5 +13,9 @@ public partial class Property
 
     public string? Description { get; set; }
 
+    public int ManagerId { get; set; }
+
+    public virtual AppUser Manager { get; set; } = null!;
+
     public virtual ICollection<Unit> Units { get; set; } = new List<Unit>();
 }

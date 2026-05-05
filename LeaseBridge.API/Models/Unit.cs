@@ -17,6 +17,8 @@ public partial class Unit
 
     public int StatusId { get; set; }
 
+    public decimal? Size { get; set; }
+
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
     public virtual ICollection<Lease> Leases { get; set; } = new List<Lease>();
@@ -28,4 +30,8 @@ public partial class Unit
     public virtual UnitStatus Status { get; set; } = null!;
 
     public virtual UnitType Type { get; set; } = null!;
+
+    public virtual ICollection<UnitImage> UnitImages { get; set; } = new List<UnitImage>();
+
+    public virtual ICollection<Amenity> Amenities { get; set; } = new List<Amenity>();
 }

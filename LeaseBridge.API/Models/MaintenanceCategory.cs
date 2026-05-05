@@ -10,6 +10,4 @@ public partial class MaintenanceCategory
     public string Name { get; set; } = null!;
 
     public virtual ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
-
-    public virtual ICollection<StaffSkill> StaffSkills { get; set; } = new List<StaffSkill>();
 }
