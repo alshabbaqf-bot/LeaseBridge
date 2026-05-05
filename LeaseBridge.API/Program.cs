@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using LeaseBridge.API.Models;
+using LeaseBridge.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 //Database

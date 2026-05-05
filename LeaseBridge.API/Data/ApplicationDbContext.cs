@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using LeaseBridge.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LeaseBridge.API.Models;
+namespace LeaseBridge.API.Data;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -75,9 +76,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<UnitType> UnitTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=LeaseBridgeDB;Trusted_Connection=True;");
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -587,8 +586,111 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
+        // SEED DATA
+ 
+        //Unit Types
+        modelBuilder.Entity<UnitType>().HasData(
+            new UnitType { TypeId = 1, Name = "Apartment" },
+            new UnitType { TypeId = 2, Name = "Studio" },
+            new UnitType { TypeId = 3, Name = "Villa" },
+            new UnitType { TypeId = 4, Name = "Office" }
+        );
+
+
+        // Unit Status
+        modelBuilder.Entity<UnitStatus>().HasData(
+            new UnitStatus { StatusId = 1, Name = "Available" },
+            new UnitStatus { StatusId = 2, Name = "Reserved" },
+            new UnitStatus { StatusId = 3, Name = "Occupied" },
+            new UnitStatus { StatusId = 4, Name = "UnderMaintenance" },
+            new UnitStatus { StatusId = 5, Name = "Pending Inspection" }
+        );
+
+
+        // Payment Status
+        modelBuilder.Entity<PaymentStatus>().HasData(
+            new PaymentStatus { StatusId = 1, Name = "Pending" },
+            new PaymentStatus { StatusId = 2, Name = "Partial" },
+            new PaymentStatus { StatusId = 3, Name = "Paid" },
+            new PaymentStatus { StatusId = 4, Name = "Overdue" }
+        );
+
+
+        // Payment Methods
+        modelBuilder.Entity<PaymentMethod>().HasData(
+            new PaymentMethod { MethodId = 1, Name = "Cash" },
+            new PaymentMethod { MethodId = 2, Name = "Card" },
+            new PaymentMethod { MethodId = 3, Name = "Bank Transfer" },
+            new PaymentMethod { MethodId = 4, Name = "BenefitPay" }
+        );
+
+
+        //Maintenance Status
+        modelBuilder.Entity<MaintenanceStatus>().HasData(
+            new MaintenanceStatus { StatusId = 1, Name = "Submitted" },
+            new MaintenanceStatus { StatusId = 2, Name = "Assigned" },
+            new MaintenanceStatus { StatusId = 3, Name = "In Progress" },
+            new MaintenanceStatus { StatusId = 4, Name = "Resolved" },
+            new MaintenanceStatus { StatusId = 5, Name = "Closed" }
+        );
+
+
+        //Maintenance Categories
+        modelBuilder.Entity<MaintenanceCategory>().HasData(
+            new MaintenanceCategory { CategoryId = 1, Name = "Plumbing" },
+            new MaintenanceCategory { CategoryId = 2, Name = "Electrical" },
+            new MaintenanceCategory { CategoryId = 3, Name = "HVAC" },
+            new MaintenanceCategory { CategoryId = 4, Name = "General Maintenance" }
+        );
+
+
+        //Priority Types
+        modelBuilder.Entity<PriorityType>().HasData(
+            new PriorityType { PriorityId = 1, Name = "Low" },
+            new PriorityType { PriorityId = 2, Name = "Medium" },
+            new PriorityType { PriorityId = 3, Name = "High" }
+        );
+
+
+        //Skills
+        modelBuilder.Entity<Skill>().HasData(
+            new Skill { SkillId = 1, Name = "Plumbing" },
+            new Skill { SkillId = 2, Name = "Electrical" },
+            new Skill { SkillId = 3, Name = "HVAC" },
+            new Skill { SkillId = 4, Name = "Carpentry" },
+            new Skill { SkillId = 5, Name = "Painting" }
+        );
+
+
+        //Amenities
+        modelBuilder.Entity<Amenity>().HasData(
+            new Amenity { AmenityId = 1, Name = "Parking" },
+            new Amenity { AmenityId = 2, Name = "Gym" },
+            new Amenity { AmenityId = 3, Name = "Pool" },
+            new Amenity { AmenityId = 4, Name = "WiFi" }
+        );
+
+        //Application Status
+        modelBuilder.Entity<ApplicationStatus>().HasData(
+            new ApplicationStatus { StatusId = 1, Name = "Submitted" },
+            new ApplicationStatus { StatusId = 2, Name = "Screening" },
+            new ApplicationStatus { StatusId = 3, Name = "Approved" },
+            new ApplicationStatus { StatusId = 4, Name = "Rejected" }
+        );
+
+        //Lease Status
+        
+        modelBuilder.Entity<LeaseStatus>().HasData(
+            new LeaseStatus { StatusId = 1, Name = "Draft" },
+            new LeaseStatus { StatusId = 2, Name = "Active" },
+            new LeaseStatus { StatusId = 3, Name = "Expired" },
+            new LeaseStatus { StatusId = 4, Name = "Renewal" },
+            new LeaseStatus { StatusId = 5, Name = "Terminated" }
+        );
+
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
