@@ -1,3 +1,4 @@
+using LeaseBridge.API.Data;
 using LeaseBridge.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
