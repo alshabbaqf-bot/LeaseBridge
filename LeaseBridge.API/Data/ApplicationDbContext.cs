@@ -614,8 +614,772 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             new LeaseStatus { StatusId = 5, Name = "Terminated" }
         );
 
-        
+        // Properties
+        modelBuilder.Entity<Property>().HasData(
 
+            new Property
+            {
+                PropertyId = 1,
+                Name = "Palm Heights",
+                Location = "Manama",
+                Description = "Luxury residential apartments",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 2,
+                Name = "Seef Towers",
+                Location = "Seef",
+                Description = "Modern high-rise residential building",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 3,
+                Name = "Marina Residences",
+                Location = "Amwaj Islands",
+                Description = "Waterfront luxury residences",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 4,
+                Name = "Business Bay Offices",
+                Location = "Diplomatic Area",
+                Description = "Premium office spaces",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 5,
+                Name = "Green Gardens",
+                Location = "Riffa",
+                Description = "Family-friendly villa compound",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 6,
+                Name = "City View Apartments",
+                Location = "Juffair",
+                Description = "Affordable city apartments",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 7,
+                Name = "Pearl Residency",
+                Location = "Muharraq",
+                Description = "Residential apartments near airport",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 8,
+                Name = "Skyline Plaza",
+                Location = "Seef",
+                Description = "Mixed-use commercial property",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 9,
+                Name = "Lagoon Villas",
+                Location = "Durrat Al Bahrain",
+                Description = "Luxury beachfront villas",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 10,
+                Name = "University Residences",
+                Location = "Isa Town",
+                Description = "Student accommodation complex",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 11,
+                Name = "Al Naseem Tower",
+                Location = "Manama",
+                Description = "High-end residential tower",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 12,
+                Name = "Harbor Offices",
+                Location = "Bahrain Bay",
+                Description = "Corporate office building",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 13,
+                Name = "Sunset Compound",
+                Location = "Saar",
+                Description = "Private residential compound",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 14,
+                Name = "Royal Suites",
+                Location = "Juffair",
+                Description = "Luxury serviced apartments",
+                ManagerId = 1
+            },
+
+            new Property
+            {
+                PropertyId = 15,
+                Name = "Tech Park Offices",
+                Location = "Hidd",
+                Description = "Technology and startup offices",
+                ManagerId = 1
+            }
+        );
+
+        // Units
+        modelBuilder.Entity<Unit>().HasData(
+
+            new Unit
+            {
+                UnitId = 1,
+                PropertyId = 1,
+                UnitNumber = "A101",
+                TypeId = 1,
+                RentAmount = 450,
+                StatusId = 1,
+                Size = 120
+            },
+
+            new Unit
+            {
+                UnitId = 2,
+                PropertyId = 1,
+                UnitNumber = "A102",
+                TypeId = 1,
+                RentAmount = 470,
+                StatusId = 2,
+                Size = 125
+            },
+
+            new Unit
+            {
+                UnitId = 3,
+                PropertyId = 2,
+                UnitNumber = "B201",
+                TypeId = 2,
+                RentAmount = 350,
+                StatusId = 1,
+                Size = 90
+            },
+
+            new Unit
+            {
+                UnitId = 4,
+                PropertyId = 2,
+                UnitNumber = "B202",
+                TypeId = 2,
+                RentAmount = 360,
+                StatusId = 3,
+                Size = 92
+            },
+
+            new Unit
+            {
+                UnitId = 5,
+                PropertyId = 3,
+                UnitNumber = "C301",
+                TypeId = 3,
+                RentAmount = 1200,
+                StatusId = 1,
+                Size = 350
+            },
+
+            new Unit
+            {
+                UnitId = 6,
+                PropertyId = 3,
+                UnitNumber = "C302",
+                TypeId = 3,
+                RentAmount = 1250,
+                StatusId = 2,
+                Size = 360
+            },
+
+            new Unit
+            {
+                UnitId = 7,
+                PropertyId = 4,
+                UnitNumber = "OFF-1",
+                TypeId = 4,
+                RentAmount = 800,
+                StatusId = 1,
+                Size = 200
+            },
+
+            new Unit
+            {
+                UnitId = 8,
+                PropertyId = 4,
+                UnitNumber = "OFF-2",
+                TypeId = 4,
+                RentAmount = 850,
+                StatusId = 4,
+                Size = 220
+            },
+
+            new Unit
+            {
+                UnitId = 9,
+                PropertyId = 5,
+                UnitNumber = "V101",
+                TypeId = 3,
+                RentAmount = 1500,
+                StatusId = 1,
+                Size = 400
+            },
+
+            new Unit
+            {
+                UnitId = 10,
+                PropertyId = 6,
+                UnitNumber = "D401",
+                TypeId = 1,
+                RentAmount = 500,
+                StatusId = 2,
+                Size = 130
+            },
+
+            new Unit
+            {
+                UnitId = 11,
+                PropertyId = 7,
+                UnitNumber = "E501",
+                TypeId = 2,
+                RentAmount = 320,
+                StatusId = 1,
+                Size = 85
+            },
+
+            new Unit
+            {
+                UnitId = 12,
+                PropertyId = 8,
+                UnitNumber = "COM-1",
+                TypeId = 4,
+                RentAmount = 950,
+                StatusId = 3,
+                Size = 250
+            },
+
+            new Unit
+            {
+                UnitId = 13,
+                PropertyId = 9,
+                UnitNumber = "L101",
+                TypeId = 3,
+                RentAmount = 1800,
+                StatusId = 1,
+                Size = 500
+            },
+
+            new Unit
+            {
+                UnitId = 14,
+                PropertyId = 10,
+                UnitNumber = "STU-1",
+                TypeId = 2,
+                RentAmount = 280,
+                StatusId = 1,
+                Size = 70
+            },
+
+            new Unit
+            {
+                UnitId = 15,
+                PropertyId = 11,
+                UnitNumber = "F601",
+                TypeId = 1,
+                RentAmount = 650,
+                StatusId = 2,
+                Size = 150
+            }
+        );
+
+        // Leases
+        modelBuilder.Entity<Lease>().HasData(
+
+            new Lease
+            {
+                LeaseId = 1,
+                TenantId = 3,
+                UnitId = 1,
+                StartDate = new DateTime(2026, 1, 1),
+                EndDate = new DateTime(2026, 12, 31),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 2,
+                TenantId = 4,
+                UnitId = 2,
+                StartDate = new DateTime(2026, 2, 1),
+                EndDate = new DateTime(2027, 1, 31),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 3,
+                TenantId = 5,
+                UnitId = 3,
+                StartDate = new DateTime(2025, 6, 1),
+                EndDate = new DateTime(2026, 5, 31),
+                StatusId = 4,
+                IsActive = false
+            },
+
+            new Lease
+            {
+                LeaseId = 4,
+                TenantId = 6,
+                UnitId = 4,
+                StartDate = new DateTime(2026, 3, 1),
+                EndDate = new DateTime(2027, 2, 28),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 5,
+                TenantId = 7,
+                UnitId = 5,
+                StartDate = new DateTime(2025, 1, 1),
+                EndDate = new DateTime(2025, 12, 31),
+                StatusId = 5,
+                IsActive = false
+            },
+
+            new Lease
+            {
+                LeaseId = 6,
+                TenantId = 8,
+                UnitId = 6,
+                StartDate = new DateTime(2026, 4, 1),
+                EndDate = new DateTime(2027, 3, 31),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 7,
+                TenantId = 9,
+                UnitId = 7,
+                StartDate = new DateTime(2026, 5, 1),
+                EndDate = new DateTime(2027, 4, 30),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 8,
+                TenantId = 10,
+                UnitId = 8,
+                StartDate = new DateTime(2025, 7, 1),
+                EndDate = new DateTime(2026, 6, 30),
+                StatusId = 3,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 9,
+                TenantId = 11,
+                UnitId = 9,
+                StartDate = new DateTime(2026, 8, 1),
+                EndDate = new DateTime(2027, 7, 31),
+                StatusId = 2,
+                IsActive = true
+            },
+
+            new Lease
+            {
+                LeaseId = 10,
+                TenantId = 12,
+                UnitId = 10,
+                StartDate = new DateTime(2025, 10, 1),
+                EndDate = new DateTime(2026, 9, 30),
+                StatusId = 1,
+                IsActive = false
+            }
+        );
+
+        // Payments
+        modelBuilder.Entity<Payment>().HasData(
+
+            new Payment
+            {
+                PaymentId = 1,
+                LeaseId = 1,
+                MethodId = 1,
+                Amount = 450,
+                PaymentDate = new DateTime(2026, 1, 5),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 1, 1),
+                TransactionReference = "TXN-1001",
+                CreatedAt = new DateTime(2026, 1, 5)
+            },
+
+            new Payment
+            {
+                PaymentId = 2,
+                LeaseId = 2,
+                MethodId = 2,
+                Amount = 470,
+                PaymentDate = new DateTime(2026, 2, 3),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 2, 1),
+                TransactionReference = "TXN-1002",
+                CreatedAt = new DateTime(2026, 2, 3)
+            },
+
+            new Payment
+            {
+                PaymentId = 3,
+                LeaseId = 3,
+                MethodId = 3,
+                Amount = 350,
+                PaymentDate = null,
+                StatusId = 1,
+                DueDate = new DateTime(2026, 3, 1),
+                TransactionReference = "TXN-1003",
+                CreatedAt = new DateTime(2026, 2, 25)
+            },
+
+            new Payment
+            {
+                PaymentId = 4,
+                LeaseId = 4,
+                MethodId = 1,
+                Amount = 360,
+                PaymentDate = new DateTime(2026, 3, 7),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 3, 1),
+                TransactionReference = "TXN-1004",
+                CreatedAt = new DateTime(2026, 3, 7)
+            },
+
+            new Payment
+            {
+                PaymentId = 5,
+                LeaseId = 5,
+                MethodId = 2,
+                Amount = 1200,
+                PaymentDate = null,
+                StatusId = 4,
+                DueDate = new DateTime(2026, 4, 1),
+                TransactionReference = "TXN-1005",
+                CreatedAt = new DateTime(2026, 3, 28)
+            },
+
+            new Payment
+            {
+                PaymentId = 6,
+                LeaseId = 6,
+                MethodId = 3,
+                Amount = 1250,
+                PaymentDate = new DateTime(2026, 4, 4),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 4, 1),
+                TransactionReference = "TXN-1006",
+                CreatedAt = new DateTime(2026, 4, 4)
+            },
+
+            new Payment
+            {
+                PaymentId = 7,
+                LeaseId = 7,
+                MethodId = 1,
+                Amount = 800,
+                PaymentDate = null,
+                StatusId = 1,
+                DueDate = new DateTime(2026, 5, 1),
+                TransactionReference = "TXN-1007",
+                CreatedAt = new DateTime(2026, 4, 27)
+            },
+
+            new Payment
+            {
+                PaymentId = 8,
+                LeaseId = 8,
+                MethodId = 2,
+                Amount = 850,
+                PaymentDate = new DateTime(2026, 5, 6),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 5, 1),
+                TransactionReference = "TXN-1008",
+                CreatedAt = new DateTime(2026, 5, 6)
+            },
+
+            new Payment
+            {
+                PaymentId = 9,
+                LeaseId = 9,
+                MethodId = 3,
+                Amount = 1500,
+                PaymentDate = null,
+                StatusId = 3,
+                DueDate = new DateTime(2026, 6, 1),
+                TransactionReference = "TXN-1009",
+                CreatedAt = new DateTime(2026, 5, 29)
+            },
+
+            new Payment
+            {
+                PaymentId = 10,
+                LeaseId = 10,
+                MethodId = 1,
+                Amount = 500,
+                PaymentDate = new DateTime(2026, 6, 2),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 6, 1),
+                TransactionReference = "TXN-1010",
+                CreatedAt = new DateTime(2026, 6, 2)
+            },
+
+            new Payment
+            {
+                PaymentId = 11,
+                LeaseId = 1,
+                MethodId = 2,
+                Amount = 450,
+                PaymentDate = new DateTime(2026, 2, 5),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 2, 1),
+                TransactionReference = "TXN-1011",
+                CreatedAt = new DateTime(2026, 2, 5)
+            },
+
+            new Payment
+            {
+                PaymentId = 12,
+                LeaseId = 2,
+                MethodId = 3,
+                Amount = 470,
+                PaymentDate = null,
+                StatusId = 4,
+                DueDate = new DateTime(2026, 3, 1),
+                TransactionReference = "TXN-1012",
+                CreatedAt = new DateTime(2026, 2, 27)
+            },
+
+            new Payment
+            {
+                PaymentId = 13,
+                LeaseId = 4,
+                MethodId = 1,
+                Amount = 360,
+                PaymentDate = new DateTime(2026, 4, 3),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 4, 1),
+                TransactionReference = "TXN-1013",
+                CreatedAt = new DateTime(2026, 4, 3)
+            },
+
+            new Payment
+            {
+                PaymentId = 14,
+                LeaseId = 6,
+                MethodId = 2,
+                Amount = 1250,
+                PaymentDate = null,
+                StatusId = 1,
+                DueDate = new DateTime(2026, 5, 1),
+                TransactionReference = "TXN-1014",
+                CreatedAt = new DateTime(2026, 4, 28)
+            },
+
+            new Payment
+            {
+                PaymentId = 15,
+                LeaseId = 8,
+                MethodId = 3,
+                Amount = 850,
+                PaymentDate = new DateTime(2026, 6, 4),
+                StatusId = 2,
+                DueDate = new DateTime(2026, 6, 1),
+                TransactionReference = "TXN-1015",
+                CreatedAt = new DateTime(2026, 6, 4)
+            }
+        );
+
+        // Maintenance Requests
+        modelBuilder.Entity<MaintenanceRequest>().HasData(
+
+            new MaintenanceRequest
+            {
+                RequestId = 1,
+                TenantId = 3,
+                UnitId = 1,
+                CategoryId = 1, // Plumbing
+                TicketNumber = "MR-1001",
+                Title = "Leaking kitchen sink",
+                Description = "Water leaking under the sink cabinet.",
+                PriorityId = 2,
+                StatusId = 1,
+                CreatedAt = new DateTime(2026, 1, 5)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 2,
+                TenantId = 4,
+                UnitId = 2,
+                CategoryId = 2, // Electrical
+                TicketNumber = "MR-1002",
+                Title = "Power outage in bedroom",
+                Description = "Bedroom outlets are not working.",
+                PriorityId = 3,
+                StatusId = 2,
+                CreatedAt = new DateTime(2026, 1, 8)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 3,
+                TenantId = 5,
+                UnitId = 3,
+                CategoryId = 3, // HVAC
+                TicketNumber = "MR-1003",
+                Title = "Air conditioner leaking",
+                Description = "AC leaking water continuously.",
+                PriorityId = 2,
+                StatusId = 1,
+                CreatedAt = new DateTime(2026, 1, 12)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 4,
+                TenantId = 6,
+                UnitId = 4,
+                CategoryId = 1, // Plumbing
+                TicketNumber = "MR-1004",
+                Title = "Bathroom pipe blockage",
+                Description = "Drain water backing up.",
+                PriorityId = 3,
+                StatusId = 2,
+                CreatedAt = new DateTime(2026, 1, 15)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 5,
+                TenantId = 7,
+                UnitId = 5,
+                CategoryId = 4, // General Maintenance
+                TicketNumber = "MR-1005",
+                Title = "Broken door lock",
+                Description = "Front door lock jammed.",
+                PriorityId = 2,
+                StatusId = 3,
+                CreatedAt = new DateTime(2026, 1, 18),
+                CompletedAt = new DateTime(2026, 1, 20)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 6,
+                TenantId = 8,
+                UnitId = 6,
+                CategoryId = 2, // Electrical
+                TicketNumber = "MR-1006",
+                Title = "Flickering lights",
+                Description = "Living room lights flickering.",
+                PriorityId = 1,
+                StatusId = 1,
+                CreatedAt = new DateTime(2026, 1, 21)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 7,
+                TenantId = 9,
+                UnitId = 7,
+                CategoryId = 4, // General Maintenance
+                TicketNumber = "MR-1007",
+                Title = "Loose cabinet door",
+                Description = "Kitchen cabinet hinge is loose.",
+                PriorityId = 1,
+                StatusId = 2,
+                CreatedAt = new DateTime(2026, 1, 23)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 8,
+                TenantId = 10,
+                UnitId = 8,
+                CategoryId = 3, // HVAC
+                TicketNumber = "MR-1008",
+                Title = "AC not cooling",
+                Description = "Cooling system stopped working.",
+                PriorityId = 3,
+                StatusId = 1,
+                CreatedAt = new DateTime(2026, 1, 25)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 9,
+                TenantId = 11,
+                UnitId = 9,
+                CategoryId = 4, // General Maintenance
+                TicketNumber = "MR-1009",
+                Title = "Wall repaint request",
+                Description = "Bedroom wall paint peeling.",
+                PriorityId = 1,
+                StatusId = 3,
+                CreatedAt = new DateTime(2026, 1, 27),
+                CompletedAt = new DateTime(2026, 1, 30)
+            },
+
+            new MaintenanceRequest
+            {
+                RequestId = 10,
+                TenantId = 12,
+                UnitId = 10,
+                CategoryId = 1, // Plumbing
+                TicketNumber = "MR-1010",
+                Title = "Toilet leaking",
+                Description = "Water leaking around toilet base.",
+                PriorityId = 2,
+                StatusId = 1,
+                CreatedAt = new DateTime(2026, 2, 1)
+            }
+        );
         OnModelCreatingPartial(modelBuilder);
     }
 
