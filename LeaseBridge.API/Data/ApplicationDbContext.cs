@@ -1380,6 +1380,192 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 CreatedAt = new DateTime(2026, 2, 1)
             }
         );
+
+        modelBuilder.Entity<MaintenanceAssignment>().HasData(
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 1,
+        RequestId = 1,
+        StaffId = 13,
+        AssignedDate = new DateTime(2026, 1, 5)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 2,
+        RequestId = 2,
+        StaffId = 14,
+        AssignedDate = new DateTime(2026, 1, 8)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 3,
+        RequestId = 3,
+        StaffId = 15,
+        AssignedDate = new DateTime(2026, 1, 12)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 4,
+        RequestId = 4,
+        StaffId = 16,
+        AssignedDate = new DateTime(2026, 1, 15)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 5,
+        RequestId = 5,
+        StaffId = 17,
+        AssignedDate = new DateTime(2026, 1, 18)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 6,
+        RequestId = 6,
+        StaffId = 13,
+        AssignedDate = new DateTime(2026, 1, 21)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 7,
+        RequestId = 7,
+        StaffId = 14,
+        AssignedDate = new DateTime(2026, 1, 23)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 8,
+        RequestId = 8,
+        StaffId = 15,
+        AssignedDate = new DateTime(2026, 1, 25)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 9,
+        RequestId = 9,
+        StaffId = 16,
+        AssignedDate = new DateTime(2026, 1, 27)
+    },
+
+    new MaintenanceAssignment
+    {
+        AssignmentId = 10,
+        RequestId = 10,
+        StaffId = 17,
+        AssignedDate = new DateTime(2026, 2, 1)
+    }
+);
+
+        modelBuilder.Entity<Application>().HasData(
+
+    new Application
+    {
+        ApplicationId = 1,
+        TenantId = 3,
+        UnitId = 11,
+        ApplicationDate = new DateTime(2026, 1, 5),
+        StatusId = 1,
+        CreatedAt = new DateTime(2026, 1, 5)
+    },
+
+    new Application
+    {
+        ApplicationId = 2,
+        TenantId = 4,
+        UnitId = 12,
+        ApplicationDate = new DateTime(2026, 1, 7),
+        StatusId = 2,
+        CreatedAt = new DateTime(2026, 1, 7)
+    },
+
+    new Application
+    {
+        ApplicationId = 3,
+        TenantId = 5,
+        UnitId = 13,
+        ApplicationDate = new DateTime(2026, 1, 10),
+        StatusId = 3,
+        CreatedAt = new DateTime(2026, 1, 10)
+    },
+
+    new Application
+    {
+        ApplicationId = 4,
+        TenantId = 6,
+        UnitId = 14,
+        ApplicationDate = new DateTime(2026, 1, 12),
+        StatusId = 1,
+        CreatedAt = new DateTime(2026, 1, 12)
+    },
+
+    new Application
+    {
+        ApplicationId = 5,
+        TenantId = 7,
+        UnitId = 15,
+        ApplicationDate = new DateTime(2026, 1, 15),
+        StatusId = 2,
+        CreatedAt = new DateTime(2026, 1, 15)
+    },
+
+    new Application
+    {
+        ApplicationId = 6,
+        TenantId = 8,
+        UnitId = 11,
+        ApplicationDate = new DateTime(2026, 1, 18),
+        StatusId = 3,
+        CreatedAt = new DateTime(2026, 1, 18)
+    },
+
+    new Application
+    {
+        ApplicationId = 7,
+        TenantId = 9,
+        UnitId = 12,
+        ApplicationDate = new DateTime(2026, 1, 20),
+        StatusId = 1,
+        CreatedAt = new DateTime(2026, 1, 20)
+    },
+
+    new Application
+    {
+        ApplicationId = 8,
+        TenantId = 10,
+        UnitId = 13,
+        ApplicationDate = new DateTime(2026, 1, 22),
+        StatusId = 2,
+        CreatedAt = new DateTime(2026, 1, 22)
+    },
+
+    new Application
+    {
+        ApplicationId = 9,
+        TenantId = 11,
+        UnitId = 14,
+        ApplicationDate = new DateTime(2026, 1, 25),
+        StatusId = 1,
+        CreatedAt = new DateTime(2026, 1, 25)
+    },
+
+    new Application
+    {
+        ApplicationId = 10,
+        TenantId = 12,
+        UnitId = 15,
+        ApplicationDate = new DateTime(2026, 1, 28),
+        StatusId = 3,
+        CreatedAt = new DateTime(2026, 1, 28)
+    }
+);
         OnModelCreatingPartial(modelBuilder);
     }
 

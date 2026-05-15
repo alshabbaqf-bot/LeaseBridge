@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260515082323_SeedMaintenanceAssignments")]
+    partial class SeedMaintenanceAssignments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,98 +152,6 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Applications");
-
-                    b.HasData(
-                        new
-                        {
-                            ApplicationId = 1,
-                            ApplicationDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 3,
-                            UnitId = 11
-                        },
-                        new
-                        {
-                            ApplicationId = 2,
-                            ApplicationDate = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 4,
-                            UnitId = 12
-                        },
-                        new
-                        {
-                            ApplicationId = 3,
-                            ApplicationDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 5,
-                            UnitId = 13
-                        },
-                        new
-                        {
-                            ApplicationId = 4,
-                            ApplicationDate = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 6,
-                            UnitId = 14
-                        },
-                        new
-                        {
-                            ApplicationId = 5,
-                            ApplicationDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 7,
-                            UnitId = 15
-                        },
-                        new
-                        {
-                            ApplicationId = 6,
-                            ApplicationDate = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 8,
-                            UnitId = 11
-                        },
-                        new
-                        {
-                            ApplicationId = 7,
-                            ApplicationDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 9,
-                            UnitId = 12
-                        },
-                        new
-                        {
-                            ApplicationId = 8,
-                            ApplicationDate = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 10,
-                            UnitId = 13
-                        },
-                        new
-                        {
-                            ApplicationId = 9,
-                            ApplicationDate = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 11,
-                            UnitId = 14
-                        },
-                        new
-                        {
-                            ApplicationId = 10,
-                            ApplicationDate = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 12,
-                            UnitId = 15
-                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.ApplicationStatus", b =>
