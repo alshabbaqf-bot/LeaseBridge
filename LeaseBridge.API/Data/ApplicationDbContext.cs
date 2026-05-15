@@ -66,6 +66,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public virtual DbSet<UnitStatus> UnitStatuses { get; set; }
 
     public virtual DbSet<UnitType> UnitTypes { get; set; }
+    
 
 
 
@@ -1566,6 +1567,41 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         CreatedAt = new DateTime(2026, 1, 28)
     }
 );
+        modelBuilder.Entity<Unit>()
+    .HasMany(u => u.Amenities)
+    .WithMany(a => a.Units)
+    .UsingEntity(j => j.HasData(
+
+        new { UnitId = 1, AmenityId = 1 },
+        new { UnitId = 1, AmenityId = 4 },
+
+        new { UnitId = 2, AmenityId = 2 },
+        new { UnitId = 2, AmenityId = 4 },
+
+        new { UnitId = 3, AmenityId = 1 },
+        new { UnitId = 3, AmenityId = 3 },
+
+        new { UnitId = 4, AmenityId = 2 },
+        new { UnitId = 4, AmenityId = 3 },
+        new { UnitId = 4, AmenityId = 4 },
+
+        new { UnitId = 5, AmenityId = 1 },
+
+        new { UnitId = 6, AmenityId = 4 },
+
+        new { UnitId = 7, AmenityId = 1 },
+        new { UnitId = 7, AmenityId = 2 },
+
+        new { UnitId = 8, AmenityId = 3 },
+
+        new { UnitId = 9, AmenityId = 1 },
+        new { UnitId = 9, AmenityId = 4 },
+
+        new { UnitId = 10, AmenityId = 2 },
+        new { UnitId = 10, AmenityId = 3 }
+
+    ));
+     
         OnModelCreatingPartial(modelBuilder);
     }
 
