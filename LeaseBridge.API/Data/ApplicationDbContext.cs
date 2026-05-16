@@ -426,7 +426,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Properties_Manager");
         });
-
+        
         modelBuilder.Entity<Skill>(entity =>
         {
             entity.HasKey(e => e.SkillId).HasName("PK__Skills__DFA0918772BE8E6B");
@@ -606,7 +606,6 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         );
 
         //Lease Status
-        
         modelBuilder.Entity<LeaseStatus>().HasData(
             new LeaseStatus { StatusId = 1, Name = "Draft" },
             new LeaseStatus { StatusId = 2, Name = "Active" },
@@ -615,7 +614,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             new LeaseStatus { StatusId = 5, Name = "Terminated" }
         );
 
-        // Properties
+        //Properties
         modelBuilder.Entity<Property>().HasData(
 
             new Property
@@ -624,7 +623,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Palm Heights",
                 Location = "Manama",
                 Description = "Luxury residential apartments",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -633,7 +632,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Seef Towers",
                 Location = "Seef",
                 Description = "Modern high-rise residential building",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -642,7 +641,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Marina Residences",
                 Location = "Amwaj Islands",
                 Description = "Waterfront luxury residences",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -651,7 +650,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Business Bay Offices",
                 Location = "Diplomatic Area",
                 Description = "Premium office spaces",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -660,7 +659,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Green Gardens",
                 Location = "Riffa",
                 Description = "Family-friendly villa compound",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -669,7 +668,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "City View Apartments",
                 Location = "Juffair",
                 Description = "Affordable city apartments",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -678,7 +677,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Pearl Residency",
                 Location = "Muharraq",
                 Description = "Residential apartments near airport",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -687,7 +686,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Skyline Plaza",
                 Location = "Seef",
                 Description = "Mixed-use commercial property",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -696,7 +695,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Lagoon Villas",
                 Location = "Durrat Al Bahrain",
                 Description = "Luxury beachfront villas",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -705,7 +704,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "University Residences",
                 Location = "Isa Town",
                 Description = "Student accommodation complex",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -714,7 +713,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Al Naseem Tower",
                 Location = "Manama",
                 Description = "High-end residential tower",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -723,7 +722,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Harbor Offices",
                 Location = "Bahrain Bay",
                 Description = "Corporate office building",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -732,7 +731,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Sunset Compound",
                 Location = "Saar",
                 Description = "Private residential compound",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -741,7 +740,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Royal Suites",
                 Location = "Juffair",
                 Description = "Luxury serviced apartments",
-                ManagerId = 1
+                ManagerId = 13
             },
 
             new Property
@@ -750,7 +749,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Tech Park Offices",
                 Location = "Hidd",
                 Description = "Technology and startup offices",
-                ManagerId = 1
+                ManagerId = 13
             }
         );
 
