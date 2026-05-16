@@ -1,0 +1,181 @@
+﻿using LeaseBridge.API.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace LeaseBridge.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize(Roles = "Manager")]
+    public class DashboardController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+
+        public DashboardController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+
+        // OVERVIEW DASHBOARD
+        [HttpGet("overview")]
+        public async Task<IActionResult> GetOverview()
+        {
+            var totalProperties = await _context.Properties.CountAsync();
+
+            var totalUnits = await _context.Units.CountAsync();
+
+            var occupiedUnits = await _context.Units
+                .CountAsync(u => u.StatusId == 2);
+
+            var availableUnits = await _context.Units
+                .CountAsync(u => u.StatusId == 1);
+
+            var activeLeases = await _context.Leases
+                .CountAsync(l => l.IsActive);
+
+            var totalTenants = await _context.AppUsers
+                .CountAsync(u =>
+                    _context.UserRoles.Any(ur =>
+                        ur.UserId == u.IdentityUserId &&
+                        _context.Roles.Any(r =>
+                            r.Id == ur.RoleId &&
+                            r.Name == "Tenant")));
+
+            var totalStaff = await _context.AppUsers
+                .CountAsync(u =>
+                    _context.UserRoles.Any(ur =>
+                        ur.UserId == u.IdentityUserId &&
+                        _context.Roles.Any(r =>
+                            r.Id == ur.RoleId &&
+                            r.Name == "Staff")));
+
+            return Ok(new
+            {
+                TotalProperties = totalProperties,
+                TotalUnits = totalUnits,
+                OccupiedUnits = occupiedUnits,
+                AvailableUnits = availableUnits,
+                ActiveLeases = activeLeases,
+                TotalTenants = totalTenants,
+                TotalStaff = totalStaff
+            });
+        }
+
+
+        // PAYMENT STATISTICS
+        [HttpGet("payments")]
+        public async Task<IActionResult> GetPaymentStatistics()
+        {
+            var totalPayments = await _context.Payments.CountAsync();
+
+            var paidPayments = await _context.Payments
+                .CountAsync(p => p.StatusId == 2);
+
+            var overduePayments = await _context.Payments
+                .CountAsync(p => p.StatusId == 4);
+
+            var totalRevenue = await _context.Payments
+                .Where(p => p.StatusId == 2)
+                .SumAsync(p => (decimal?)p.Amount) ?? 0;
+
+            return Ok(new
+            {
+                TotalPayments = totalPayments,
+                PaidPayments = paidPayments,
+                OverduePayments = overduePayments,
+                TotalRevenue = totalRevenue
+            });
+        }
+
+
+        // MAINTENANCE STATISTICS
+        [HttpGet("maintenance")]
+        public async Task<IActionResult> GetMaintenanceStatistics()
+        {
+            var totalRequests = await _context.MaintenanceRequests
+                .CountAsync();
+
+            var openRequests = await _context.MaintenanceRequests
+                .CountAsync(r => r.StatusId == 1);
+
+            var inProgressRequests = await _context.MaintenanceRequests
+                .CountAsync(r => r.StatusId == 2);
+
+            var completedRequests = await _context.MaintenanceRequests
+                .CountAsync(r => r.StatusId == 3);
+
+            var highPriorityRequests = await _context.MaintenanceRequests
+                .CountAsync(r => r.PriorityId == 3);
+
+            var totalAssignments = await _context.MaintenanceAssignments
+                .CountAsync();
+
+            return Ok(new
+            {
+                TotalRequests = totalRequests,
+                OpenRequests = openRequests,
+                InProgressRequests = inProgressRequests,
+                CompletedRequests = completedRequests,
+                HighPriorityRequests = highPriorityRequests,
+                TotalAssignments = totalAssignments
+            });
+        }
+
+        // APPLICATION STATISTICS
+        [HttpGet("applications")]
+        public async Task<IActionResult> GetApplicationStatistics()
+        {
+            var totalApplications = await _context.Applications
+                .CountAsync();
+
+            var pendingApplications = await _context.Applications
+                .CountAsync(a => a.StatusId == 1);
+
+            var approvedApplications = await _context.Applications
+                .CountAsync(a => a.StatusId == 2);
+
+            var rejectedApplications = await _context.Applications
+                .CountAsync(a => a.StatusId == 3);
+
+            return Ok(new
+            {
+                TotalApplications = totalApplications,
+                PendingApplications = pendingApplications,
+                ApprovedApplications = approvedApplications,
+                RejectedApplications = rejectedApplications
+            });
+        }
+
+
+        // OCCUPANCY STATISTICS
+        [HttpGet("occupancy")]
+        public async Task<IActionResult> GetOccupancyStatistics()
+        {
+            var totalUnits = await _context.Units.CountAsync();
+
+            var occupiedUnits = await _context.Units
+                .CountAsync(u => u.StatusId == 2);
+
+            var availableUnits = await _context.Units
+                .CountAsync(u => u.StatusId == 1);
+
+            double occupiedPercentage = 0;
+
+            if (totalUnits > 0)
+            {
+                occupiedPercentage =
+                    ((double)occupiedUnits / totalUnits) * 100;
+            }
+
+            return Ok(new
+            {
+                TotalUnits = totalUnits,
+                OccupiedUnits = occupiedUnits,
+                AvailableUnits = availableUnits,
+                OccupiedPercentage = Math.Round(occupiedPercentage, 2)
+            });
+        }
+    }
+}

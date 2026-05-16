@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260515082323_SeedMaintenanceAssignments")]
+    partial class SeedMaintenanceAssignments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,98 +152,6 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Applications");
-
-                    b.HasData(
-                        new
-                        {
-                            ApplicationId = 1,
-                            ApplicationDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 3,
-                            UnitId = 11
-                        },
-                        new
-                        {
-                            ApplicationId = 2,
-                            ApplicationDate = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 4,
-                            UnitId = 12
-                        },
-                        new
-                        {
-                            ApplicationId = 3,
-                            ApplicationDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 5,
-                            UnitId = 13
-                        },
-                        new
-                        {
-                            ApplicationId = 4,
-                            ApplicationDate = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 6,
-                            UnitId = 14
-                        },
-                        new
-                        {
-                            ApplicationId = 5,
-                            ApplicationDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 7,
-                            UnitId = 15
-                        },
-                        new
-                        {
-                            ApplicationId = 6,
-                            ApplicationDate = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 8,
-                            UnitId = 11
-                        },
-                        new
-                        {
-                            ApplicationId = 7,
-                            ApplicationDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 9,
-                            UnitId = 12
-                        },
-                        new
-                        {
-                            ApplicationId = 8,
-                            ApplicationDate = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TenantId = 10,
-                            UnitId = 13
-                        },
-                        new
-                        {
-                            ApplicationId = 9,
-                            ApplicationDate = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 1,
-                            TenantId = 11,
-                            UnitId = 14
-                        },
-                        new
-                        {
-                            ApplicationId = 10,
-                            ApplicationDate = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            TenantId = 12,
-                            UnitId = 15
-                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.ApplicationStatus", b =>
@@ -1418,7 +1329,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 1,
                             Description = "Luxury residential apartments",
                             Location = "Manama",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Palm Heights"
                         },
                         new
@@ -1426,7 +1337,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 2,
                             Description = "Modern high-rise residential building",
                             Location = "Seef",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Seef Towers"
                         },
                         new
@@ -1434,7 +1345,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 3,
                             Description = "Waterfront luxury residences",
                             Location = "Amwaj Islands",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Marina Residences"
                         },
                         new
@@ -1442,7 +1353,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 4,
                             Description = "Premium office spaces",
                             Location = "Diplomatic Area",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Business Bay Offices"
                         },
                         new
@@ -1450,7 +1361,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 5,
                             Description = "Family-friendly villa compound",
                             Location = "Riffa",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Green Gardens"
                         },
                         new
@@ -1458,7 +1369,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 6,
                             Description = "Affordable city apartments",
                             Location = "Juffair",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "City View Apartments"
                         },
                         new
@@ -1466,7 +1377,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 7,
                             Description = "Residential apartments near airport",
                             Location = "Muharraq",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Pearl Residency"
                         },
                         new
@@ -1474,7 +1385,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 8,
                             Description = "Mixed-use commercial property",
                             Location = "Seef",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Skyline Plaza"
                         },
                         new
@@ -1482,7 +1393,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 9,
                             Description = "Luxury beachfront villas",
                             Location = "Durrat Al Bahrain",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Lagoon Villas"
                         },
                         new
@@ -1490,7 +1401,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 10,
                             Description = "Student accommodation complex",
                             Location = "Isa Town",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "University Residences"
                         },
                         new
@@ -1498,7 +1409,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 11,
                             Description = "High-end residential tower",
                             Location = "Manama",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Al Naseem Tower"
                         },
                         new
@@ -1506,7 +1417,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 12,
                             Description = "Corporate office building",
                             Location = "Bahrain Bay",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Harbor Offices"
                         },
                         new
@@ -1514,7 +1425,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 13,
                             Description = "Private residential compound",
                             Location = "Saar",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Sunset Compound"
                         },
                         new
@@ -1522,7 +1433,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 14,
                             Description = "Luxury serviced apartments",
                             Location = "Juffair",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Royal Suites"
                         },
                         new
@@ -1530,7 +1441,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 15,
                             Description = "Technology and startup offices",
                             Location = "Hidd",
-                            ManagerId = 13,
+                            ManagerId = 1,
                             Name = "Tech Park Offices"
                         });
                 });
@@ -2123,98 +2034,6 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("AmenityId");
 
                     b.ToTable("UnitAmenities", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UnitId = 1,
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            UnitId = 1,
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            UnitId = 2,
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            UnitId = 2,
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            UnitId = 3,
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            UnitId = 3,
-                            AmenityId = 3
-                        },
-                        new
-                        {
-                            UnitId = 4,
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            UnitId = 4,
-                            AmenityId = 3
-                        },
-                        new
-                        {
-                            UnitId = 4,
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            UnitId = 5,
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            UnitId = 6,
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            UnitId = 7,
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            UnitId = 7,
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            UnitId = 8,
-                            AmenityId = 3
-                        },
-                        new
-                        {
-                            UnitId = 9,
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            UnitId = 9,
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            UnitId = 10,
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            UnitId = 10,
-                            AmenityId = 3
-                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
