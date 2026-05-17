@@ -1,0 +1,101 @@
+﻿@model LeaseBridge.MVC.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="page-container d-flex align-items-start pt-5 pb-5" style="background-color: #f8f9fa; min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+                    <div class="row g-0">
+                        <div class="auth-header text-center w-100" style="padding: 50px 20px; background: linear-gradient(135deg, var(--navy-blue) 0%, #1a2a40 100%); color: white;">
+                            <h2 class="fw-bold m-0" style="letter-spacing: -1px;">Join Lease Bridge</h2>
+                            <p class="small opacity-75 mt-2 mb-0">Create your account to start managing your leases efficiently</p>
+                        </div>
+
+                        <div class="card-body p-4 p-md-5 bg-white">
+                            <form asp-action="Register" asp-controller="Account" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger small mb-4"></div>
+
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label asp-for="FirstName" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">First Name</label>
+                                        <div class="input-group">
+                                            <input asp-for="FirstName" class="form-control form-control-lg border-end-0" placeholder="Enter FIrst Name" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="FirstName" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="LastName" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Last Name</label>
+                                        <div class="input-group">
+                                            <input asp-for="LastName" class="form-control form-control-lg border-end-0" placeholder="Enter Last Name" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="LastName" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="PhoneNumber" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Phone Number</label>
+                                        <div class="input-group">
+                                            <input asp-for="PhoneNumber" class="form-control form-control-lg border-end-0" placeholder="Enter Phone Number" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="PhoneNumber" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="Email" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Email Address</label>
+                                        <div class="input-group">
+                                            <input asp-for="Email" class="form-control form-control-lg border-end-0" placeholder="Enter Email" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="Password" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Password</label>
+                                        <div class="input-group">
+                                            <input asp-for="Password" type="password" class="form-control form-control-lg border-end-0" placeholder="" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="ConfirmPassword" class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Confirm Password</label>
+                                        <div class="input-group">
+                                            <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg border-end-0" placeholder="" style="border-radius: 12px 0 0 12px; font-size: 0.95rem; background-color: #fdfdfd;" required>
+                                            <span class="input-group-text bg-white border-start-0" style="border-radius: 0 12px 12px 0;"></span>
+                                        </div>
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger small mt-1 d-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5">
+                                    <button type="submit" class="btn btn-navy w-100 py-3 fw-bold shadow-sm transition-all" style="border-radius: 12px; font-size: 1.1rem; letter-spacing: 0.5px;">
+                                        Create Account
+                                    </button>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <span class="small text-muted">Already a member?</span>
+                                    <a asp-action="Login" class="fw-bold text-navy text-decoration-none small ms-1 hover-underline">Login</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

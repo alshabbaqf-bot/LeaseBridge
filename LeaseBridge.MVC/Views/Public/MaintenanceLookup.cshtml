@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Track Maintenance";
+}
+
+<!--Page Background-->
+<div class="lookup-full-bg">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                    <!--Header-->
+                    <div class="card-header border-0 py-4 text-center" style="background-color: var(--navy-blue);">
+                        <i class="bi bi-search fs-1 text-white mb-2"></i>
+                        <h3 class="fw-bold text-white m-0">Maintenance Tracking</h3>
+                    </div>
+
+                    <!--Body-->
+                    <div class="card-body p-4 p-lg-5">
+
+                        <p class="text-muted text-center mb-4">
+                            Enter your details to retrieve your request history and current status.
+                        </p>
+
+                        <form id="trackForm">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-navy small">TICKET NUMBER</label>
+                                <div class="input-group border rounded-3 overflow-hidden">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-hash text-primary"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-0 ps-2"
+                                           placeholder="Enter Ticket Number">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-navy small">PHONE NUMBER</label>
+                                <div class="input-group border rounded-3 overflow-hidden">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-telephone text-primary"></i>
+                                    </span>
+                                    <input type="tel" class="form-control border-0 ps-2"
+                                           placeholder="Enter Phone Number">
+                                </div>
+                            </div>
+
+                            <button type="button"
+                                    class="btn btn-navy w-100 py-3 fw-bold rounded-3 shadow-sm">
+                                Track Progress
+                            </button>
+
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

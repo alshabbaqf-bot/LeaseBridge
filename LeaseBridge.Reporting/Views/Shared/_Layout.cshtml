@@ -3,45 +3,74 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LeaseBridge.Reporting</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Lease Bridge Reports</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaseBridge.Reporting.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LeaseBridge.Reporting</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="d-flex">
+        <div class="sidebar d-flex flex-column justify-content-between" style="min-width: 250px; min-height: 100vh; background: var(--navy-blue);">
+            <div>
+                <div class="logo text-center py-4 border-bottom border-secondary border-opacity-25">
+                    <h5 class="fw-bold text-white mb-0">LEASE BRIDGE</h5>
+                    <small class="text-white-50 text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Reporting System</small>
                 </div>
+                <ul class="nav flex-column px-3 mt-4">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="Occupancy">
+                            <i class="bi bi-house-check me-2"></i> Occupancy
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="MaintenanceStatus">
+                            <i class="bi bi-tools me-2"></i> Maintenance Status
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="ResolutionTime">
+                            <i class="bi bi-clock-history me-2"></i> Resolution Time
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="OverduePayments">
+                            <i class="bi bi-exclamation-octagon me-2"></i> Overdue Payments
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LeaseBridge.Reporting - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!--Profile Section-->
+            <div class="profile-section p-3 border-top border-secondary border-opacity-25 bg-dark bg-opacity-25">
+                <!--User Fullname-->
+                <div class="d-flex align-items-center mb-3 px-2">
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                        <i class="bi bi-person-fill text-navy"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-white small mb-0 fw-bold text-truncate">Ahmed Ali</p>
+                    </div>
+                </div>
+                <!--Logout Button-->
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger w-100 opacity-75 hover-opacity-100 transition">
+                        <i class="bi bi-box-arrow-left me-2"></i> Logout
+                    </button>
+                </form>
+            </div>
         </div>
-    </footer>
+        <div class="content flex-grow-1 bg-light">
+            <main role="main" class="p-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
