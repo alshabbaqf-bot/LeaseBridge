@@ -1380,7 +1380,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 CreatedAt = new DateTime(2026, 2, 1)
             }
         );
-
+        // Maintenance Assignment
         modelBuilder.Entity<MaintenanceAssignment>().HasData(
 
     new MaintenanceAssignment
@@ -1463,7 +1463,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         AssignedDate = new DateTime(2026, 2, 1)
     }
 );
-
+        //Application
         modelBuilder.Entity<Application>().HasData(
 
     new Application
@@ -1566,6 +1566,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         CreatedAt = new DateTime(2026, 1, 28)
     }
 );
+        //Unit
         modelBuilder.Entity<Unit>()
     .HasMany(u => u.Amenities)
     .WithMany(a => a.Units)
@@ -1600,7 +1601,126 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         new { UnitId = 10, AmenityId = 3 }
 
     ));
-     
+
+        //UnitImage
+        modelBuilder.Entity<UnitImage>().HasData(
+
+    new UnitImage
+    {
+        ImageId = 1,
+        UnitId = 1,
+        ImageUrl = "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+    },
+
+    new UnitImage
+    {
+        ImageId = 2,
+        UnitId = 2,
+        ImageUrl = "https://images.unsplash.com/photo-1494526585095-c41746248156"
+    },
+
+    new UnitImage
+    {
+        ImageId = 3,
+        UnitId = 3,
+        ImageUrl = "https://images.unsplash.com/photo-1484154218962-a197022b5858"
+    },
+
+    new UnitImage
+    {
+        ImageId = 4,
+        UnitId = 4,
+        ImageUrl = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688"
+    }
+
+);
+        //MaintenanceUpdate
+        modelBuilder.Entity<MaintenanceUpdate>().HasData(
+
+    new MaintenanceUpdate
+    {
+        UpdateId = 1,
+        RequestId = 1,
+        OldStatusId = 1,
+        NewStatusId = 2,
+        UpdatedBy = 13,
+        Notes = "Assigned to plumbing staff.",
+        CreatedAt = new DateTime(2026, 1, 5)
+    },
+
+    new MaintenanceUpdate
+    {
+        UpdateId = 2,
+        RequestId = 5,
+        OldStatusId = 2,
+        NewStatusId = 4,
+        UpdatedBy = 17,
+        Notes = "Door lock repaired successfully.",
+        CreatedAt = new DateTime(2026, 1, 20)
+    },
+
+    new MaintenanceUpdate
+    {
+        UpdateId = 3,
+        RequestId = 9,
+        OldStatusId = 3,
+        NewStatusId = 4,
+        UpdatedBy = 16,
+        Notes = "Wall repaint completed.",
+        CreatedAt = new DateTime(2026, 1, 30)
+    }
+
+);
+        //Feedback
+        modelBuilder.Entity<Feedback>().HasData(
+
+    new Feedback
+    {
+        FeedbackId = 1,
+        TenantId = 7,
+        RequestId = 5,
+        Message = "Maintenance team was quick and professional.",
+        Rating = 5,
+        CreatedAt = new DateTime(2026, 1, 21)
+    },
+
+    new Feedback
+    {
+        FeedbackId = 2,
+        TenantId = 11,
+        RequestId = 9,
+        Message = "Painting quality was very good.",
+        Rating = 4,
+        CreatedAt = new DateTime(2026, 1, 31)
+    }
+
+);
+        //Maintenance Attchment
+        modelBuilder.Entity<MaintenanceAttachment>().HasData(
+
+    new MaintenanceAttachment
+    {
+        AttachmentId = 1,
+        RequestId = 1,
+        FileUrl = "https://example.com/leak-photo.jpg"
+    },
+
+    new MaintenanceAttachment
+    {
+        AttachmentId = 2,
+        RequestId = 5,
+        FileUrl = "https://example.com/door-lock.jpg"
+    },
+
+    new MaintenanceAttachment
+    {
+        AttachmentId = 3,
+        RequestId = 9,
+        FileUrl = "https://example.com/wall-paint.jpg"
+    }
+
+);
+
         OnModelCreatingPartial(modelBuilder);
     }
 
