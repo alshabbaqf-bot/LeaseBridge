@@ -19,7 +19,9 @@ namespace LeaseBridge.API.Models
 
         public DateTime DueDate { get; set; }
 
-        public bool IsPaid { get; set; }
+        public int StatusId { get; set; }
+
+        public virtual InvoiceStatus Status { get; set; } = null!;
 
         public virtual Lease Lease { get; set; } = null!;
 

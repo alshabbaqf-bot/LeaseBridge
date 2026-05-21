@@ -69,6 +69,8 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     public virtual DbSet<Invoice> Invoices { get; set; }
 
+    public virtual DbSet<StaffSkill> StaffSkills { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -94,24 +96,6 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(255);
-
-            entity.HasMany(d => d.Skills).WithMany(p => p.Staff)
-                .UsingEntity<Dictionary<string, object>>(
-                    "StaffSkill",
-                    r => r.HasOne<Skill>().WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_StaffSkills_Skill"),
-                    l => l.HasOne<AppUser>().WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6"),
-                    j =>
-                    {
-                        j.HasKey("StaffId", "SkillId");
-                        j.ToTable("StaffSkills");
-                        j.IndexerProperty<int>("SkillId").ValueGeneratedOnAdd();
-                    });
         });
 
         modelBuilder.Entity<Application>(entity =>
@@ -437,7 +421,30 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .HasMaxLength(255)
                 .IsUnicode(false);
         });
+        modelBuilder.Entity<StaffSkill>(entity =>
+        {
+            entity.HasKey(e => new { e.StaffId, e.SkillId });
 
+            entity.ToTable("StaffSkills");
+
+            entity.HasOne(d => d.Staff)
+                .WithMany(p => p.StaffSkills)
+                .HasForeignKey(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Staff");
+
+            entity.HasOne(d => d.Skill)
+                .WithMany(p => p.StaffSkills)
+                .HasForeignKey(d => d.SkillId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Skill");
+
+            entity.HasOne(d => d.Category)
+                .WithMany()
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Category");
+        });
         modelBuilder.Entity<Unit>(entity =>
         {
             entity.HasKey(e => e.UnitId).HasName("PK__Units__44F5ECB524C2F27E");
@@ -514,7 +521,13 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         });
 
         modelBuilder.Entity<Invoice>(entity =>
+
         {
+            entity.HasOne(d => d.Status)
+    .WithMany(p => p.Invoices)
+    .HasForeignKey(d => d.StatusId)
+    .OnDelete(DeleteBehavior.ClientSetNull)
+    .HasConstraintName("FK_Invoice_Status");
             entity.HasKey(e => e.InvoiceId);
 
             entity.Property(e => e.InvoiceNumber)
@@ -533,7 +546,15 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .HasForeignKey(d => d.PaymentId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
+        modelBuilder.Entity<InvoiceStatus>(entity =>
+        {
+            entity.HasKey(e => e.StatusId);
 
+            entity.ToTable("InvoiceStatus");
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(50);
+        });
         // SEED DATA
 
         //Unit Types
@@ -1754,7 +1775,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         Amount = 450.00m,
         IssuedDate = new DateTime(2026, 1, 1),
         DueDate = new DateTime(2026, 1, 10),
-        IsPaid = true
+        StatusId = 2
     },
 
     new Invoice
@@ -1766,7 +1787,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         Amount = 600.00m,
         IssuedDate = new DateTime(2026, 1, 5),
         DueDate = new DateTime(2026, 1, 15),
-        IsPaid = false
+        StatusId = 1
     },
 
     new Invoice
@@ -1778,9 +1799,27 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         Amount = 700.00m,
         IssuedDate = new DateTime(2026, 1, 8),
         DueDate = new DateTime(2026, 1, 20),
-        IsPaid = false
+        StatusId = 1
     }
 
+);
+        //Invoice status
+        modelBuilder.Entity<InvoiceStatus>().HasData(
+    new InvoiceStatus
+    {
+        StatusId = 1,
+        Name = "Pending"
+    },
+    new InvoiceStatus
+    {
+        StatusId = 2,
+        Name = "Paid"
+    },
+    new InvoiceStatus
+    {
+        StatusId = 3,
+        Name = "Overdue"
+    }
 );
 
         OnModelCreatingPartial(modelBuilder);

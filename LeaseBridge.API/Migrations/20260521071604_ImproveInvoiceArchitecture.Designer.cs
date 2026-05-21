@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521071604_ImproveInvoiceArchitecture")]
+    partial class ImproveInvoiceArchitecture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2308,14 +2311,10 @@ namespace LeaseBridge.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.HasKey("StaffId", "SkillId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("SkillId");
 
@@ -2789,29 +2788,17 @@ namespace LeaseBridge.API.Migrations
 
             modelBuilder.Entity("StaffSkill", b =>
                 {
-                    b.HasOne("LeaseBridge.API.Models.MaintenanceCategory", "Category")
+                    b.HasOne("LeaseBridge.API.Models.Skill", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Category");
-
-                    b.HasOne("LeaseBridge.API.Models.Skill", "Skill")
-                        .WithMany("StaffSkills")
                         .HasForeignKey("SkillId")
                         .IsRequired()
                         .HasConstraintName("FK_StaffSkills_Skill");
 
-                    b.HasOne("LeaseBridge.API.Models.AppUser", "Staff")
-                        .WithMany("StaffSkills")
+                    b.HasOne("LeaseBridge.API.Models.AppUser", null)
+                        .WithMany()
                         .HasForeignKey("StaffId")
                         .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Staff");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Skill");
-
-                    b.Navigation("Staff");
+                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6");
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2846,8 +2833,6 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Properties");
-
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -2927,11 +2912,6 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.Property", b =>
                 {
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.Skill", b =>
-                {
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Unit", b =>

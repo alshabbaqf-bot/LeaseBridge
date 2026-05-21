@@ -7,6 +7,6 @@ namespace LeaseBridge.API.DTOs.Invoices
         public int? PaymentId { get; set; }
 
         [Required]
-        public bool IsPaid { get; set; }
+        public int StatusId { get; set; }
     }
 }

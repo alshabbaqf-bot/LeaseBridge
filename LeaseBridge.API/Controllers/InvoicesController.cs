@@ -33,7 +33,7 @@ namespace LeaseBridge.API.Controllers
                     Amount = i.Amount,
                     IssuedDate = i.IssuedDate,
                     DueDate = i.DueDate,
-                    IsPaid = i.IsPaid
+                    StatusId = i.StatusId
                 })
                 .ToListAsync();
 
@@ -55,7 +55,7 @@ namespace LeaseBridge.API.Controllers
                     Amount = i.Amount,
                     IssuedDate = i.IssuedDate,
                     DueDate = i.DueDate,
-                    IsPaid = i.IsPaid
+                    StatusId = i.StatusId
                 })
                 .FirstOrDefaultAsync();
 
@@ -97,7 +97,7 @@ namespace LeaseBridge.API.Controllers
                 Amount = dto.Amount,
                 IssuedDate = DateTime.Now,
                 DueDate = dto.DueDate,
-                IsPaid = false
+                StatusId = 1
             };
 
             _context.Invoices.Add(invoice);
@@ -133,7 +133,7 @@ namespace LeaseBridge.API.Controllers
             }
 
             invoice.PaymentId = dto.PaymentId;
-            invoice.IsPaid = dto.IsPaid;
+            invoice.StatusId = dto.StatusId;
 
             await _context.SaveChangesAsync();
 
