@@ -66,8 +66,10 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public virtual DbSet<UnitStatus> UnitStatuses { get; set; }
 
     public virtual DbSet<UnitType> UnitTypes { get; set; }
-    
 
+    public virtual DbSet<Invoice> Invoices { get; set; }
+
+    public virtual DbSet<StaffSkill> StaffSkills { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -94,24 +96,6 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(255);
-
-            entity.HasMany(d => d.Skills).WithMany(p => p.Staff)
-                .UsingEntity<Dictionary<string, object>>(
-                    "StaffSkill",
-                    r => r.HasOne<Skill>().WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_StaffSkills_Skill"),
-                    l => l.HasOne<AppUser>().WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6"),
-                    j =>
-                    {
-                        j.HasKey("StaffId", "SkillId");
-                        j.ToTable("StaffSkills");
-                        j.IndexerProperty<int>("SkillId").ValueGeneratedOnAdd();
-                    });
         });
 
         modelBuilder.Entity<Application>(entity =>
@@ -437,7 +421,30 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .HasMaxLength(255)
                 .IsUnicode(false);
         });
+        modelBuilder.Entity<StaffSkill>(entity =>
+        {
+            entity.HasKey(e => new { e.StaffId, e.SkillId });
 
+            entity.ToTable("StaffSkills");
+
+            entity.HasOne(d => d.Staff)
+                .WithMany(p => p.StaffSkills)
+                .HasForeignKey(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Staff");
+
+            entity.HasOne(d => d.Skill)
+                .WithMany(p => p.StaffSkills)
+                .HasForeignKey(d => d.SkillId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Skill");
+
+            entity.HasOne(d => d.Category)
+                .WithMany()
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffSkills_Category");
+        });
         modelBuilder.Entity<Unit>(entity =>
         {
             entity.HasKey(e => e.UnitId).HasName("PK__Units__44F5ECB524C2F27E");
@@ -513,8 +520,43 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<Invoice>(entity =>
+
+        {
+            entity.HasOne(d => d.Status)
+    .WithMany(p => p.Invoices)
+    .HasForeignKey(d => d.StatusId)
+    .OnDelete(DeleteBehavior.ClientSetNull)
+    .HasConstraintName("FK_Invoice_Status");
+            entity.HasKey(e => e.InvoiceId);
+
+            entity.Property(e => e.InvoiceNumber)
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(10,2)");
+
+            entity.HasOne(d => d.Lease)
+                .WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.LeaseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Payment)
+                .WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.PaymentId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+        modelBuilder.Entity<InvoiceStatus>(entity =>
+        {
+            entity.HasKey(e => e.StatusId);
+
+            entity.ToTable("InvoiceStatus");
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(50);
+        });
         // SEED DATA
- 
+
         //Unit Types
         modelBuilder.Entity<UnitType>().HasData(
             new UnitType { TypeId = 1, Name = "Apartment" },
@@ -623,7 +665,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Palm Heights",
                 Location = "Manama",
                 Description = "Luxury residential apartments",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -632,7 +674,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Seef Towers",
                 Location = "Seef",
                 Description = "Modern high-rise residential building",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -641,7 +683,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Marina Residences",
                 Location = "Amwaj Islands",
                 Description = "Waterfront luxury residences",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -650,7 +692,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Business Bay Offices",
                 Location = "Diplomatic Area",
                 Description = "Premium office spaces",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -659,7 +701,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Green Gardens",
                 Location = "Riffa",
                 Description = "Family-friendly villa compound",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -668,7 +710,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "City View Apartments",
                 Location = "Juffair",
                 Description = "Affordable city apartments",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -677,7 +719,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Pearl Residency",
                 Location = "Muharraq",
                 Description = "Residential apartments near airport",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -686,7 +728,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Skyline Plaza",
                 Location = "Seef",
                 Description = "Mixed-use commercial property",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -695,7 +737,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Lagoon Villas",
                 Location = "Durrat Al Bahrain",
                 Description = "Luxury beachfront villas",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -704,7 +746,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "University Residences",
                 Location = "Isa Town",
                 Description = "Student accommodation complex",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -713,7 +755,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Al Naseem Tower",
                 Location = "Manama",
                 Description = "High-end residential tower",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -722,7 +764,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Harbor Offices",
                 Location = "Bahrain Bay",
                 Description = "Corporate office building",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -731,7 +773,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Sunset Compound",
                 Location = "Saar",
                 Description = "Private residential compound",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -740,7 +782,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Royal Suites",
                 Location = "Juffair",
                 Description = "Luxury serviced apartments",
-                ManagerId = 13
+                ManagerId = 1
             },
 
             new Property
@@ -749,7 +791,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 Name = "Tech Park Offices",
                 Location = "Hidd",
                 Description = "Technology and startup offices",
-                ManagerId = 13
+                ManagerId = 1
             }
         );
 
@@ -1046,7 +1088,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 1,
                 Amount = 450,
                 PaymentDate = new DateTime(2026, 1, 5),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 1, 1),
                 TransactionReference = "TXN-1001",
                 CreatedAt = new DateTime(2026, 1, 5)
@@ -1059,7 +1101,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 2,
                 Amount = 470,
                 PaymentDate = new DateTime(2026, 2, 3),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 2, 1),
                 TransactionReference = "TXN-1002",
                 CreatedAt = new DateTime(2026, 2, 3)
@@ -1085,7 +1127,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 1,
                 Amount = 360,
                 PaymentDate = new DateTime(2026, 3, 7),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 3, 1),
                 TransactionReference = "TXN-1004",
                 CreatedAt = new DateTime(2026, 3, 7)
@@ -1111,7 +1153,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 3,
                 Amount = 1250,
                 PaymentDate = new DateTime(2026, 4, 4),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 4, 1),
                 TransactionReference = "TXN-1006",
                 CreatedAt = new DateTime(2026, 4, 4)
@@ -1137,7 +1179,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 2,
                 Amount = 850,
                 PaymentDate = new DateTime(2026, 5, 6),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 5, 1),
                 TransactionReference = "TXN-1008",
                 CreatedAt = new DateTime(2026, 5, 6)
@@ -1150,7 +1192,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 3,
                 Amount = 1500,
                 PaymentDate = null,
-                StatusId = 3,
+                StatusId = 1,
                 DueDate = new DateTime(2026, 6, 1),
                 TransactionReference = "TXN-1009",
                 CreatedAt = new DateTime(2026, 5, 29)
@@ -1163,7 +1205,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 1,
                 Amount = 500,
                 PaymentDate = new DateTime(2026, 6, 2),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 6, 1),
                 TransactionReference = "TXN-1010",
                 CreatedAt = new DateTime(2026, 6, 2)
@@ -1176,7 +1218,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 2,
                 Amount = 450,
                 PaymentDate = new DateTime(2026, 2, 5),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 2, 1),
                 TransactionReference = "TXN-1011",
                 CreatedAt = new DateTime(2026, 2, 5)
@@ -1202,7 +1244,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 1,
                 Amount = 360,
                 PaymentDate = new DateTime(2026, 4, 3),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 4, 1),
                 TransactionReference = "TXN-1013",
                 CreatedAt = new DateTime(2026, 4, 3)
@@ -1228,7 +1270,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 MethodId = 3,
                 Amount = 850,
                 PaymentDate = new DateTime(2026, 6, 4),
-                StatusId = 2,
+                StatusId = 3,
                 DueDate = new DateTime(2026, 6, 1),
                 TransactionReference = "TXN-1015",
                 CreatedAt = new DateTime(2026, 6, 4)
@@ -1720,7 +1762,90 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     }
 
 );
+        //Invoice
+        modelBuilder.Entity<Invoice>().HasData(
 
+
+    new Invoice
+    {
+        InvoiceId = 1,
+        LeaseId = 1,
+        PaymentId = 1,
+        InvoiceNumber = "INV-1001",
+        Amount = 450.00m,
+        IssuedDate = new DateTime(2026, 1, 1),
+        DueDate = new DateTime(2026, 1, 10),
+        StatusId = 2
+    },
+
+    new Invoice
+    {
+        InvoiceId = 2,
+        LeaseId = 2,
+        PaymentId = 2,
+        InvoiceNumber = "INV-1002",
+        Amount = 600.00m,
+        IssuedDate = new DateTime(2026, 1, 5),
+        DueDate = new DateTime(2026, 1, 15),
+        StatusId = 1
+    },
+
+    new Invoice
+    {
+        InvoiceId = 3,
+        LeaseId = 3,
+        PaymentId = null,
+        InvoiceNumber = "INV-1003",
+        Amount = 700.00m,
+        IssuedDate = new DateTime(2026, 1, 8),
+        DueDate = new DateTime(2026, 1, 20),
+        StatusId = 1
+    }
+
+);
+        //Invoice status
+        modelBuilder.Entity<InvoiceStatus>().HasData(
+    new InvoiceStatus
+    {
+        StatusId = 1,
+        Name = "Pending"
+    },
+    new InvoiceStatus
+    {
+        StatusId = 2,
+        Name = "Paid"
+    },
+    new InvoiceStatus
+    {
+        StatusId = 3,
+        Name = "Overdue"
+    }
+);
+
+        modelBuilder.Entity<StaffSkill>().HasData(
+
+            //Staff Skill
+    new StaffSkill
+    {
+        StaffId = 5,
+        SkillId = 1,
+        CategoryId = 1
+    },
+
+    new StaffSkill
+    {
+        StaffId = 5,
+        SkillId = 2,
+        CategoryId = 2
+    },
+
+    new StaffSkill
+    {
+        StaffId = 6,
+        SkillId = 1,
+        CategoryId = 1
+    }
+);
         OnModelCreatingPartial(modelBuilder);
     }
 

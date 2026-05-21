@@ -35,5 +35,5 @@ public partial class AppUser
 
     public virtual ICollection<Property> Properties { get; set; } = new List<Property>();
 
-    public virtual ICollection<Skill> Skills { get; set; } = new List<Skill>();
+    public virtual ICollection<StaffSkill> StaffSkills { get; set; } = new List<StaffSkill>();
 }

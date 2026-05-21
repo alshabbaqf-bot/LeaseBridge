@@ -30,4 +30,9 @@ public partial class Payment
     public virtual PaymentMethod Method { get; set; } = null!;
 
     public virtual PaymentStatus Status { get; set; } = null!;
+
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+
+
+
 }

@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260519112205_AddInvoices")]
+    partial class AddInvoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -358,6 +361,9 @@ namespace LeaseBridge.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
@@ -367,87 +373,13 @@ namespace LeaseBridge.API.Migrations
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.HasKey("InvoiceId");
 
                     b.HasIndex("LeaseId");
 
                     b.HasIndex("PaymentId");
 
-                    b.HasIndex("StatusId");
-
                     b.ToTable("Invoices");
-
-                    b.HasData(
-                        new
-                        {
-                            InvoiceId = 1,
-                            Amount = 450.00m,
-                            DueDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1001",
-                            IssuedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 1,
-                            PaymentId = 1,
-                            StatusId = 2
-                        },
-                        new
-                        {
-                            InvoiceId = 2,
-                            Amount = 600.00m,
-                            DueDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1002",
-                            IssuedDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 2,
-                            PaymentId = 2,
-                            StatusId = 1
-                        },
-                        new
-                        {
-                            InvoiceId = 3,
-                            Amount = 700.00m,
-                            DueDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1003",
-                            IssuedDate = new DateTime(2026, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 3,
-                            StatusId = 1
-                        });
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("InvoiceStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Name = "Paid"
-                        },
-                        new
-                        {
-                            StatusId = 3,
-                            Name = "Overdue"
-                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -1269,7 +1201,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 1,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1001"
                         },
                         new
@@ -1281,7 +1213,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 2,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1002"
                         },
                         new
@@ -1304,7 +1236,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 4,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1004"
                         },
                         new
@@ -1327,7 +1259,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 6,
                             MethodId = 3,
                             PaymentDate = new DateTime(2026, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1006"
                         },
                         new
@@ -1350,7 +1282,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 8,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1008"
                         },
                         new
@@ -1361,7 +1293,7 @@ namespace LeaseBridge.API.Migrations
                             DueDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeaseId = 9,
                             MethodId = 3,
-                            StatusId = 1,
+                            StatusId = 3,
                             TransactionReference = "TXN-1009"
                         },
                         new
@@ -1373,7 +1305,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 10,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1010"
                         },
                         new
@@ -1385,7 +1317,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 1,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1011"
                         },
                         new
@@ -1408,7 +1340,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 4,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1013"
                         },
                         new
@@ -1431,7 +1363,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 8,
                             MethodId = 3,
                             PaymentDate = new DateTime(2026, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1015"
                         });
                 });
@@ -1601,7 +1533,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 1,
                             Description = "Luxury residential apartments",
                             Location = "Manama",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Palm Heights"
                         },
                         new
@@ -1609,7 +1541,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 2,
                             Description = "Modern high-rise residential building",
                             Location = "Seef",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Seef Towers"
                         },
                         new
@@ -1617,7 +1549,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 3,
                             Description = "Waterfront luxury residences",
                             Location = "Amwaj Islands",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Marina Residences"
                         },
                         new
@@ -1625,7 +1557,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 4,
                             Description = "Premium office spaces",
                             Location = "Diplomatic Area",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Business Bay Offices"
                         },
                         new
@@ -1633,7 +1565,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 5,
                             Description = "Family-friendly villa compound",
                             Location = "Riffa",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Green Gardens"
                         },
                         new
@@ -1641,7 +1573,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 6,
                             Description = "Affordable city apartments",
                             Location = "Juffair",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "City View Apartments"
                         },
                         new
@@ -1649,7 +1581,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 7,
                             Description = "Residential apartments near airport",
                             Location = "Muharraq",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Pearl Residency"
                         },
                         new
@@ -1657,7 +1589,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 8,
                             Description = "Mixed-use commercial property",
                             Location = "Seef",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Skyline Plaza"
                         },
                         new
@@ -1665,7 +1597,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 9,
                             Description = "Luxury beachfront villas",
                             Location = "Durrat Al Bahrain",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Lagoon Villas"
                         },
                         new
@@ -1673,7 +1605,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 10,
                             Description = "Student accommodation complex",
                             Location = "Isa Town",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "University Residences"
                         },
                         new
@@ -1681,7 +1613,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 11,
                             Description = "High-end residential tower",
                             Location = "Manama",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Al Naseem Tower"
                         },
                         new
@@ -1689,7 +1621,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 12,
                             Description = "Corporate office building",
                             Location = "Bahrain Bay",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Harbor Offices"
                         },
                         new
@@ -1697,7 +1629,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 13,
                             Description = "Private residential compound",
                             Location = "Saar",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Sunset Compound"
                         },
                         new
@@ -1705,7 +1637,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 14,
                             Description = "Luxury serviced apartments",
                             Location = "Juffair",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Royal Suites"
                         },
                         new
@@ -1713,7 +1645,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 15,
                             Description = "Technology and startup offices",
                             Location = "Hidd",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Tech Park Offices"
                         });
                 });
@@ -2308,38 +2240,14 @@ namespace LeaseBridge.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.HasKey("StaffId", "SkillId");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("SkillId");
 
                     b.ToTable("StaffSkills", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 1,
-                            CategoryId = 1
-                        },
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 2,
-                            CategoryId = 2
-                        },
-                        new
-                        {
-                            StaffId = 6,
-                            SkillId = 1,
-                            CategoryId = 1
-                        });
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2508,17 +2416,9 @@ namespace LeaseBridge.API.Migrations
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("LeaseBridge.API.Models.InvoiceStatus", "Status")
-                        .WithMany("Invoices")
-                        .HasForeignKey("StatusId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Invoice_Status");
-
                     b.Navigation("Lease");
 
                     b.Navigation("Payment");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -2809,29 +2709,17 @@ namespace LeaseBridge.API.Migrations
 
             modelBuilder.Entity("StaffSkill", b =>
                 {
-                    b.HasOne("LeaseBridge.API.Models.MaintenanceCategory", "Category")
+                    b.HasOne("LeaseBridge.API.Models.Skill", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Category");
-
-                    b.HasOne("LeaseBridge.API.Models.Skill", "Skill")
-                        .WithMany("StaffSkills")
                         .HasForeignKey("SkillId")
                         .IsRequired()
                         .HasConstraintName("FK_StaffSkills_Skill");
 
-                    b.HasOne("LeaseBridge.API.Models.AppUser", "Staff")
-                        .WithMany("StaffSkills")
+                    b.HasOne("LeaseBridge.API.Models.AppUser", null)
+                        .WithMany()
                         .HasForeignKey("StaffId")
                         .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Staff");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Skill");
-
-                    b.Navigation("Staff");
+                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6");
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2866,8 +2754,6 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Properties");
-
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -2878,11 +2764,6 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.ApplicationStatus", b =>
                 {
                     b.Navigation("Applications");
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
-                {
-                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -2947,11 +2828,6 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.Property", b =>
                 {
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.Skill", b =>
-                {
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Unit", b =>

@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521073419_FixStaffSkills")]
+    partial class FixStaffSkills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2320,26 +2323,6 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("SkillId");
 
                     b.ToTable("StaffSkills", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 1,
-                            CategoryId = 1
-                        },
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 2,
-                            CategoryId = 2
-                        },
-                        new
-                        {
-                            StaffId = 6,
-                            SkillId = 1,
-                            CategoryId = 1
-                        });
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LeaseBridge.API.Models;
+﻿using LeaseBridge.API.Models;
 
 public partial class StaffSkill
 {
@@ -14,4 +11,6 @@ public partial class StaffSkill
     public virtual MaintenanceCategory Category { get; set; } = null!;
 
     public virtual AppUser Staff { get; set; } = null!;
+
+    public virtual Skill Skill { get; set; } = null!;
 }

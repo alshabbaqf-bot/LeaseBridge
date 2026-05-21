@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260520134502_FixPaymentStatusesAndManagerSeed")]
+    partial class FixPaymentStatusesAndManagerSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -358,6 +361,9 @@ namespace LeaseBridge.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
@@ -367,16 +373,11 @@ namespace LeaseBridge.API.Migrations
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
                     b.HasKey("InvoiceId");
 
                     b.HasIndex("LeaseId");
 
                     b.HasIndex("PaymentId");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Invoices");
 
@@ -387,10 +388,10 @@ namespace LeaseBridge.API.Migrations
                             Amount = 450.00m,
                             DueDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InvoiceNumber = "INV-1001",
+                            IsPaid = true,
                             IssuedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeaseId = 1,
-                            PaymentId = 1,
-                            StatusId = 2
+                            PaymentId = 1
                         },
                         new
                         {
@@ -398,10 +399,10 @@ namespace LeaseBridge.API.Migrations
                             Amount = 600.00m,
                             DueDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InvoiceNumber = "INV-1002",
+                            IsPaid = false,
                             IssuedDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeaseId = 2,
-                            PaymentId = 2,
-                            StatusId = 1
+                            PaymentId = 2
                         },
                         new
                         {
@@ -409,44 +410,9 @@ namespace LeaseBridge.API.Migrations
                             Amount = 700.00m,
                             DueDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InvoiceNumber = "INV-1003",
+                            IsPaid = false,
                             IssuedDate = new DateTime(2026, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 3,
-                            StatusId = 1
-                        });
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("InvoiceStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Name = "Paid"
-                        },
-                        new
-                        {
-                            StatusId = 3,
-                            Name = "Overdue"
+                            LeaseId = 3
                         });
                 });
 
@@ -2308,38 +2274,14 @@ namespace LeaseBridge.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.HasKey("StaffId", "SkillId");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("SkillId");
 
                     b.ToTable("StaffSkills", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 1,
-                            CategoryId = 1
-                        },
-                        new
-                        {
-                            StaffId = 5,
-                            SkillId = 2,
-                            CategoryId = 2
-                        },
-                        new
-                        {
-                            StaffId = 6,
-                            SkillId = 1,
-                            CategoryId = 1
-                        });
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2508,17 +2450,9 @@ namespace LeaseBridge.API.Migrations
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("LeaseBridge.API.Models.InvoiceStatus", "Status")
-                        .WithMany("Invoices")
-                        .HasForeignKey("StatusId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Invoice_Status");
-
                     b.Navigation("Lease");
 
                     b.Navigation("Payment");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -2809,29 +2743,17 @@ namespace LeaseBridge.API.Migrations
 
             modelBuilder.Entity("StaffSkill", b =>
                 {
-                    b.HasOne("LeaseBridge.API.Models.MaintenanceCategory", "Category")
+                    b.HasOne("LeaseBridge.API.Models.Skill", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Category");
-
-                    b.HasOne("LeaseBridge.API.Models.Skill", "Skill")
-                        .WithMany("StaffSkills")
                         .HasForeignKey("SkillId")
                         .IsRequired()
                         .HasConstraintName("FK_StaffSkills_Skill");
 
-                    b.HasOne("LeaseBridge.API.Models.AppUser", "Staff")
-                        .WithMany("StaffSkills")
+                    b.HasOne("LeaseBridge.API.Models.AppUser", null)
+                        .WithMany()
                         .HasForeignKey("StaffId")
                         .IsRequired()
-                        .HasConstraintName("FK_StaffSkills_Staff");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Skill");
-
-                    b.Navigation("Staff");
+                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6");
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2866,8 +2788,6 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Properties");
-
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -2878,11 +2798,6 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.ApplicationStatus", b =>
                 {
                     b.Navigation("Applications");
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
-                {
-                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -2947,11 +2862,6 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.Property", b =>
                 {
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.Skill", b =>
-                {
-                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Unit", b =>
