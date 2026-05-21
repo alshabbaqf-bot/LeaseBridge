@@ -21,6 +21,8 @@ public partial class Lease
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+
     public virtual LeaseStatus Status { get; set; } = null!;
 
     public virtual AppUser Tenant { get; set; } = null!;

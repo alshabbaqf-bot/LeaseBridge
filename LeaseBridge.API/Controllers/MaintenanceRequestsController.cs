@@ -109,7 +109,7 @@ namespace LeaseBridge.API.Controllers
                 Title = dto.Title,
                 Description = dto.Description,
                 PriorityId = dto.PriorityId,
-                StatusId = dto.StatusId,
+                StatusId = 1, // Submitted
                 CreatedAt = DateTime.Now
             };
 

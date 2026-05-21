@@ -4,6 +4,7 @@ using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260519112205_AddInvoices")]
+    partial class AddInvoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,40 +380,6 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("PaymentId");
 
                     b.ToTable("Invoices");
-
-                    b.HasData(
-                        new
-                        {
-                            InvoiceId = 1,
-                            Amount = 450.00m,
-                            DueDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1001",
-                            IsPaid = true,
-                            IssuedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 1,
-                            PaymentId = 1
-                        },
-                        new
-                        {
-                            InvoiceId = 2,
-                            Amount = 600.00m,
-                            DueDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1002",
-                            IsPaid = false,
-                            IssuedDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 2,
-                            PaymentId = 2
-                        },
-                        new
-                        {
-                            InvoiceId = 3,
-                            Amount = 700.00m,
-                            DueDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            InvoiceNumber = "INV-1003",
-                            IsPaid = false,
-                            IssuedDate = new DateTime(2026, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 3
-                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -1232,7 +1201,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 1,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1001"
                         },
                         new
@@ -1244,7 +1213,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 2,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1002"
                         },
                         new
@@ -1267,7 +1236,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 4,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1004"
                         },
                         new
@@ -1290,7 +1259,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 6,
                             MethodId = 3,
                             PaymentDate = new DateTime(2026, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1006"
                         },
                         new
@@ -1313,7 +1282,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 8,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1008"
                         },
                         new
@@ -1324,7 +1293,7 @@ namespace LeaseBridge.API.Migrations
                             DueDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LeaseId = 9,
                             MethodId = 3,
-                            StatusId = 1,
+                            StatusId = 3,
                             TransactionReference = "TXN-1009"
                         },
                         new
@@ -1336,7 +1305,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 10,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1010"
                         },
                         new
@@ -1348,7 +1317,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 1,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1011"
                         },
                         new
@@ -1371,7 +1340,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 4,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1013"
                         },
                         new
@@ -1394,7 +1363,7 @@ namespace LeaseBridge.API.Migrations
                             LeaseId = 8,
                             MethodId = 3,
                             PaymentDate = new DateTime(2026, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
+                            StatusId = 2,
                             TransactionReference = "TXN-1015"
                         });
                 });
@@ -1564,7 +1533,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 1,
                             Description = "Luxury residential apartments",
                             Location = "Manama",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Palm Heights"
                         },
                         new
@@ -1572,7 +1541,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 2,
                             Description = "Modern high-rise residential building",
                             Location = "Seef",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Seef Towers"
                         },
                         new
@@ -1580,7 +1549,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 3,
                             Description = "Waterfront luxury residences",
                             Location = "Amwaj Islands",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Marina Residences"
                         },
                         new
@@ -1588,7 +1557,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 4,
                             Description = "Premium office spaces",
                             Location = "Diplomatic Area",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Business Bay Offices"
                         },
                         new
@@ -1596,7 +1565,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 5,
                             Description = "Family-friendly villa compound",
                             Location = "Riffa",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Green Gardens"
                         },
                         new
@@ -1604,7 +1573,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 6,
                             Description = "Affordable city apartments",
                             Location = "Juffair",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "City View Apartments"
                         },
                         new
@@ -1612,7 +1581,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 7,
                             Description = "Residential apartments near airport",
                             Location = "Muharraq",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Pearl Residency"
                         },
                         new
@@ -1620,7 +1589,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 8,
                             Description = "Mixed-use commercial property",
                             Location = "Seef",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Skyline Plaza"
                         },
                         new
@@ -1628,7 +1597,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 9,
                             Description = "Luxury beachfront villas",
                             Location = "Durrat Al Bahrain",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Lagoon Villas"
                         },
                         new
@@ -1636,7 +1605,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 10,
                             Description = "Student accommodation complex",
                             Location = "Isa Town",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "University Residences"
                         },
                         new
@@ -1644,7 +1613,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 11,
                             Description = "High-end residential tower",
                             Location = "Manama",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Al Naseem Tower"
                         },
                         new
@@ -1652,7 +1621,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 12,
                             Description = "Corporate office building",
                             Location = "Bahrain Bay",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Harbor Offices"
                         },
                         new
@@ -1660,7 +1629,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 13,
                             Description = "Private residential compound",
                             Location = "Saar",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Sunset Compound"
                         },
                         new
@@ -1668,7 +1637,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 14,
                             Description = "Luxury serviced apartments",
                             Location = "Juffair",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Royal Suites"
                         },
                         new
@@ -1676,7 +1645,7 @@ namespace LeaseBridge.API.Migrations
                             PropertyId = 15,
                             Description = "Technology and startup offices",
                             Location = "Hidd",
-                            ManagerId = 1,
+                            ManagerId = 13,
                             Name = "Tech Park Offices"
                         });
                 });
