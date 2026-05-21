@@ -1822,6 +1822,30 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     }
 );
 
+        modelBuilder.Entity<StaffSkill>().HasData(
+
+            //Staff Skill
+    new StaffSkill
+    {
+        StaffId = 5,
+        SkillId = 1,
+        CategoryId = 1
+    },
+
+    new StaffSkill
+    {
+        StaffId = 5,
+        SkillId = 2,
+        CategoryId = 2
+    },
+
+    new StaffSkill
+    {
+        StaffId = 6,
+        SkillId = 1,
+        CategoryId = 1
+    }
+);
         OnModelCreatingPartial(modelBuilder);
     }
 
