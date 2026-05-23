@@ -6,8 +6,6 @@
 
         public int LeaseId { get; set; }
 
-        public int? PaymentId { get; set; }
-
         public string InvoiceNumber { get; set; } = null!;
 
         public decimal Amount { get; set; }

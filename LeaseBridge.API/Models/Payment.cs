@@ -7,17 +7,13 @@ public partial class Payment
 {
     public int PaymentId { get; set; }
 
-    public int LeaseId { get; set; }
+    public int InvoiceId { get; set; }
 
     public int MethodId { get; set; }
 
     public decimal Amount { get; set; }
 
-    public DateTime? PaymentDate { get; set; }
-
-    public int StatusId { get; set; }
-
-    public DateTime DueDate { get; set; }
+    public DateTime PaymentDate { get; set; }
 
     public string? TransactionReference { get; set; }
 
@@ -25,14 +21,10 @@ public partial class Payment
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual Lease Lease { get; set; } = null!;
+    public virtual Invoice Invoice { get; set; } = null!;
 
     public virtual PaymentMethod Method { get; set; } = null!;
-
-    public virtual PaymentStatus Status { get; set; } = null!;
-
-    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
-
-
-
 }
+
+
+

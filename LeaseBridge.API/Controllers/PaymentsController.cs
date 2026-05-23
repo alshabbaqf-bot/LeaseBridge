@@ -26,12 +26,10 @@ namespace LeaseBridge.API.Controllers
                 .Select(p => new PaymentDto
                 {
                     PaymentId = p.PaymentId,
-                    LeaseId = p.LeaseId,
+                    InvoiceId = p.InvoiceId,
                     MethodId = p.MethodId,
                     Amount = p.Amount,
                     PaymentDate = p.PaymentDate,
-                    StatusId = p.StatusId,
-                    DueDate = p.DueDate,
                     TransactionReference = p.TransactionReference,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt
@@ -50,12 +48,10 @@ namespace LeaseBridge.API.Controllers
                 .Select(p => new PaymentDto
                 {
                     PaymentId = p.PaymentId,
-                    LeaseId = p.LeaseId,
+                    InvoiceId = p.InvoiceId,
                     MethodId = p.MethodId,
                     Amount = p.Amount,
                     PaymentDate = p.PaymentDate,
-                    StatusId = p.StatusId,
-                    DueDate = p.DueDate,
                     TransactionReference = p.TransactionReference,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt
@@ -68,21 +64,19 @@ namespace LeaseBridge.API.Controllers
             return Ok(payment);
         }
 
-        // GET: api/Payments/lease/1
-        [HttpGet("lease/{leaseId}")]
-        public async Task<IActionResult> GetPaymentsByLease(int leaseId)
+        // GET: api/Payments/invoice/1
+        [HttpGet("invoice/{invoiceId}")]
+        public async Task<IActionResult> GetPaymentsByInvoice(int invoiceId)
         {
             var payments = await _context.Payments
-                .Where(p => p.LeaseId == leaseId)
+                .Where(p => p.InvoiceId == invoiceId)
                 .Select(p => new PaymentDto
                 {
                     PaymentId = p.PaymentId,
-                    LeaseId = p.LeaseId,
+                    InvoiceId = p.InvoiceId,
                     MethodId = p.MethodId,
                     Amount = p.Amount,
                     PaymentDate = p.PaymentDate,
-                    StatusId = p.StatusId,
-                    DueDate = p.DueDate,
                     TransactionReference = p.TransactionReference,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt
@@ -100,28 +94,25 @@ namespace LeaseBridge.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Validate lease exists
-            var leaseExists = await _context.Leases
-                .AnyAsync(l => l.LeaseId == dto.LeaseId);
+            // Validate invoice exists
+            var invoiceExists = await _context.Invoices
+                .AnyAsync(i => i.InvoiceId == dto.InvoiceId);
 
-            if (!leaseExists)
-                return BadRequest("Lease does not exist.");
+            if (!invoiceExists)
+                return BadRequest("Invoice does not exist.");
 
-            // Validate due date
-            if (dto.PaymentDate.HasValue &&
-                dto.PaymentDate > DateTime.Now.AddDays(1))
+            // Validate payment date
+            if (dto.PaymentDate > DateTime.Now.AddDays(1))
             {
                 return BadRequest("Payment date cannot be in the future.");
             }
 
             var payment = new Payment
             {
-                LeaseId = dto.LeaseId,
+                InvoiceId = dto.InvoiceId,
                 MethodId = dto.MethodId,
                 Amount = dto.Amount,
                 PaymentDate = dto.PaymentDate,
-                StatusId = dto.StatusId,
-                DueDate = dto.DueDate,
                 TransactionReference = dto.TransactionReference,
                 CreatedAt = DateTime.Now
             };
@@ -153,12 +144,17 @@ namespace LeaseBridge.API.Controllers
             if (payment == null)
                 return NotFound("Payment not found.");
 
-            payment.LeaseId = dto.LeaseId;
+            // Validate invoice exists
+            var invoiceExists = await _context.Invoices
+                .AnyAsync(i => i.InvoiceId == dto.InvoiceId);
+
+            if (!invoiceExists)
+                return BadRequest("Invoice does not exist.");
+
+            payment.InvoiceId = dto.InvoiceId;
             payment.MethodId = dto.MethodId;
             payment.Amount = dto.Amount;
             payment.PaymentDate = dto.PaymentDate;
-            payment.StatusId = dto.StatusId;
-            payment.DueDate = dto.DueDate;
             payment.TransactionReference = dto.TransactionReference;
             payment.UpdatedAt = DateTime.Now;
 
