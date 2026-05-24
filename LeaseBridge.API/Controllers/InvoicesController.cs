@@ -28,7 +28,6 @@ namespace LeaseBridge.API.Controllers
                 {
                     InvoiceId = i.InvoiceId,
                     LeaseId = i.LeaseId,
-                    PaymentId = i.PaymentId,
                     InvoiceNumber = i.InvoiceNumber,
                     Amount = i.Amount,
                     IssuedDate = i.IssuedDate,
@@ -50,7 +49,6 @@ namespace LeaseBridge.API.Controllers
                 {
                     InvoiceId = i.InvoiceId,
                     LeaseId = i.LeaseId,
-                    PaymentId = i.PaymentId,
                     InvoiceNumber = i.InvoiceNumber,
                     Amount = i.Amount,
                     IssuedDate = i.IssuedDate,
@@ -74,37 +72,32 @@ namespace LeaseBridge.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Validate lease exists
             var leaseExists = await _context.Leases
                 .AnyAsync(l => l.LeaseId == dto.LeaseId);
 
             if (!leaseExists)
                 return BadRequest("Lease not found.");
 
-            if (dto.PaymentId.HasValue)
-            {
-                var paymentExists = await _context.Payments
-                    .AnyAsync(p => p.PaymentId == dto.PaymentId);
-
-                if (!paymentExists)
-                    return BadRequest("Payment not found.");
-            }
-
             var invoice = new Invoice
             {
                 LeaseId = dto.LeaseId,
-                PaymentId = dto.PaymentId,
                 InvoiceNumber = dto.InvoiceNumber,
                 Amount = dto.Amount,
                 IssuedDate = DateTime.Now,
                 DueDate = dto.DueDate,
-                StatusId = 1
+                StatusId = dto.StatusId
             };
 
             _context.Invoices.Add(invoice);
 
             await _context.SaveChangesAsync();
 
-            return Ok("Invoice created successfully.");
+            return Ok(new
+            {
+                Message = "Invoice created successfully.",
+                InvoiceId = invoice.InvoiceId
+            });
         }
 
         // PUT: api/Invoices/5
@@ -123,16 +116,8 @@ namespace LeaseBridge.API.Controllers
             if (invoice == null)
                 return NotFound("Invoice not found.");
 
-            if (dto.PaymentId.HasValue)
-            {
-                var paymentExists = await _context.Payments
-                    .AnyAsync(p => p.PaymentId == dto.PaymentId);
-
-                if (!paymentExists)
-                    return BadRequest("Payment not found.");
-            }
-
-            invoice.PaymentId = dto.PaymentId;
+            invoice.Amount = dto.Amount;
+            invoice.DueDate = dto.DueDate;
             invoice.StatusId = dto.StatusId;
 
             await _context.SaveChangesAsync();

@@ -51,7 +51,6 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
-    public virtual DbSet<PaymentStatus> PaymentStatuses { get; set; }
 
     public virtual DbSet<PriorityType> PriorityTypes { get; set; }
 
@@ -337,35 +336,38 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A3867B7C952");
+            entity.HasKey(e => e.PaymentId);
 
-            entity.HasIndex(e => e.TransactionReference, "UQ_Transaction").IsUnique();
+            entity.HasIndex(e => e.TransactionReference)
+                .IsUnique();
 
-            entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(10,2)");
+
+            entity.Property(e => e.PaymentDate)
                 .HasColumnType("datetime");
-            entity.Property(e => e.DueDate).HasColumnType("datetime");
-            entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime");
+
             entity.Property(e => e.TransactionReference)
                 .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Lease).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.LeaseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__LeaseI__619B8048");
+            entity.HasOne(d => d.Invoice)
+                .WithMany(p => p.Payments)
+                .HasForeignKey(d => d.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Payments_Invoice");
 
-            entity.HasOne(d => d.Method).WithMany(p => p.Payments)
+            entity.HasOne(d => d.Method)
+                .WithMany(p => p.Payments)
                 .HasForeignKey(d => d.MethodId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__Method__628FA481");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.StatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__Status__6383C8BA");
+                .HasConstraintName("FK_Payments_Method");
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
@@ -377,16 +379,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<PaymentStatus>(entity =>
-        {
-            entity.HasKey(e => e.StatusId).HasName("PK__PaymentS__C8EE2063B7DD4DC4");
-
-            entity.ToTable("PaymentStatus");
-
-            entity.HasIndex(e => e.Name, "UQ_PaymentStatus_Name").IsUnique();
-
-            entity.Property(e => e.Name).HasMaxLength(255);
-        });
+     
 
         modelBuilder.Entity<PriorityType>(entity =>
         {
@@ -520,32 +513,30 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<Invoice>(entity =>
+       
+            modelBuilder.Entity<Invoice>(entity =>
+            {
+                entity.HasKey(e => e.InvoiceId);
 
-        {
-            entity.HasOne(d => d.Status)
-    .WithMany(p => p.Invoices)
-    .HasForeignKey(d => d.StatusId)
-    .OnDelete(DeleteBehavior.ClientSetNull)
-    .HasConstraintName("FK_Invoice_Status");
-            entity.HasKey(e => e.InvoiceId);
+                entity.Property(e => e.InvoiceNumber)
+                    .HasMaxLength(50);
 
-            entity.Property(e => e.InvoiceNumber)
-                .HasMaxLength(50);
+                entity.Property(e => e.Amount)
+                    .HasColumnType("decimal(10,2)");
 
-            entity.Property(e => e.Amount)
-                .HasColumnType("decimal(10,2)");
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Status");
 
-            entity.HasOne(d => d.Lease)
-                .WithMany(p => p.Invoices)
-                .HasForeignKey(d => d.LeaseId)
-                .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(d => d.Lease)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.LeaseId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
-            entity.HasOne(d => d.Payment)
-                .WithMany(p => p.Invoices)
-                .HasForeignKey(d => d.PaymentId)
-                .OnDelete(DeleteBehavior.SetNull);
-        });
+      
         modelBuilder.Entity<InvoiceStatus>(entity =>
         {
             entity.HasKey(e => e.StatusId);
@@ -556,6 +547,183 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .HasMaxLength(50);
         });
         // SEED DATA
+        // AppUsers
+        modelBuilder.Entity<AppUser>().HasData(
+
+            // Manager
+            new AppUser
+            {
+                UserId = 1,
+                FirstName = "Manager",
+                LastName = "User",
+                Email = "manager@test.com",
+                PhoneNumber = "33330001",
+                IsAvailable = true
+            },
+
+            // Staff
+            new AppUser
+            {
+                UserId = 2,
+                FirstName = "Staff",
+                LastName = "User",
+                Email = "staff@test.com",
+                PhoneNumber = "33330002",
+                IsAvailable = true
+            },
+
+            // Tenant
+            new AppUser
+            {
+                UserId = 3,
+                FirstName = "Tenant",
+                LastName = "User",
+                Email = "tenant@test.com",
+                PhoneNumber = "33330003",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 4,
+                FirstName = "Noor",
+                LastName = "Ali",
+                Email = "noor.ali@gmail.com",
+                PhoneNumber = "33330004",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 5,
+                FirstName = "Khalid",
+                LastName = "Hasan",
+                Email = "khalid.hasan@gmail.com",
+                PhoneNumber = "33330005",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 6,
+                FirstName = "Fatima",
+                LastName = "Mahmood",
+                Email = "fatima.mahmood@gmail.com",
+                PhoneNumber = "33330006",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 7,
+                FirstName = "Ahmed",
+                LastName = "Yousif",
+                Email = "ahmed.yousif@gmail.com",
+                PhoneNumber = "33330007",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 8,
+                FirstName = "Layla",
+                LastName = "Ibrahim",
+                Email = "layla.ibrahim@gmail.com",
+                PhoneNumber = "33330008",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 9,
+                FirstName = "Yousef",
+                LastName = "Saleh",
+                Email = "yousef.saleh@gmail.com",
+                PhoneNumber = "33330009",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 10,
+                FirstName = "Mariam",
+                LastName = "Adel",
+                Email = "mariam.adel@gmail.com",
+                PhoneNumber = "33330010",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 11,
+                FirstName = "Hassan",
+                LastName = "Nasser",
+                Email = "hassan.nasser@gmail.com",
+                PhoneNumber = "33330011",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 12,
+                FirstName = "Zainab",
+                LastName = "Kareem",
+                Email = "zainab.kareem@gmail.com",
+                PhoneNumber = "33330012",
+                IsAvailable = true
+            },
+
+            // Additional Staff
+            new AppUser
+            {
+                UserId = 13,
+                FirstName = "Omar",
+                LastName = "Rahman",
+                Email = "omar.rahman@gmail.com",
+                PhoneNumber = "33330013",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 14,
+                FirstName = "Salman",
+                LastName = "Jaber",
+                Email = "salman.jaber@gmail.com",
+                PhoneNumber = "33330014",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 15,
+                FirstName = "Huda",
+                LastName = "Faisal",
+                Email = "huda.faisal@gmail.com",
+                PhoneNumber = "33330015",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 16,
+                FirstName = "Mahmood",
+                LastName = "Karim",
+                Email = "mahmood.karim@gmail.com",
+                PhoneNumber = "33330016",
+                IsAvailable = true
+            },
+
+            new AppUser
+            {
+                UserId = 17,
+                FirstName = "Reem",
+                LastName = "Nasser",
+                Email = "reem.nasser@gmail.com",
+                PhoneNumber = "33330017",
+                IsAvailable = true
+            }
+        );
 
         //Unit Types
         modelBuilder.Entity<UnitType>().HasData(
@@ -576,14 +744,7 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         );
 
 
-        // Payment Status
-        modelBuilder.Entity<PaymentStatus>().HasData(
-            new PaymentStatus { StatusId = 1, Name = "Pending" },
-            new PaymentStatus { StatusId = 2, Name = "Partial" },
-            new PaymentStatus { StatusId = 3, Name = "Paid" },
-            new PaymentStatus { StatusId = 4, Name = "Overdue" }
-        );
-
+        
 
         // Payment Methods
         modelBuilder.Entity<PaymentMethod>().HasData(
@@ -1078,204 +1239,233 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
             }
         );
 
+        //Invoice
+        modelBuilder.Entity<Invoice>().HasData(
+
+    new Invoice
+    {
+        InvoiceId = 1,
+        LeaseId = 1,
+        InvoiceNumber = "INV-1001",
+        Amount = 450.00m,
+        IssuedDate = new DateTime(2026, 1, 1),
+        DueDate = new DateTime(2026, 1, 10),
+        StatusId = 2
+    },
+
+    new Invoice
+    {
+        InvoiceId = 2,
+        LeaseId = 2,
+        InvoiceNumber = "INV-1002",
+        Amount = 600.00m,
+        IssuedDate = new DateTime(2026, 1, 5),
+        DueDate = new DateTime(2026, 1, 15),
+        StatusId = 1
+    },
+
+    new Invoice
+    {
+        InvoiceId = 3,
+        LeaseId = 3,
+        InvoiceNumber = "INV-1003",
+        Amount = 700.00m,
+        IssuedDate = new DateTime(2026, 1, 8),
+        DueDate = new DateTime(2026, 1, 20),
+        StatusId = 3
+    },
+
+    new Invoice
+    {
+        InvoiceId = 4,
+        LeaseId = 4,
+        InvoiceNumber = "INV-1004",
+        Amount = 360.00m,
+        IssuedDate = new DateTime(2026, 3, 1),
+        DueDate = new DateTime(2026, 3, 10),
+        StatusId = 2
+    },
+
+    new Invoice
+    {
+        InvoiceId = 5,
+        LeaseId = 5,
+        InvoiceNumber = "INV-1005",
+        Amount = 1200.00m,
+        IssuedDate = new DateTime(2026, 4, 1),
+        DueDate = new DateTime(2026, 4, 10),
+        StatusId = 3
+    },
+
+    new Invoice
+    {
+        InvoiceId = 6,
+        LeaseId = 6,
+        InvoiceNumber = "INV-1006",
+        Amount = 1250.00m,
+        IssuedDate = new DateTime(2026, 4, 1),
+        DueDate = new DateTime(2026, 4, 10),
+        StatusId = 2
+    },
+
+    new Invoice
+    {
+        InvoiceId = 7,
+        LeaseId = 7,
+        InvoiceNumber = "INV-1007",
+        Amount = 800.00m,
+        IssuedDate = new DateTime(2026, 5, 1),
+        DueDate = new DateTime(2026, 5, 10),
+        StatusId = 1
+    },
+
+    new Invoice
+    {
+        InvoiceId = 8,
+        LeaseId = 8,
+        InvoiceNumber = "INV-1008",
+        Amount = 850.00m,
+        IssuedDate = new DateTime(2026, 5, 1),
+        DueDate = new DateTime(2026, 5, 10),
+        StatusId = 2
+    },
+
+    new Invoice
+    {
+        InvoiceId = 9,
+        LeaseId = 9,
+        InvoiceNumber = "INV-1009",
+        Amount = 1500.00m,
+        IssuedDate = new DateTime(2026, 6, 1),
+        DueDate = new DateTime(2026, 6, 10),
+        StatusId = 1
+    },
+
+    new Invoice
+    {
+        InvoiceId = 10,
+        LeaseId = 10,
+        InvoiceNumber = "INV-1010",
+        Amount = 500.00m,
+        IssuedDate = new DateTime(2026, 6, 1),
+        DueDate = new DateTime(2026, 6, 10),
+        StatusId = 2
+    }
+);
+
         // Payments
         modelBuilder.Entity<Payment>().HasData(
 
-            new Payment
-            {
-                PaymentId = 1,
-                LeaseId = 1,
-                MethodId = 1,
-                Amount = 450,
-                PaymentDate = new DateTime(2026, 1, 5),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 1, 1),
-                TransactionReference = "TXN-1001",
-                CreatedAt = new DateTime(2026, 1, 5)
-            },
+    new Payment
+    {
+        PaymentId = 1,
+        InvoiceId = 1,
+        MethodId = 1,
+        Amount = 450,
+        PaymentDate = new DateTime(2026, 1, 5),
+        TransactionReference = "TXN-1001",
+        CreatedAt = new DateTime(2026, 1, 5)
+    },
 
-            new Payment
-            {
-                PaymentId = 2,
-                LeaseId = 2,
-                MethodId = 2,
-                Amount = 470,
-                PaymentDate = new DateTime(2026, 2, 3),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 2, 1),
-                TransactionReference = "TXN-1002",
-                CreatedAt = new DateTime(2026, 2, 3)
-            },
+    new Payment
+    {
+        PaymentId = 2,
+        InvoiceId = 2,
+        MethodId = 2,
+        Amount = 470,
+        PaymentDate = new DateTime(2026, 2, 3),
+        TransactionReference = "TXN-1002",
+        CreatedAt = new DateTime(2026, 2, 3)
+    },
 
-            new Payment
-            {
-                PaymentId = 3,
-                LeaseId = 3,
-                MethodId = 3,
-                Amount = 350,
-                PaymentDate = null,
-                StatusId = 1,
-                DueDate = new DateTime(2026, 3, 1),
-                TransactionReference = "TXN-1003",
-                CreatedAt = new DateTime(2026, 2, 25)
-            },
+    new Payment
+    {
+        PaymentId = 3,
+        InvoiceId = 3,
+        MethodId = 3,
+        Amount = 350,
+        PaymentDate = new DateTime(2026, 3, 1),
+        TransactionReference = "TXN-1003",
+        CreatedAt = new DateTime(2026, 2, 25)
+    },
 
-            new Payment
-            {
-                PaymentId = 4,
-                LeaseId = 4,
-                MethodId = 1,
-                Amount = 360,
-                PaymentDate = new DateTime(2026, 3, 7),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 3, 1),
-                TransactionReference = "TXN-1004",
-                CreatedAt = new DateTime(2026, 3, 7)
-            },
+    new Payment
+    {
+        PaymentId = 4,
+        InvoiceId = 4,
+        MethodId = 1,
+        Amount = 360,
+        PaymentDate = new DateTime(2026, 3, 7),
+        TransactionReference = "TXN-1004",
+        CreatedAt = new DateTime(2026, 3, 7)
+    },
 
-            new Payment
-            {
-                PaymentId = 5,
-                LeaseId = 5,
-                MethodId = 2,
-                Amount = 1200,
-                PaymentDate = null,
-                StatusId = 4,
-                DueDate = new DateTime(2026, 4, 1),
-                TransactionReference = "TXN-1005",
-                CreatedAt = new DateTime(2026, 3, 28)
-            },
+    new Payment
+    {
+        PaymentId = 5,
+        InvoiceId = 5,
+        MethodId = 2,
+        Amount = 1200,
+        PaymentDate = new DateTime(2026, 4, 2),
+        TransactionReference = "TXN-1005",
+        CreatedAt = new DateTime(2026, 3, 28)
+    },
 
-            new Payment
-            {
-                PaymentId = 6,
-                LeaseId = 6,
-                MethodId = 3,
-                Amount = 1250,
-                PaymentDate = new DateTime(2026, 4, 4),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 4, 1),
-                TransactionReference = "TXN-1006",
-                CreatedAt = new DateTime(2026, 4, 4)
-            },
+    new Payment
+    {
+        PaymentId = 6,
+        InvoiceId = 6,
+        MethodId = 3,
+        Amount = 1250,
+        PaymentDate = new DateTime(2026, 4, 4),
+        TransactionReference = "TXN-1006",
+        CreatedAt = new DateTime(2026, 4, 4)
+    },
 
-            new Payment
-            {
-                PaymentId = 7,
-                LeaseId = 7,
-                MethodId = 1,
-                Amount = 800,
-                PaymentDate = null,
-                StatusId = 1,
-                DueDate = new DateTime(2026, 5, 1),
-                TransactionReference = "TXN-1007",
-                CreatedAt = new DateTime(2026, 4, 27)
-            },
+    new Payment
+    {
+        PaymentId = 7,
+        InvoiceId = 7,
+        MethodId = 1,
+        Amount = 800,
+        PaymentDate = new DateTime(2026, 5, 2),
+        TransactionReference = "TXN-1007",
+        CreatedAt = new DateTime(2026, 4, 27)
+    },
 
-            new Payment
-            {
-                PaymentId = 8,
-                LeaseId = 8,
-                MethodId = 2,
-                Amount = 850,
-                PaymentDate = new DateTime(2026, 5, 6),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 5, 1),
-                TransactionReference = "TXN-1008",
-                CreatedAt = new DateTime(2026, 5, 6)
-            },
+    new Payment
+    {
+        PaymentId = 8,
+        InvoiceId = 8,
+        MethodId = 2,
+        Amount = 850,
+        PaymentDate = new DateTime(2026, 5, 6),
+        TransactionReference = "TXN-1008",
+        CreatedAt = new DateTime(2026, 5, 6)
+    },
 
-            new Payment
-            {
-                PaymentId = 9,
-                LeaseId = 9,
-                MethodId = 3,
-                Amount = 1500,
-                PaymentDate = null,
-                StatusId = 1,
-                DueDate = new DateTime(2026, 6, 1),
-                TransactionReference = "TXN-1009",
-                CreatedAt = new DateTime(2026, 5, 29)
-            },
+    new Payment
+    {
+        PaymentId = 9,
+        InvoiceId = 9,
+        MethodId = 3,
+        Amount = 1500,
+        PaymentDate = new DateTime(2026, 6, 2),
+        TransactionReference = "TXN-1009",
+        CreatedAt = new DateTime(2026, 5, 29)
+    },
 
-            new Payment
-            {
-                PaymentId = 10,
-                LeaseId = 10,
-                MethodId = 1,
-                Amount = 500,
-                PaymentDate = new DateTime(2026, 6, 2),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 6, 1),
-                TransactionReference = "TXN-1010",
-                CreatedAt = new DateTime(2026, 6, 2)
-            },
-
-            new Payment
-            {
-                PaymentId = 11,
-                LeaseId = 1,
-                MethodId = 2,
-                Amount = 450,
-                PaymentDate = new DateTime(2026, 2, 5),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 2, 1),
-                TransactionReference = "TXN-1011",
-                CreatedAt = new DateTime(2026, 2, 5)
-            },
-
-            new Payment
-            {
-                PaymentId = 12,
-                LeaseId = 2,
-                MethodId = 3,
-                Amount = 470,
-                PaymentDate = null,
-                StatusId = 4,
-                DueDate = new DateTime(2026, 3, 1),
-                TransactionReference = "TXN-1012",
-                CreatedAt = new DateTime(2026, 2, 27)
-            },
-
-            new Payment
-            {
-                PaymentId = 13,
-                LeaseId = 4,
-                MethodId = 1,
-                Amount = 360,
-                PaymentDate = new DateTime(2026, 4, 3),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 4, 1),
-                TransactionReference = "TXN-1013",
-                CreatedAt = new DateTime(2026, 4, 3)
-            },
-
-            new Payment
-            {
-                PaymentId = 14,
-                LeaseId = 6,
-                MethodId = 2,
-                Amount = 1250,
-                PaymentDate = null,
-                StatusId = 1,
-                DueDate = new DateTime(2026, 5, 1),
-                TransactionReference = "TXN-1014",
-                CreatedAt = new DateTime(2026, 4, 28)
-            },
-
-            new Payment
-            {
-                PaymentId = 15,
-                LeaseId = 8,
-                MethodId = 3,
-                Amount = 850,
-                PaymentDate = new DateTime(2026, 6, 4),
-                StatusId = 3,
-                DueDate = new DateTime(2026, 6, 1),
-                TransactionReference = "TXN-1015",
-                CreatedAt = new DateTime(2026, 6, 4)
-            }
-        );
+    new Payment
+    {
+        PaymentId = 10,
+        InvoiceId = 10,
+        MethodId = 1,
+        Amount = 500,
+        PaymentDate = new DateTime(2026, 6, 2),
+        TransactionReference = "TXN-1010",
+        CreatedAt = new DateTime(2026, 6, 2)
+    }
+);
 
         // Maintenance Requests
         modelBuilder.Entity<MaintenanceRequest>().HasData(
@@ -1762,47 +1952,8 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
     }
 
 );
-        //Invoice
-        modelBuilder.Entity<Invoice>().HasData(
+        
 
-
-    new Invoice
-    {
-        InvoiceId = 1,
-        LeaseId = 1,
-        PaymentId = 1,
-        InvoiceNumber = "INV-1001",
-        Amount = 450.00m,
-        IssuedDate = new DateTime(2026, 1, 1),
-        DueDate = new DateTime(2026, 1, 10),
-        StatusId = 2
-    },
-
-    new Invoice
-    {
-        InvoiceId = 2,
-        LeaseId = 2,
-        PaymentId = 2,
-        InvoiceNumber = "INV-1002",
-        Amount = 600.00m,
-        IssuedDate = new DateTime(2026, 1, 5),
-        DueDate = new DateTime(2026, 1, 15),
-        StatusId = 1
-    },
-
-    new Invoice
-    {
-        InvoiceId = 3,
-        LeaseId = 3,
-        PaymentId = null,
-        InvoiceNumber = "INV-1003",
-        Amount = 700.00m,
-        IssuedDate = new DateTime(2026, 1, 8),
-        DueDate = new DateTime(2026, 1, 20),
-        StatusId = 1
-    }
-
-);
         //Invoice status
         modelBuilder.Entity<InvoiceStatus>().HasData(
     new InvoiceStatus
@@ -1821,31 +1972,44 @@ public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
         Name = "Overdue"
     }
 );
-
+        //Staff Skill
         modelBuilder.Entity<StaffSkill>().HasData(
 
-            //Staff Skill
-    new StaffSkill
-    {
-        StaffId = 5,
-        SkillId = 1,
-        CategoryId = 1
-    },
+     new StaffSkill
+     {
+         StaffId = 13,
+         SkillId = 1,
+         CategoryId = 1
+     },
 
-    new StaffSkill
-    {
-        StaffId = 5,
-        SkillId = 2,
-        CategoryId = 2
-    },
+     new StaffSkill
+     {
+         StaffId = 14,
+         SkillId = 2,
+         CategoryId = 2
+     },
 
-    new StaffSkill
-    {
-        StaffId = 6,
-        SkillId = 1,
-        CategoryId = 1
-    }
-);
+     new StaffSkill
+     {
+         StaffId = 15,
+         SkillId = 3,
+         CategoryId = 3
+     },
+
+     new StaffSkill
+     {
+         StaffId = 16,
+         SkillId = 4,
+         CategoryId = 4
+     },
+
+     new StaffSkill
+     {
+         StaffId = 17,
+         SkillId = 5,
+         CategoryId = 4
+     }
+ );
         OnModelCreatingPartial(modelBuilder);
     }
 

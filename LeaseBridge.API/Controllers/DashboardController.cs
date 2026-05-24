@@ -17,7 +17,6 @@ namespace LeaseBridge.API.Controllers
             _context = context;
         }
 
-
         // OVERVIEW DASHBOARD
         [HttpGet("overview")]
         public async Task<IActionResult> GetOverview()
@@ -63,32 +62,34 @@ namespace LeaseBridge.API.Controllers
             });
         }
 
-
-        // PAYMENT STATISTICS
+        // PAYMENT & INVOICE STATISTICS
         [HttpGet("payments")]
         public async Task<IActionResult> GetPaymentStatistics()
         {
-            var totalPayments = await _context.Payments.CountAsync();
+            var totalPayments = await _context.Payments
+                .CountAsync();
 
-            var paidPayments = await _context.Payments
-                .CountAsync(p => p.StatusId == 2);
+            var paidInvoices = await _context.Invoices
+                .CountAsync(i => i.StatusId == 2);
 
-            var overduePayments = await _context.Payments
-                .CountAsync(p => p.StatusId == 4);
+            var pendingInvoices = await _context.Invoices
+                .CountAsync(i => i.StatusId == 1);
+
+            var overdueInvoices = await _context.Invoices
+                .CountAsync(i => i.StatusId == 3);
 
             var totalRevenue = await _context.Payments
-                .Where(p => p.StatusId == 2)
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
             return Ok(new
             {
                 TotalPayments = totalPayments,
-                PaidPayments = paidPayments,
-                OverduePayments = overduePayments,
+                PaidInvoices = paidInvoices,
+                PendingInvoices = pendingInvoices,
+                OverdueInvoices = overdueInvoices,
                 TotalRevenue = totalRevenue
             });
         }
-
 
         // MAINTENANCE STATISTICS
         [HttpGet("maintenance")]
@@ -148,12 +149,12 @@ namespace LeaseBridge.API.Controllers
             });
         }
 
-
         // OCCUPANCY STATISTICS
         [HttpGet("occupancy")]
         public async Task<IActionResult> GetOccupancyStatistics()
         {
-            var totalUnits = await _context.Units.CountAsync();
+            var totalUnits = await _context.Units
+                .CountAsync();
 
             var occupiedUnits = await _context.Units
                 .CountAsync(u => u.StatusId == 2);

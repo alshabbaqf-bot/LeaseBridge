@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeaseBridge.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260514212410_SeedMaintenanceRequests")]
-    partial class SeedMaintenanceRequests
+    [Migration("20260523063601_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,6 +112,161 @@ namespace LeaseBridge.API.Migrations
                         .HasFilter("[IdentityUserId] IS NOT NULL");
 
                     b.ToTable("AppUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Email = "manager@test.com",
+                            FirstName = "Manager",
+                            IsAvailable = true,
+                            LastName = "User",
+                            PhoneNumber = "33330001"
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Email = "staff@test.com",
+                            FirstName = "Staff",
+                            IsAvailable = true,
+                            LastName = "User",
+                            PhoneNumber = "33330002"
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            Email = "tenant@test.com",
+                            FirstName = "Tenant",
+                            IsAvailable = true,
+                            LastName = "User",
+                            PhoneNumber = "33330003"
+                        },
+                        new
+                        {
+                            UserId = 4,
+                            Email = "noor.ali@gmail.com",
+                            FirstName = "Noor",
+                            IsAvailable = true,
+                            LastName = "Ali",
+                            PhoneNumber = "33330004"
+                        },
+                        new
+                        {
+                            UserId = 5,
+                            Email = "khalid.hasan@gmail.com",
+                            FirstName = "Khalid",
+                            IsAvailable = true,
+                            LastName = "Hasan",
+                            PhoneNumber = "33330005"
+                        },
+                        new
+                        {
+                            UserId = 6,
+                            Email = "fatima.mahmood@gmail.com",
+                            FirstName = "Fatima",
+                            IsAvailable = true,
+                            LastName = "Mahmood",
+                            PhoneNumber = "33330006"
+                        },
+                        new
+                        {
+                            UserId = 7,
+                            Email = "ahmed.yousif@gmail.com",
+                            FirstName = "Ahmed",
+                            IsAvailable = true,
+                            LastName = "Yousif",
+                            PhoneNumber = "33330007"
+                        },
+                        new
+                        {
+                            UserId = 8,
+                            Email = "layla.ibrahim@gmail.com",
+                            FirstName = "Layla",
+                            IsAvailable = true,
+                            LastName = "Ibrahim",
+                            PhoneNumber = "33330008"
+                        },
+                        new
+                        {
+                            UserId = 9,
+                            Email = "yousef.saleh@gmail.com",
+                            FirstName = "Yousef",
+                            IsAvailable = true,
+                            LastName = "Saleh",
+                            PhoneNumber = "33330009"
+                        },
+                        new
+                        {
+                            UserId = 10,
+                            Email = "mariam.adel@gmail.com",
+                            FirstName = "Mariam",
+                            IsAvailable = true,
+                            LastName = "Adel",
+                            PhoneNumber = "33330010"
+                        },
+                        new
+                        {
+                            UserId = 11,
+                            Email = "hassan.nasser@gmail.com",
+                            FirstName = "Hassan",
+                            IsAvailable = true,
+                            LastName = "Nasser",
+                            PhoneNumber = "33330011"
+                        },
+                        new
+                        {
+                            UserId = 12,
+                            Email = "zainab.kareem@gmail.com",
+                            FirstName = "Zainab",
+                            IsAvailable = true,
+                            LastName = "Kareem",
+                            PhoneNumber = "33330012"
+                        },
+                        new
+                        {
+                            UserId = 13,
+                            Email = "omar.rahman@gmail.com",
+                            FirstName = "Omar",
+                            IsAvailable = true,
+                            LastName = "Rahman",
+                            PhoneNumber = "33330013"
+                        },
+                        new
+                        {
+                            UserId = 14,
+                            Email = "salman.jaber@gmail.com",
+                            FirstName = "Salman",
+                            IsAvailable = true,
+                            LastName = "Jaber",
+                            PhoneNumber = "33330014"
+                        },
+                        new
+                        {
+                            UserId = 15,
+                            Email = "huda.faisal@gmail.com",
+                            FirstName = "Huda",
+                            IsAvailable = true,
+                            LastName = "Faisal",
+                            PhoneNumber = "33330015"
+                        },
+                        new
+                        {
+                            UserId = 16,
+                            Email = "mahmood.karim@gmail.com",
+                            FirstName = "Mahmood",
+                            IsAvailable = true,
+                            LastName = "Karim",
+                            PhoneNumber = "33330016"
+                        },
+                        new
+                        {
+                            UserId = 17,
+                            Email = "reem.nasser@gmail.com",
+                            FirstName = "Reem",
+                            IsAvailable = true,
+                            LastName = "Nasser",
+                            PhoneNumber = "33330017"
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -152,6 +307,98 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Applications");
+
+                    b.HasData(
+                        new
+                        {
+                            ApplicationId = 1,
+                            ApplicationDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 1,
+                            TenantId = 3,
+                            UnitId = 11
+                        },
+                        new
+                        {
+                            ApplicationId = 2,
+                            ApplicationDate = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 2,
+                            TenantId = 4,
+                            UnitId = 12
+                        },
+                        new
+                        {
+                            ApplicationId = 3,
+                            ApplicationDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 3,
+                            TenantId = 5,
+                            UnitId = 13
+                        },
+                        new
+                        {
+                            ApplicationId = 4,
+                            ApplicationDate = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 1,
+                            TenantId = 6,
+                            UnitId = 14
+                        },
+                        new
+                        {
+                            ApplicationId = 5,
+                            ApplicationDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 2,
+                            TenantId = 7,
+                            UnitId = 15
+                        },
+                        new
+                        {
+                            ApplicationId = 6,
+                            ApplicationDate = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 3,
+                            TenantId = 8,
+                            UnitId = 11
+                        },
+                        new
+                        {
+                            ApplicationId = 7,
+                            ApplicationDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 1,
+                            TenantId = 9,
+                            UnitId = 12
+                        },
+                        new
+                        {
+                            ApplicationId = 8,
+                            ApplicationDate = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 2,
+                            TenantId = 10,
+                            UnitId = 13
+                        },
+                        new
+                        {
+                            ApplicationId = 9,
+                            ApplicationDate = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 1,
+                            TenantId = 11,
+                            UnitId = 14
+                        },
+                        new
+                        {
+                            ApplicationId = 10,
+                            ApplicationDate = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2026, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 3,
+                            TenantId = 12,
+                            UnitId = 15
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.ApplicationStatus", b =>
@@ -228,6 +475,200 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Feedback", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            FeedbackId = 1,
+                            CreatedAt = new DateTime(2026, 1, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Message = "Maintenance team was quick and professional.",
+                            Rating = 5,
+                            RequestId = 5,
+                            TenantId = 7
+                        },
+                        new
+                        {
+                            FeedbackId = 2,
+                            CreatedAt = new DateTime(2026, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Message = "Painting quality was very good.",
+                            Rating = 4,
+                            RequestId = 9,
+                            TenantId = 11
+                        });
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.Invoice", b =>
+                {
+                    b.Property<int>("InvoiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("IssuedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LeaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvoiceId");
+
+                    b.HasIndex("LeaseId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Invoices");
+
+                    b.HasData(
+                        new
+                        {
+                            InvoiceId = 1,
+                            Amount = 450.00m,
+                            DueDate = new DateTime(2026, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1001",
+                            IssuedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 1,
+                            StatusId = 2
+                        },
+                        new
+                        {
+                            InvoiceId = 2,
+                            Amount = 600.00m,
+                            DueDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1002",
+                            IssuedDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 2,
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            InvoiceId = 3,
+                            Amount = 700.00m,
+                            DueDate = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1003",
+                            IssuedDate = new DateTime(2026, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 3,
+                            StatusId = 3
+                        },
+                        new
+                        {
+                            InvoiceId = 4,
+                            Amount = 360.00m,
+                            DueDate = new DateTime(2026, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1004",
+                            IssuedDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 4,
+                            StatusId = 2
+                        },
+                        new
+                        {
+                            InvoiceId = 5,
+                            Amount = 1200.00m,
+                            DueDate = new DateTime(2026, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1005",
+                            IssuedDate = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 5,
+                            StatusId = 3
+                        },
+                        new
+                        {
+                            InvoiceId = 6,
+                            Amount = 1250.00m,
+                            DueDate = new DateTime(2026, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1006",
+                            IssuedDate = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 6,
+                            StatusId = 2
+                        },
+                        new
+                        {
+                            InvoiceId = 7,
+                            Amount = 800.00m,
+                            DueDate = new DateTime(2026, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1007",
+                            IssuedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 7,
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            InvoiceId = 8,
+                            Amount = 850.00m,
+                            DueDate = new DateTime(2026, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1008",
+                            IssuedDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 8,
+                            StatusId = 2
+                        },
+                        new
+                        {
+                            InvoiceId = 9,
+                            Amount = 1500.00m,
+                            DueDate = new DateTime(2026, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1009",
+                            IssuedDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 9,
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            InvoiceId = 10,
+                            Amount = 500.00m,
+                            DueDate = new DateTime(2026, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InvoiceNumber = "INV-1010",
+                            IssuedDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LeaseId = 10,
+                            StatusId = 2
+                        });
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
+                {
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("StatusId");
+
+                    b.ToTable("InvoiceStatus", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            StatusId = 1,
+                            Name = "Pending"
+                        },
+                        new
+                        {
+                            StatusId = 2,
+                            Name = "Paid"
+                        },
+                        new
+                        {
+                            StatusId = 3,
+                            Name = "Overdue"
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -445,6 +886,78 @@ namespace LeaseBridge.API.Migrations
                         .IsUnique();
 
                     b.ToTable("MaintenanceAssignments");
+
+                    b.HasData(
+                        new
+                        {
+                            AssignmentId = 1,
+                            AssignedDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 1,
+                            StaffId = 13
+                        },
+                        new
+                        {
+                            AssignmentId = 2,
+                            AssignedDate = new DateTime(2026, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 2,
+                            StaffId = 14
+                        },
+                        new
+                        {
+                            AssignmentId = 3,
+                            AssignedDate = new DateTime(2026, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 3,
+                            StaffId = 15
+                        },
+                        new
+                        {
+                            AssignmentId = 4,
+                            AssignedDate = new DateTime(2026, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 4,
+                            StaffId = 16
+                        },
+                        new
+                        {
+                            AssignmentId = 5,
+                            AssignedDate = new DateTime(2026, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 5,
+                            StaffId = 17
+                        },
+                        new
+                        {
+                            AssignmentId = 6,
+                            AssignedDate = new DateTime(2026, 1, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 6,
+                            StaffId = 13
+                        },
+                        new
+                        {
+                            AssignmentId = 7,
+                            AssignedDate = new DateTime(2026, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 7,
+                            StaffId = 14
+                        },
+                        new
+                        {
+                            AssignmentId = 8,
+                            AssignedDate = new DateTime(2026, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 8,
+                            StaffId = 15
+                        },
+                        new
+                        {
+                            AssignmentId = 9,
+                            AssignedDate = new DateTime(2026, 1, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 9,
+                            StaffId = 16
+                        },
+                        new
+                        {
+                            AssignmentId = 10,
+                            AssignedDate = new DateTime(2026, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RequestId = 10,
+                            StaffId = 17
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.MaintenanceAttachment", b =>
@@ -470,6 +983,26 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("RequestId");
 
                     b.ToTable("MaintenanceAttachments");
+
+                    b.HasData(
+                        new
+                        {
+                            AttachmentId = 1,
+                            FileUrl = "https://example.com/leak-photo.jpg",
+                            RequestId = 1
+                        },
+                        new
+                        {
+                            AttachmentId = 2,
+                            FileUrl = "https://example.com/door-lock.jpg",
+                            RequestId = 5
+                        },
+                        new
+                        {
+                            AttachmentId = 3,
+                            FileUrl = "https://example.com/wall-paint.jpg",
+                            RequestId = 9
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.MaintenanceCategory", b =>
@@ -806,6 +1339,38 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("UpdatedBy");
 
                     b.ToTable("MaintenanceUpdates");
+
+                    b.HasData(
+                        new
+                        {
+                            UpdateId = 1,
+                            CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NewStatusId = 2,
+                            Notes = "Assigned to plumbing staff.",
+                            OldStatusId = 1,
+                            RequestId = 1,
+                            UpdatedBy = 13
+                        },
+                        new
+                        {
+                            UpdateId = 2,
+                            CreatedAt = new DateTime(2026, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NewStatusId = 4,
+                            Notes = "Door lock repaired successfully.",
+                            OldStatusId = 2,
+                            RequestId = 5,
+                            UpdatedBy = 17
+                        },
+                        new
+                        {
+                            UpdateId = 3,
+                            CreatedAt = new DateTime(2026, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NewStatusId = 4,
+                            Notes = "Wall repaint completed.",
+                            OldStatusId = 3,
+                            RequestId = 9,
+                            UpdatedBy = 16
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Notification", b =>
@@ -870,27 +1435,19 @@ namespace LeaseBridge.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(10, 2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("LeaseId")
+                    b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
                     b.Property<int>("MethodId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
 
                     b.Property<string>("TransactionReference")
                         .HasMaxLength(255)
@@ -900,16 +1457,13 @@ namespace LeaseBridge.API.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
 
-                    b.HasKey("PaymentId")
-                        .HasName("PK__Payments__9B556A3867B7C952");
+                    b.HasKey("PaymentId");
 
-                    b.HasIndex("LeaseId");
+                    b.HasIndex("InvoiceId");
 
                     b.HasIndex("MethodId");
 
-                    b.HasIndex("StatusId");
-
-                    b.HasIndex(new[] { "TransactionReference" }, "UQ_Transaction")
+                    b.HasIndex("TransactionReference")
                         .IsUnique()
                         .HasFilter("[TransactionReference] IS NOT NULL");
 
@@ -921,11 +1475,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 1,
                             Amount = 450m,
                             CreatedAt = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 1,
+                            InvoiceId = 1,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1001"
                         },
                         new
@@ -933,11 +1485,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 2,
                             Amount = 470m,
                             CreatedAt = new DateTime(2026, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 2,
+                            InvoiceId = 2,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1002"
                         },
                         new
@@ -945,10 +1495,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 3,
                             Amount = 350m,
                             CreatedAt = new DateTime(2026, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 3,
+                            InvoiceId = 3,
                             MethodId = 3,
-                            StatusId = 1,
+                            PaymentDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TransactionReference = "TXN-1003"
                         },
                         new
@@ -956,11 +1505,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 4,
                             Amount = 360m,
                             CreatedAt = new DateTime(2026, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 4,
+                            InvoiceId = 4,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1004"
                         },
                         new
@@ -968,10 +1515,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 5,
                             Amount = 1200m,
                             CreatedAt = new DateTime(2026, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 5,
+                            InvoiceId = 5,
                             MethodId = 2,
-                            StatusId = 4,
+                            PaymentDate = new DateTime(2026, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TransactionReference = "TXN-1005"
                         },
                         new
@@ -979,11 +1525,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 6,
                             Amount = 1250m,
                             CreatedAt = new DateTime(2026, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 6,
+                            InvoiceId = 6,
                             MethodId = 3,
                             PaymentDate = new DateTime(2026, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1006"
                         },
                         new
@@ -991,10 +1535,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 7,
                             Amount = 800m,
                             CreatedAt = new DateTime(2026, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 7,
+                            InvoiceId = 7,
                             MethodId = 1,
-                            StatusId = 1,
+                            PaymentDate = new DateTime(2026, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TransactionReference = "TXN-1007"
                         },
                         new
@@ -1002,11 +1545,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 8,
                             Amount = 850m,
                             CreatedAt = new DateTime(2026, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 8,
+                            InvoiceId = 8,
                             MethodId = 2,
                             PaymentDate = new DateTime(2026, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1008"
                         },
                         new
@@ -1014,10 +1555,9 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 9,
                             Amount = 1500m,
                             CreatedAt = new DateTime(2026, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 9,
+                            InvoiceId = 9,
                             MethodId = 3,
-                            StatusId = 3,
+                            PaymentDate = new DateTime(2026, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TransactionReference = "TXN-1009"
                         },
                         new
@@ -1025,70 +1565,10 @@ namespace LeaseBridge.API.Migrations
                             PaymentId = 10,
                             Amount = 500m,
                             CreatedAt = new DateTime(2026, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 10,
+                            InvoiceId = 10,
                             MethodId = 1,
                             PaymentDate = new DateTime(2026, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
                             TransactionReference = "TXN-1010"
-                        },
-                        new
-                        {
-                            PaymentId = 11,
-                            Amount = 450m,
-                            CreatedAt = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 1,
-                            MethodId = 2,
-                            PaymentDate = new DateTime(2026, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TransactionReference = "TXN-1011"
-                        },
-                        new
-                        {
-                            PaymentId = 12,
-                            Amount = 470m,
-                            CreatedAt = new DateTime(2026, 2, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 2,
-                            MethodId = 3,
-                            StatusId = 4,
-                            TransactionReference = "TXN-1012"
-                        },
-                        new
-                        {
-                            PaymentId = 13,
-                            Amount = 360m,
-                            CreatedAt = new DateTime(2026, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 4,
-                            MethodId = 1,
-                            PaymentDate = new DateTime(2026, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TransactionReference = "TXN-1013"
-                        },
-                        new
-                        {
-                            PaymentId = 14,
-                            Amount = 1250m,
-                            CreatedAt = new DateTime(2026, 4, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 6,
-                            MethodId = 2,
-                            StatusId = 1,
-                            TransactionReference = "TXN-1014"
-                        },
-                        new
-                        {
-                            PaymentId = 15,
-                            Amount = 850m,
-                            CreatedAt = new DateTime(2026, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DueDate = new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LeaseId = 8,
-                            MethodId = 3,
-                            PaymentDate = new DateTime(2026, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            TransactionReference = "TXN-1015"
                         });
                 });
 
@@ -1133,50 +1613,6 @@ namespace LeaseBridge.API.Migrations
                         {
                             MethodId = 4,
                             Name = "BenefitPay"
-                        });
-                });
-
-            modelBuilder.Entity("LeaseBridge.API.Models.PaymentStatus", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("StatusId")
-                        .HasName("PK__PaymentS__C8EE2063B7DD4DC4");
-
-                    b.HasIndex(new[] { "Name" }, "UQ_PaymentStatus_Name")
-                        .IsUnique();
-
-                    b.ToTable("PaymentStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            Name = "Partial"
-                        },
-                        new
-                        {
-                            StatusId = 3,
-                            Name = "Paid"
-                        },
-                        new
-                        {
-                            StatusId = 4,
-                            Name = "Overdue"
                         });
                 });
 
@@ -1639,6 +2075,32 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("UnitImages");
+
+                    b.HasData(
+                        new
+                        {
+                            ImageId = 1,
+                            ImageUrl = "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
+                            UnitId = 1
+                        },
+                        new
+                        {
+                            ImageId = 2,
+                            ImageUrl = "https://images.unsplash.com/photo-1494526585095-c41746248156",
+                            UnitId = 2
+                        },
+                        new
+                        {
+                            ImageId = 3,
+                            ImageUrl = "https://images.unsplash.com/photo-1484154218962-a197022b5858",
+                            UnitId = 3
+                        },
+                        new
+                        {
+                            ImageId = 4,
+                            ImageUrl = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+                            UnitId = 4
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.UnitStatus", b =>
@@ -1938,14 +2400,50 @@ namespace LeaseBridge.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("SkillId")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.HasKey("StaffId", "SkillId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("SkillId");
 
                     b.ToTable("StaffSkills", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            StaffId = 13,
+                            SkillId = 1,
+                            CategoryId = 1
+                        },
+                        new
+                        {
+                            StaffId = 14,
+                            SkillId = 2,
+                            CategoryId = 2
+                        },
+                        new
+                        {
+                            StaffId = 15,
+                            SkillId = 3,
+                            CategoryId = 3
+                        },
+                        new
+                        {
+                            StaffId = 16,
+                            SkillId = 4,
+                            CategoryId = 4
+                        },
+                        new
+                        {
+                            StaffId = 17,
+                            SkillId = 5,
+                            CategoryId = 4
+                        });
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -1962,6 +2460,98 @@ namespace LeaseBridge.API.Migrations
                     b.HasIndex("AmenityId");
 
                     b.ToTable("UnitAmenities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UnitId = 1,
+                            AmenityId = 1
+                        },
+                        new
+                        {
+                            UnitId = 1,
+                            AmenityId = 4
+                        },
+                        new
+                        {
+                            UnitId = 2,
+                            AmenityId = 2
+                        },
+                        new
+                        {
+                            UnitId = 2,
+                            AmenityId = 4
+                        },
+                        new
+                        {
+                            UnitId = 3,
+                            AmenityId = 1
+                        },
+                        new
+                        {
+                            UnitId = 3,
+                            AmenityId = 3
+                        },
+                        new
+                        {
+                            UnitId = 4,
+                            AmenityId = 2
+                        },
+                        new
+                        {
+                            UnitId = 4,
+                            AmenityId = 3
+                        },
+                        new
+                        {
+                            UnitId = 4,
+                            AmenityId = 4
+                        },
+                        new
+                        {
+                            UnitId = 5,
+                            AmenityId = 1
+                        },
+                        new
+                        {
+                            UnitId = 6,
+                            AmenityId = 4
+                        },
+                        new
+                        {
+                            UnitId = 7,
+                            AmenityId = 1
+                        },
+                        new
+                        {
+                            UnitId = 7,
+                            AmenityId = 2
+                        },
+                        new
+                        {
+                            UnitId = 8,
+                            AmenityId = 3
+                        },
+                        new
+                        {
+                            UnitId = 9,
+                            AmenityId = 1
+                        },
+                        new
+                        {
+                            UnitId = 9,
+                            AmenityId = 4
+                        },
+                        new
+                        {
+                            UnitId = 10,
+                            AmenityId = 2
+                        },
+                        new
+                        {
+                            UnitId = 10,
+                            AmenityId = 3
+                        });
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -2007,6 +2597,25 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Request");
 
                     b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.Invoice", b =>
+                {
+                    b.HasOne("LeaseBridge.API.Models.Lease", "Lease")
+                        .WithMany("Invoices")
+                        .HasForeignKey("LeaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LeaseBridge.API.Models.InvoiceStatus", "Status")
+                        .WithMany("Invoices")
+                        .HasForeignKey("StatusId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Invoice_Status");
+
+                    b.Navigation("Lease");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
@@ -2170,29 +2779,22 @@ namespace LeaseBridge.API.Migrations
 
             modelBuilder.Entity("LeaseBridge.API.Models.Payment", b =>
                 {
-                    b.HasOne("LeaseBridge.API.Models.Lease", "Lease")
+                    b.HasOne("LeaseBridge.API.Models.Invoice", "Invoice")
                         .WithMany("Payments")
-                        .HasForeignKey("LeaseId")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK__Payments__LeaseI__619B8048");
+                        .HasConstraintName("FK_Payments_Invoice");
 
                     b.HasOne("LeaseBridge.API.Models.PaymentMethod", "Method")
                         .WithMany("Payments")
                         .HasForeignKey("MethodId")
                         .IsRequired()
-                        .HasConstraintName("FK__Payments__Method__628FA481");
+                        .HasConstraintName("FK_Payments_Method");
 
-                    b.HasOne("LeaseBridge.API.Models.PaymentStatus", "Status")
-                        .WithMany("Payments")
-                        .HasForeignKey("StatusId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Payments__Status__6383C8BA");
-
-                    b.Navigation("Lease");
+                    b.Navigation("Invoice");
 
                     b.Navigation("Method");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Property", b =>
@@ -2297,17 +2899,29 @@ namespace LeaseBridge.API.Migrations
 
             modelBuilder.Entity("StaffSkill", b =>
                 {
-                    b.HasOne("LeaseBridge.API.Models.Skill", null)
+                    b.HasOne("LeaseBridge.API.Models.MaintenanceCategory", "Category")
                         .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .IsRequired()
+                        .HasConstraintName("FK_StaffSkills_Category");
+
+                    b.HasOne("LeaseBridge.API.Models.Skill", "Skill")
+                        .WithMany("StaffSkills")
                         .HasForeignKey("SkillId")
                         .IsRequired()
                         .HasConstraintName("FK_StaffSkills_Skill");
 
-                    b.HasOne("LeaseBridge.API.Models.AppUser", null)
-                        .WithMany()
+                    b.HasOne("LeaseBridge.API.Models.AppUser", "Staff")
+                        .WithMany("StaffSkills")
                         .HasForeignKey("StaffId")
                         .IsRequired()
-                        .HasConstraintName("FK__StaffSkil__Staff__5FB337D6");
+                        .HasConstraintName("FK_StaffSkills_Staff");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Skill");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("UnitAmenity", b =>
@@ -2342,6 +2956,8 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Properties");
+
+                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Application", b =>
@@ -2354,9 +2970,19 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Applications");
                 });
 
-            modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
+            modelBuilder.Entity("LeaseBridge.API.Models.Invoice", b =>
                 {
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.InvoiceStatus", b =>
+                {
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.Lease", b =>
+                {
+                    b.Navigation("Invoices");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.LeaseStatus", b =>
@@ -2396,11 +3022,6 @@ namespace LeaseBridge.API.Migrations
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("LeaseBridge.API.Models.PaymentStatus", b =>
-                {
-                    b.Navigation("Payments");
-                });
-
             modelBuilder.Entity("LeaseBridge.API.Models.PriorityType", b =>
                 {
                     b.Navigation("MaintenanceRequests");
@@ -2409,6 +3030,11 @@ namespace LeaseBridge.API.Migrations
             modelBuilder.Entity("LeaseBridge.API.Models.Property", b =>
                 {
                     b.Navigation("Units");
+                });
+
+            modelBuilder.Entity("LeaseBridge.API.Models.Skill", b =>
+                {
+                    b.Navigation("StaffSkills");
                 });
 
             modelBuilder.Entity("LeaseBridge.API.Models.Unit", b =>

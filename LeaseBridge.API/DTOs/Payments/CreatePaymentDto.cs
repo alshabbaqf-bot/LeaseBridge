@@ -4,25 +4,14 @@ namespace LeaseBridge.API.DTOs.Payments
 {
     public class CreatePaymentDto
     {
-        [Required]
-        public int LeaseId { get; set; }
+        public int InvoiceId { get; set; }
 
-        [Required]
         public int MethodId { get; set; }
 
-        [Required]
-        [Range(1, 1000000)]
         public decimal Amount { get; set; }
 
-        public DateTime? PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; }
 
-        [Required]
-        public int StatusId { get; set; }
-
-        [Required]
-        public DateTime DueDate { get; set; }
-
-        [StringLength(255)]
         public string? TransactionReference { get; set; }
     }
 }
