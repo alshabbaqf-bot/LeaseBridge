@@ -4,6 +4,9 @@ using LeaseBridge.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using LeaseBridge.API.Hubs;
+
 
 namespace LeaseBridge.API.Controllers
 {
@@ -12,10 +15,13 @@ namespace LeaseBridge.API.Controllers
     public class MaintenanceUpdatesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public MaintenanceUpdatesController(ApplicationDbContext context)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public MaintenanceUpdatesController(
+    ApplicationDbContext context,
+    IHubContext<NotificationHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         // GET: api/MaintenanceUpdates
@@ -152,6 +158,7 @@ namespace LeaseBridge.API.Controllers
             }
 
             await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification",$"Maintenance request #{dto.RequestId} status updated.");
 
             return Ok("Maintenance update added successfully.");
         }
