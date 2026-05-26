@@ -3,12 +3,12 @@ using LeaseBridge.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Authorization;
 
 namespace LeaseBridge.MVC.Areas.Management.Controllers
 {
     [Area("Management")]
-    //[Authorize(Roles = "Property Manager")]
+    // [Authorize(Roles = "Property Manager")]
     public class PaymentsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,39 +21,47 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         // GET: /Management/PaymentsManagement
         public async Task<IActionResult> Index()
         {
-            var payments = await _context.Payments
-                .Include(p => p.Lease)
+            var invoices = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Tenant)
-                .Include(p => p.Method)
-                .Include(p => p.Status)
-                .OrderByDescending(p => p.DueDate)
+                .Include(i => i.Lease)
+                    .ThenInclude(l => l.Unit)
+                        .ThenInclude(u => u.Property)
+                .Include(i => i.Payments)
+                    .ThenInclude(p => p.Method)
+                .OrderByDescending(i => i.DueDate)
                 .ToListAsync();
 
-            return View(payments);
+            return View(invoices);
         }
 
         // GET: /Management/PaymentsManagement/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var payment = await _context.Payments
-                .Include(p => p.Lease)
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Tenant)
-                .Include(p => p.Method)
-                .Include(p => p.Status)
-                .FirstOrDefaultAsync(p => p.PaymentId == id);
+                .Include(i => i.Lease)
+                    .ThenInclude(l => l.Unit)
+                        .ThenInclude(u => u.Property)
+                .Include(i => i.Payments)
+                    .ThenInclude(p => p.Method)
+                .FirstOrDefaultAsync(i => i.InvoiceId == id);
 
-            if (payment == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            return View(payment);
+            return View(invoice);
         }
 
         // GET: /Management/PaymentsManagement/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            LoadDropdowns();
+            await LoadDropdownsAsync();
             return View();
         }
 
@@ -61,38 +69,72 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("LeaseId,Amount,DueDate,PaymentDate,MethodId,StatusId")] Payment payment)
+            int leaseId,
+            string invoiceNumber,
+            decimal amount,
+            DateTime issuedDate,
+            DateTime dueDate,
+            int statusId)
         {
+            if (string.IsNullOrWhiteSpace(invoiceNumber))
+            {
+                ModelState.AddModelError("invoiceNumber", "Invoice number is required.");
+            }
+
+            if (amount <= 0)
+            {
+                ModelState.AddModelError("amount", "Amount must be greater than zero.");
+            }
+
+            var leaseExists = await _context.Leases.AnyAsync(l => l.LeaseId == leaseId);
+            if (!leaseExists)
+            {
+                ModelState.AddModelError("leaseId", "Please select a valid lease.");
+            }
+
+            var statusExists = await _context.Set<InvoiceStatus>().AnyAsync(s => s.StatusId == statusId);
+            if (!statusExists)
+            {
+                ModelState.AddModelError("statusId", "Please select a valid invoice status.");
+            }
+
             if (!ModelState.IsValid)
             {
-                LoadDropdowns(payment);
-                return View(payment);
+                await LoadDropdownsAsync();
+                return View();
             }
 
-            if (payment.PaymentDate == default)
+            var invoice = new Invoice
             {
-                payment.PaymentDate = null;
-            }
+                LeaseId = leaseId,
+                InvoiceNumber = invoiceNumber.Trim(),
+                Amount = amount,
+                IssuedDate = issuedDate,
+                DueDate = dueDate,
+                StatusId = statusId
+            };
 
-            _context.Payments.Add(payment);
+            _context.Set<Invoice>().Add(invoice);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Payment record created successfully.";
+            TempData["SuccessMessage"] = "Invoice created successfully.";
             return RedirectToAction(nameof(Index));
         }
 
         // GET: /Management/PaymentsManagement/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var payment = await _context.Payments.FindAsync(id);
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .FirstOrDefaultAsync(i => i.InvoiceId == id);
 
-            if (payment == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            LoadDropdowns(payment);
-            return View(payment);
+            await LoadDropdownsAsync(invoice);
+            return View(invoice);
         }
 
         // POST: /Management/PaymentsManagement/Edit/5
@@ -100,79 +142,103 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
-            [Bind("PaymentId,LeaseId,Amount,DueDate,PaymentDate,MethodId,StatusId")] Payment payment)
+            int leaseId,
+            string invoiceNumber,
+            decimal amount,
+            DateTime issuedDate,
+            DateTime dueDate,
+            int statusId)
         {
-            if (id != payment.PaymentId)
+            var invoice = await _context.Set<Invoice>().FirstOrDefaultAsync(i => i.InvoiceId == id);
+
+            if (invoice == null)
             {
                 return NotFound();
             }
 
+            if (string.IsNullOrWhiteSpace(invoiceNumber))
+            {
+                ModelState.AddModelError("invoiceNumber", "Invoice number is required.");
+            }
+
+            if (amount <= 0)
+            {
+                ModelState.AddModelError("amount", "Amount must be greater than zero.");
+            }
+
+            var leaseExists = await _context.Leases.AnyAsync(l => l.LeaseId == leaseId);
+            if (!leaseExists)
+            {
+                ModelState.AddModelError("leaseId", "Please select a valid lease.");
+            }
+
+            var statusExists = await _context.Set<InvoiceStatus>().AnyAsync(s => s.StatusId == statusId);
+            if (!statusExists)
+            {
+                ModelState.AddModelError("statusId", "Please select a valid invoice status.");
+            }
+
             if (!ModelState.IsValid)
             {
-                LoadDropdowns(payment);
-                return View(payment);
+                await LoadDropdownsAsync(invoice);
+                return View(invoice);
             }
 
-            try
-            {
-                if (payment.PaymentDate == default)
-                {
-                    payment.PaymentDate = null;
-                }
+            invoice.LeaseId = leaseId;
+            invoice.InvoiceNumber = invoiceNumber.Trim();
+            invoice.Amount = amount;
+            invoice.IssuedDate = issuedDate;
+            invoice.DueDate = dueDate;
+            invoice.StatusId = statusId;
 
-                _context.Update(payment);
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Payment record updated successfully.";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var exists = await _context.Payments.AnyAsync(p => p.PaymentId == payment.PaymentId);
-
-                if (!exists)
-                {
-                    return NotFound();
-                }
-
-                throw;
-            }
+            TempData["SuccessMessage"] = "Invoice updated successfully.";
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: /Management/PaymentsManagement/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var payment = await _context.Payments
-                .Include(p => p.Lease)
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Tenant)
-                .Include(p => p.Method)
-                .Include(p => p.Status)
-                .FirstOrDefaultAsync(p => p.PaymentId == id);
+                .Include(i => i.Payments)
+                .FirstOrDefaultAsync(i => i.InvoiceId == id);
 
-            if (payment == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            return View(payment);
+            return View(invoice);
         }
 
         // POST: /Management/PaymentsManagement/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int paymentId)
+        public async Task<IActionResult> DeleteConfirmed(int invoiceId)
         {
-            var payment = await _context.Payments.FindAsync(paymentId);
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Payments)
+                .FirstOrDefaultAsync(i => i.InvoiceId == invoiceId);
 
-            if (payment == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            _context.Payments.Remove(payment);
+            if (invoice.Payments.Any())
+            {
+                TempData["ErrorMessage"] = "This invoice has payment transactions and cannot be deleted.";
+                return RedirectToAction(nameof(Delete), new { id = invoiceId });
+            }
+
+            _context.Set<Invoice>().Remove(invoice);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Payment record deleted successfully.";
+            TempData["SuccessMessage"] = "Invoice deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -181,26 +247,28 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         {
             var today = DateTime.Today;
 
-            var payments = await _context.Payments
-                .Include(p => p.Lease)
+            var invoices = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Tenant)
-                .Include(p => p.Method)
-                .Include(p => p.Status)
-                .Where(p =>
-                    p.Status.Name == "Overdue" ||
-                    (p.DueDate < today && p.Status.Name != "Paid"))
-                .OrderBy(p => p.DueDate)
+                .Include(i => i.Lease)
+                    .ThenInclude(l => l.Unit)
+                        .ThenInclude(u => u.Property)
+                .Include(i => i.Payments)
+                    .ThenInclude(p => p.Method)
+                .Where(i =>
+                    i.Status.Name == "Overdue" ||
+                    (i.DueDate < today && i.Status.Name != "Paid"))
+                .OrderBy(i => i.DueDate)
                 .ToListAsync();
 
-            ViewData["Title"] = "Overdue Payments";
             ViewBag.IsOverduePage = true;
-
-            return View("Index", payments);
+            return View("Index", invoices);
         }
 
-        private void LoadDropdowns(Payment? payment = null)
+        private async Task LoadDropdownsAsync(Invoice? invoice = null)
         {
-            var leases = _context.Leases
+            var leases = await _context.Leases
                 .Include(l => l.Tenant)
                 .OrderBy(l => l.LeaseId)
                 .Select(l => new
@@ -209,27 +277,20 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
                     DisplayText = "Lease #" + l.LeaseId + " - " +
                                   l.Tenant.FirstName + " " + l.Tenant.LastName
                 })
-                .ToList();
+                .ToListAsync();
 
             ViewData["LeaseId"] = new SelectList(
                 leases,
                 "LeaseId",
                 "DisplayText",
-                payment?.LeaseId
-            );
-
-            ViewData["MethodId"] = new SelectList(
-                _context.PaymentMethods.OrderBy(m => m.Name).ToList(),
-                "MethodId",
-                "Name",
-                payment?.MethodId
+                invoice?.LeaseId
             );
 
             ViewData["StatusId"] = new SelectList(
-                _context.PaymentStatuses.OrderBy(s => s.Name).ToList(),
+                await _context.Set<InvoiceStatus>().OrderBy(s => s.Name).ToListAsync(),
                 "StatusId",
                 "Name",
-                payment?.StatusId
+                invoice?.StatusId
             );
         }
     }
