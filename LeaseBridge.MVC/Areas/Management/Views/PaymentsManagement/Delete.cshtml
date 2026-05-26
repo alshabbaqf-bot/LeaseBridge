@@ -1,0 +1,91 @@
+﻿@model LeaseBridge.API.Models.Payment
+
+@{
+    ViewData["Title"] = "Delete Payment";
+}
+
+<div class="container mt-4" style="max-width: 750px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Delete Payment</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <strong>Warning:</strong> Are you sure you want to delete this payment record?
+            </div>
+
+            <dl class="row">
+                <dt class="col-sm-4">Payment ID</dt>
+                <dd class="col-sm-8">@Model.PaymentId</dd>
+
+                <dt class="col-sm-4">Lease ID</dt>
+                <dd class="col-sm-8">@Model.LeaseId</dd>
+
+                <dt class="col-sm-4">Tenant</dt>
+                <dd class="col-sm-8">
+                    @Model.Lease?.Tenant?.FirstName @Model.Lease?.Tenant?.LastName
+                </dd>
+
+                <dt class="col-sm-4">Amount</dt>
+                <dd class="col-sm-8">@Model.Amount BHD</dd>
+
+                <dt class="col-sm-4">Due Date</dt>
+                <dd class="col-sm-8">@Model.DueDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-4">Payment Date</dt>
+                <dd class="col-sm-8">
+                    @(Model.PaymentDate.HasValue
+                                        ? Model.PaymentDate.Value.ToString("dd MMM yyyy")
+                                        : "Not Paid")
+                </dd>
+
+                <dt class="col-sm-4">Method</dt>
+                <dd class="col-sm-8">@(Model.Method?.Name ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.Status?.Name == "Paid")
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else if (Model.Status?.Name == "Overdue")
+                    {
+                        <span class="badge bg-danger">Overdue</span>
+                    }
+                    else if (Model.Status?.Name == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@(Model.Status?.Name ?? "Unknown")</span>
+                    }
+                </dd>
+            </dl>
+
+            <form asp-area="Management"
+                  asp-controller="PaymentsManagement"
+                  asp-action="Delete"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        Delete Payment
+                    </button>
+
+                    <a asp-area="Management"
+                       asp-controller="PaymentsManagement"
+                       asp-action="Index"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

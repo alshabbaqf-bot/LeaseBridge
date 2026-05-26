@@ -1,0 +1,87 @@
+﻿@model LeaseBridge.API.Models.MaintenanceRequest
+
+@{
+    ViewData["Title"] = "Process Maintenance Request";
+}
+
+<div class="container mt-5" style="max-width: 650px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-danger text-white py-3">
+            <h5 class="mb-0 fw-bold">
+                <i class="bi bi-gear-fill me-2"></i>
+                Process Maintenance Request
+            </h5>
+            <small class="text-white-50">Ticket Number: @Model.TicketNumber</small>
+        </div>
+
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="p-3 bg-white border rounded mb-4 shadow-sm">
+                <h6 class="fw-bold text-secondary mb-1">Tenant Reported Issue Description:</h6>
+
+                <p class="mb-0 text-dark @(string.IsNullOrEmpty(Model.Description) ? "text-muted" : "")">
+                    @(Model.Description ?? "No text description provided by tenant.")
+                </p>
+
+                <hr class="my-2">
+
+                <small class="text-muted d-block">
+                    Logged Timestamp: @Model.CreatedAt.ToString("g")
+                </small>
+            </div>
+
+            @if (TempData["ManagementError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ManagementError"]
+                </div>
+            }
+
+            <form asp-area="Management"
+                  asp-controller="MaintenanceManagement"
+                  asp-action="ProcessTicket"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="requestId" value="@Model.RequestId" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">
+                        Update Maintenance Status
+                    </label>
+
+                    <select name="statusId" class="form-select shadow-sm" required>
+                        @foreach (var status in ViewBag.Statuses)
+                        {
+                            if (status.StatusId == Model.StatusId)
+                            {
+                                <option value="@status.StatusId" selected>@status.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@status.StatusId">@status.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-6">
+                        <a asp-area="Management"
+                           asp-controller="MaintenanceManagement"
+                           asp-action="Dashboard"
+                           class="btn btn-outline-secondary w-100 fw-bold">
+                            Return to Dashboard
+                        </a>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

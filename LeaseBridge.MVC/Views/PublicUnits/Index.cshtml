@@ -1,0 +1,77 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Unit>
+@{
+    ViewData["Title"] = "Find Your Next Home";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">Discover Available Properties</h1>
+        <p class="lead text-muted">Browse top-tier listings across premier locations without needing an account.</p>
+    </div>
+
+    <form asp-controller="PublicUnits" asp-action="Index" method="get" class="row g-3 mb-5 p-4 bg-white rounded shadow-sm border">
+        <div class="col-md-6">
+            <label class="form-label fw-semibold text-secondary">Where would you like to live?</label>
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by property name or location..." />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">Maximum Monthly Rent (BHD)</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light">BHD</span>
+                <input type="number" name="maxPrice" class="form-control" placeholder="e.g. 450" />
+            </div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Search</button>
+        </div>
+    </form>
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center my-5 py-5 bg-white rounded border">
+                <i class="bi bi-building-exclamation text-warning display-1"></i>
+                <h3 class="mt-3 text-dark fw-bold">No Vacancies Found</h3>
+                <p class="text-muted">Try adjusting your budget cap or searching for a different area.</p>
+                <a asp-action="Index" class="btn btn-outline-primary mt-2">Clear All Filters</a>
+            </div>
+        }
+        else
+        {
+            @foreach (var unit in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0 bg-white">
+                        <div class="card-body p-4">
+                            <span class="badge bg-light text-primary border border-primary-subtle px-2.5 py-1.5 mb-3 fw-bold">Available For Lease</span>
+                            <h4 class="card-title text-dark fw-bold mb-1">@unit.Property?.Name</h4>
+                            <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i> @unit.Property?.Location</p>
+
+                            <div class="row bg-light rounded p-2 text-center g-0 my-3 border border-light-subtle">
+                                <div class="col-6 border-end">
+                                    <span class="text-muted small d-block">Unit Code</span>
+                                    <strong class="text-dark">#@unit.UnitNumber</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span class="text-muted small d-block">Total Space</span>
+                                    <strong class="text-dark">@unit.Size SqFt</strong>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
+                                <div>
+                                    <span class="text-muted small d-block">Monthly Rent</span>
+                                    <h3 class="text-success fw-bold m-0">@unit.RentAmount <span class="fs-6 fw-normal text-muted">BHD</span></h3>
+                                </div>
+                                <a asp-controller="PublicUnits" asp-action="Details" asp-route-id="@unit.UnitId" class="btn btn-outline-primary fw-bold px-3">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

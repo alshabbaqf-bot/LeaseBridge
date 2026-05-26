@@ -1,0 +1,110 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Application>
+
+@{
+    ViewData["Title"] = "My Applications";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>My Applications</h2>
+            <p class="text-muted mb-0">
+                View your submitted rental applications and their current status.
+            </p>
+        </div>
+
+        <a asp-area="Tenant"
+           asp-controller="AvailableUnits"
+           asp-action="Index"
+           class="btn btn-primary">
+            Browse Units
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You have not submitted any rental applications yet.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Unit</th>
+                            <th>Property</th>
+                            <th>Application Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var application in Model)
+                        {
+                            <tr>
+                                <td>@application.ApplicationId</td>
+
+                                <td>
+                                    @(application.Unit != null
+                                                                ? "Unit " + application.Unit.UnitNumber
+                                                                : "Unit #" + application.UnitId)
+                        </td>
+
+                                <td>
+                                    @(application.Unit?.Property?.Name ?? "N/A")
+                                </td>
+
+                                <td>@application.ApplicationDate.ToString("dd MMM yyyy")</td>
+
+                                <td>
+                            @if (application.Status?.Name == "Approved")
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else if (application.Status?.Name == "Rejected")
+                                    {
+                                        <span class="badge bg-danger">Rejected</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            @(application.Status?.Name ?? "Pending")
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Public Maintenance Lookup";
+}
+
+<div class="container mt-5" style="max-width: 550px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white text-center">
+            <h4 class="mb-0">Track Maintenance Request</h4>
+        </div>
+
+        <div class="card-body p-4">
+            <p class="text-muted text-center">
+                Enter your maintenance ticket number and registered phone number to check the request status.
+            </p>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form asp-controller="Tracker"
+                  asp-action="CheckMaintenanceStatus"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Maintenance Ticket Number</label>
+                    <input type="text"
+                           name="ticketNumber"
+                           class="form-control"
+                           placeholder="Example: TKT-20260526-ABCD"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Registered Phone Number</label>
+                    <input type="text"
+                           name="phoneNumber"
+                           class="form-control"
+                           placeholder="Example: 39991234"
+                           required />
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100">
+                    Check Status
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

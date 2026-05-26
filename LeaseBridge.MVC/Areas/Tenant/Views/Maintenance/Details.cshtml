@@ -1,0 +1,72 @@
+﻿@model LeaseBridge.MVC.Areas.Tenant.Controllers.TenantMaintenanceViewModel
+
+@{
+
+    ViewData["Title"] = "Maintenance Request Details";
+
+}
+
+<div class="container mt-4" style="max-width: 750px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Maintenance Request Details</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Ticket Number</dt>
+                <dd class="col-sm-8">@Model.TicketNumber</dd>
+
+                <dt class="col-sm-4">Title</dt>
+                <dd class="col-sm-8">@Model.Title</dd>
+
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">@(Model.Description ?? "No description provided.")</dd>
+
+                <dt class="col-sm-4">Category</dt>
+                <dd class="col-sm-8">@Model.CategoryName</dd>
+
+                <dt class="col-sm-4">Priority</dt>
+                <dd class="col-sm-8">@Model.PriorityName</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+
+                    @if (Model.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+
+                                        Model.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+
+                    {
+                        <span class="badge bg-success">@Model.StatusName</span>
+
+                    }
+
+                    else if (Model.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
+
+                    {
+                        <span class="badge bg-warning text-dark">@Model.StatusName</span>
+
+                    }
+
+                    else
+
+                    {
+                        <span class="badge bg-info text-white">@Model.StatusName</span>
+
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Date Raised</dt>
+                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+            </dl>
+
+            <a asp-area="Tenant"
+               asp-controller="Maintenance"
+               asp-action="MyRequests"
+               class="btn btn-secondary">
+
+                Back to My Requests
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,193 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Payment>
+
+@{
+    ViewData["Title"] = ViewBag.IsOverduePage == true ? "Overdue Payments" : "Payments Management";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>
+                @(ViewBag.IsOverduePage == true ? "Overdue Payments" : "Payments Management")
+            </h2>
+            <p class="text-muted mb-0">
+                @(ViewBag.IsOverduePage == true
+                                ? "View unpaid payments that are overdue or marked as overdue."
+                                : "Manage tenant lease payment records, payment statuses, and due dates.")
+            </p>
+        </div>
+
+        <div>
+            <a asp-area="Management"
+               asp-controller="PaymentsManagement"
+               asp-action="Create"
+               class="btn btn-primary">
+                Add Payment
+            </a>
+
+            @if (ViewBag.IsOverduePage == true)
+            {
+                <a asp-area="Management"
+                   asp-controller="PaymentsManagement"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    All Payments
+                </a>
+            }
+            else
+            {
+                <a asp-area="Management"
+                   asp-controller="PaymentsManagement"
+                   asp-action="Overdue"
+                   class="btn btn-danger">
+                    Overdue Payments
+                </a>
+            }
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Lease ID</th>
+                            <th>Tenant</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Payment Date</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">
+                                    No payment records found.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var payment in Model)
+                            {
+                                <tr>
+                                    <td>@payment.PaymentId</td>
+
+                                    <td>@payment.LeaseId</td>
+
+                                    <td>
+                                        @if (payment.Lease?.Tenant != null)
+                                        {
+                                            <span>
+                                                @payment.Lease.Tenant.FirstName @payment.Lease.Tenant.LastName
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                            </td>
+
+                            <td>@payment.Amount.ToString("0.000") BHD</td>
+
+                            <td>@payment.DueDate.ToString("dd MMM yyyy")</td>
+
+                            <td>
+                                @(payment.PaymentDate.HasValue
+                                                                ? payment.PaymentDate.Value.ToString("dd MMM yyyy")
+                                                                : "Not Paid")
+                            </td>
+
+                                    <td>
+                                        @(payment.Method?.Name ?? "N/A")
+                                    </td>
+
+                                    <td>
+                                @if (payment.Status?.Name == "Paid")
+                                        {
+                                            <span class="badge bg-success">Paid</span>
+                                        }
+                                        else if (payment.Status?.Name == "Overdue")
+                                        {
+                                            <span class="badge bg-danger">Overdue</span>
+                                        }
+                                        else if (payment.Status?.Name == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @(payment.Status?.Name ?? "Unknown")
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-area="Management"
+                                               asp-controller="PaymentsManagement"
+                                               asp-action="Details"
+                                               asp-route-id="@payment.PaymentId"
+                                               class="btn btn-info btn-sm">
+                                                Details
+                                            </a>
+
+                                            <a asp-area="Management"
+                                               asp-controller="PaymentsManagement"
+                                               asp-action="Edit"
+                                               asp-route-id="@payment.PaymentId"
+                                               class="btn btn-warning btn-sm">
+                                                Edit
+                                            </a>
+
+                                            <a asp-area="Management"
+                                               asp-controller="PaymentsManagement"
+                                               asp-action="Delete"
+                                               asp-route-id="@payment.PaymentId"
+                                               class="btn btn-danger btn-sm">
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

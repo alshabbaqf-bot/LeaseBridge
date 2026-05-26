@@ -1,0 +1,77 @@
+﻿@model LeaseBridge.API.Models.Notification
+
+@{
+    ViewData["Title"] = "Notification Details";
+}
+
+<div class="container mt-4" style="max-width: 750px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Notification Details</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Notification ID</dt>
+                <dd class="col-sm-8">@Model.NotificationId</dd>
+
+                <dt class="col-sm-4">Message</dt>
+                <dd class="col-sm-8">@Model.Message</dd>
+
+                <dt class="col-sm-4">Type</dt>
+                <dd class="col-sm-8">@(Model.NotificationType ?? "General")</dd>
+
+                <dt class="col-sm-4">Read Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.IsRead)
+                    {
+                        <span class="badge bg-success">Read</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Unread</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Created At</dt>
+                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+
+                <dt class="col-sm-4">User ID</dt>
+                <dd class="col-sm-8">@Model.UserId</dd>
+
+                <dt class="col-sm-4">Maintenance Request ID</dt>
+                <dd class="col-sm-8">
+                    @(Model.MaintenanceRequestId.HasValue? Model.MaintenanceRequestId.Value.ToString() : "N/A")
+                </dd>
+
+                <dt class="col-sm-4">Application ID</dt>
+                <dd class="col-sm-8">
+                    @(Model.ApplicationId.HasValue? Model.ApplicationId.Value.ToString() : "N/A")
+                </dd>
+            </dl>
+
+            <div class="d-flex gap-2 mt-4">
+                @if (!Model.IsRead)
+                {
+                    <form asp-area="Management"
+                          asp-controller="Notifications"
+                          asp-action="MarkAsRead"
+                          asp-route-id="@Model.NotificationId"
+                          method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success">
+                            Mark as Read
+                        </button>
+                    </form>
+                }
+
+                <a asp-area="Management"
+                   asp-controller="Notifications"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
