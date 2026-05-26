@@ -26,112 +26,21 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
             if (tenant == null)
             {
                 TempData["ErrorMessage"] = "Tenant profile was not found for the logged-in user.";
-                return View(new List<Payment>());
+                return View(new List<Invoice>());
             }
 
-            var payments = await _context.Payments
-                .Include(p => p.Status)
-                .Include(p => p.Method)
-                .Include(p => p.Lease)
+            var invoices = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Unit)
                         .ThenInclude(u => u.Property)
-                .Where(p => p.Lease.TenantId == tenant.UserId)
-                .OrderByDescending(p => p.DueDate)
+                .Include(i => i.Payments)
+                    .ThenInclude(p => p.Method)
+                .Where(i => i.Lease.TenantId == tenant.UserId)
+                .OrderByDescending(i => i.DueDate)
                 .ToListAsync();
 
-            return View(payments);
-        }
-
-        // GET: /Tenant/Payment/Pay/5
-        public async Task<IActionResult> Pay(int id)
-        {
-            var tenant = await GetCurrentTenantAsync();
-
-            if (tenant == null)
-            {
-                TempData["ErrorMessage"] = "Tenant profile was not found for the logged-in user.";
-                return RedirectToAction(nameof(MyPayments));
-            }
-
-            var payment = await _context.Payments
-                .Include(p => p.Status)
-                .Include(p => p.Method)
-                .Include(p => p.Lease)
-                    .ThenInclude(l => l.Unit)
-                        .ThenInclude(u => u.Property)
-                .FirstOrDefaultAsync(p =>
-                    p.PaymentId == id &&
-                    p.Lease.TenantId == tenant.UserId);
-
-            if (payment == null)
-            {
-                return NotFound();
-            }
-
-            if (payment.Status != null && payment.Status.Name == "Paid")
-            {
-                TempData["ErrorMessage"] = "This payment has already been paid.";
-                return RedirectToAction(nameof(MyPayments));
-            }
-
-            ViewBag.PaymentMethods = await _context.PaymentMethods
-                .OrderBy(m => m.Name)
-                .ToListAsync();
-
-            return View(payment);
-        }
-
-        // POST: /Tenant/Payment/ProcessPayment
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ProcessPayment(int paymentId, int paymentMethodId)
-        {
-            var tenant = await GetCurrentTenantAsync();
-
-            if (tenant == null)
-            {
-                TempData["ErrorMessage"] = "Tenant profile was not found for the logged-in user.";
-                return RedirectToAction(nameof(MyPayments));
-            }
-
-            var payment = await _context.Payments
-                .Include(p => p.Lease)
-                .FirstOrDefaultAsync(p =>
-                    p.PaymentId == paymentId &&
-                    p.Lease.TenantId == tenant.UserId);
-
-            if (payment == null)
-            {
-                return NotFound();
-            }
-
-            var methodExists = await _context.PaymentMethods
-                .AnyAsync(m => m.MethodId == paymentMethodId);
-
-            if (!methodExists)
-            {
-                TempData["ErrorMessage"] = "Invalid payment method selected.";
-                return RedirectToAction(nameof(Pay), new { id = paymentId });
-            }
-
-            var paidStatus = await _context.PaymentStatuses
-                .FirstOrDefaultAsync(s => s.Name == "Paid");
-
-            if (paidStatus == null)
-            {
-                TempData["ErrorMessage"] = "Paid status was not found in the database.";
-                return RedirectToAction(nameof(Pay), new { id = paymentId });
-            }
-
-            payment.PaymentDate = DateTime.UtcNow;
-            payment.MethodId = paymentMethodId;
-            payment.StatusId = paidStatus.StatusId;
-            payment.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Payment completed successfully.";
-            return RedirectToAction(nameof(MyPayments));
+            return View(invoices);
         }
 
         // GET: /Tenant/Payment/Details/5
@@ -145,22 +54,125 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
                 return RedirectToAction(nameof(MyPayments));
             }
 
-            var payment = await _context.Payments
-                .Include(p => p.Status)
-                .Include(p => p.Method)
-                .Include(p => p.Lease)
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
                     .ThenInclude(l => l.Unit)
                         .ThenInclude(u => u.Property)
-                .FirstOrDefaultAsync(p =>
-                    p.PaymentId == id &&
-                    p.Lease.TenantId == tenant.UserId);
+                .Include(i => i.Payments)
+                    .ThenInclude(p => p.Method)
+                .FirstOrDefaultAsync(i =>
+                    i.InvoiceId == id &&
+                    i.Lease.TenantId == tenant.UserId);
 
-            if (payment == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            return View(payment);
+            return View(invoice);
+        }
+
+        // GET: /Tenant/Payment/Pay/5
+        public async Task<IActionResult> Pay(int id)
+        {
+            var tenant = await GetCurrentTenantAsync();
+
+            if (tenant == null)
+            {
+                TempData["ErrorMessage"] = "Tenant profile was not found for the logged-in user.";
+                return RedirectToAction(nameof(MyPayments));
+            }
+
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Status)
+                .Include(i => i.Lease)
+                    .ThenInclude(l => l.Unit)
+                        .ThenInclude(u => u.Property)
+                .FirstOrDefaultAsync(i =>
+                    i.InvoiceId == id &&
+                    i.Lease.TenantId == tenant.UserId);
+
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            if (invoice.Status != null &&
+                invoice.Status.Name.Equals("Paid", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "This invoice has already been paid.";
+                return RedirectToAction(nameof(MyPayments));
+            }
+
+            ViewBag.PaymentMethods = await _context.Set<PaymentMethod>()
+                .OrderBy(m => m.Name)
+                .ToListAsync();
+
+            return View(invoice);
+        }
+
+        // POST: /Tenant/Payment/ProcessPayment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProcessPayment(int invoiceId, int paymentMethodId)
+        {
+            var tenant = await GetCurrentTenantAsync();
+
+            if (tenant == null)
+            {
+                TempData["ErrorMessage"] = "Tenant profile was not found for the logged-in user.";
+                return RedirectToAction(nameof(MyPayments));
+            }
+
+            var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Lease)
+                .FirstOrDefaultAsync(i =>
+                    i.InvoiceId == invoiceId &&
+                    i.Lease.TenantId == tenant.UserId);
+
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            var methodExists = await _context.Set<PaymentMethod>()
+                .AnyAsync(m => m.MethodId == paymentMethodId);
+
+            if (!methodExists)
+            {
+                TempData["ErrorMessage"] = "Invalid payment method selected.";
+                return RedirectToAction(nameof(Pay), new { id = invoiceId });
+            }
+
+            var paidStatus = await _context.Set<InvoiceStatus>()
+                .FirstOrDefaultAsync(s => s.Name == "Paid");
+
+            if (paidStatus == null)
+            {
+                TempData["ErrorMessage"] = "Paid invoice status was not found.";
+                return RedirectToAction(nameof(Pay), new { id = invoiceId });
+            }
+
+            var payment = new Payment
+            {
+                InvoiceId = invoice.InvoiceId,
+                MethodId = paymentMethodId,
+                Amount = invoice.Amount,
+                PaymentDate = DateTime.UtcNow,
+                TransactionReference = "TXN-" + Guid.NewGuid().ToString("N").Substring(0, 10).ToUpper(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = null
+            };
+
+            _context.Set<Payment>().Add(payment);
+
+            invoice.StatusId = paidStatus.StatusId;
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Payment completed successfully.";
+            return RedirectToAction(nameof(MyPayments));
         }
 
         private async Task<AppUser?> GetCurrentTenantAsync()
@@ -172,7 +184,7 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
                 return null;
             }
 
-            return await _context.AppUsers
+            return await _context.Set<AppUser>()
                 .FirstOrDefaultAsync(u => u.IdentityUserId == identityUserId);
         }
     }
