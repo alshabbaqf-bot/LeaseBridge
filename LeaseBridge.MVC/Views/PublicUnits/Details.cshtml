@@ -1,0 +1,49 @@
+﻿@model LeaseBridge.API.Models.Unit
+@{
+    ViewData["Title"] = "Property Specifications";
+}
+
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Marketplace</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Unit Details</li>
+        </ol>
+    </nav>
+
+    <div class="row bg-white p-4 rounded shadow-sm border g-4 mt-1">
+        <div class="col-md-7 pe-md-4">
+            <h1 class="text-dark fw-bold mb-1">Apartment Suite @Model.UnitNumber</h1>
+            <h3 class="text-secondary fw-semibold mb-3">@Model.Property?.Name</h3>
+            <p class="text-muted fs-5 mb-4"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Property?.Location</p>
+
+            <h5 class="fw-bold text-dark mt-4">About this Property</h5>
+            <p class="text-secondary lead fs-6 border-start border-3 ps-3 py-1 bg-light">
+                @(string.IsNullOrEmpty(Model.Property?.Description) ? "No structural notes or specific descriptive items provided for this building profile listing layout." : Model.Property.Description)
+            </p>
+        </div>
+
+        <div class="col-md-5">
+            <div class="bg-light p-4 rounded border text-center">
+                <span class="text-muted d-block small mb-1">Guaranteed Fixed Pricing</span>
+                <h1 class="text-success fw-bold display-5 mb-3">@Model.RentAmount <span class="fs-3 font-normal">BHD</span> <span class="fs-6 fw-normal text-muted d-block">per calendar month</span></h1>
+
+                <ul class="list-group list-group-flush text-start shadow-sm rounded mb-4 border">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-ruler me-2 text-primary"></i> Total Area Size</span>
+                        <strong class="text-dark">@Model.Size Sq Ft</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-hash me-2 text-primary"></i> Unique Unit Index</span>
+                        <strong class="text-dark">#@Model.UnitId</strong>
+                    </li>
+                </ul>
+
+                <a asp-area="Tenant" asp-controller="Application" asp-action="Apply" asp-route-unitId="@Model.UnitId" class="btn btn-success btn-lg w-100 fw-bold mb-2 shadow-sm">
+                    <i class="bi bi-file-earmark-arrow-up-fill me-1"></i> Apply for Lease Online
+                </a>
+                <a asp-action="Index" class="btn btn-link w-100 text-muted btn-sm">Return to Listings Marketplace</a>
+            </div>
+        </div>
+    </div>
+</div>

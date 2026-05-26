@@ -1,0 +1,112 @@
+﻿@{
+
+    ViewData["Title"] = "Tenant Dashboard";
+
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>Tenant Dashboard</h2>
+        <p class="text-muted">
+
+            Manage your lease applications, maintenance requests, and payments.
+        </p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Browse Units</h5>
+                    <p class="card-text text-muted">
+
+                        View available rental units and submit a lease application.
+                    </p>
+                    <a asp-area="Tenant"
+                       asp-controller="AvailableUnits"
+                       asp-action="Index"
+                       class="btn btn-primary">
+
+                        Browse Units
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">My Applications</h5>
+                    <p class="card-text text-muted">
+
+                        Track your submitted lease applications and their current status.
+                    </p>
+                    <a asp-area="Tenant"
+                       asp-controller="Application"
+                       asp-action="MyApplications"
+                       class="btn btn-outline-primary">
+
+                        View Applications
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Maintenance Requests</h5>
+                    <p class="card-text text-muted">
+
+                        Submit a maintenance request or check existing request statuses.
+                    </p>
+                    <a asp-area="Tenant"
+                       asp-controller="Maintenance"
+                       asp-action="MyRequests"
+                       class="btn btn-outline-primary">
+
+                        My Maintenance
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Submit Maintenance</h5>
+                    <p class="card-text text-muted">
+
+                        Report an issue in your rented unit.
+                    </p>
+                    <a asp-area="Tenant"
+                       asp-controller="Maintenance"
+                       asp-action="RaiseTicket"
+                       class="btn btn-warning">
+
+                        Raise Ticket
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">My Payments</h5>
+                    <p class="card-text text-muted">
+
+                        View your rent payments, due dates, and payment status.
+                    </p>
+                    <a asp-area="Tenant"
+                       asp-controller="Payment"
+                       asp-action="MyPayments"
+                       class="btn btn-outline-success">
+
+                        View Payments
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

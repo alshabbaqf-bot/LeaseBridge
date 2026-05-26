@@ -1,0 +1,137 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Notification>
+
+@{
+    ViewData["Title"] = "Management Notifications";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>Management Notifications</h2>
+            <p class="text-muted mb-0">
+                View system notifications related to applications, maintenance, and payments.
+            </p>
+        </div>
+
+        <a asp-area="Management"
+           asp-controller="Dashboard"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Message</th>
+                        <th>Type</th>
+                        <th>Read</th>
+                        <th>Created</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No notifications found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.NotificationId</td>
+
+                                <td>
+                                    @if (!item.IsRead)
+                                    {
+                                        <strong>@item.Message</strong>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Message</span>
+                                    }
+                                </td>
+
+                                <td>@(item.NotificationType ?? "General")</td>
+
+                                <td>
+                                    @if (item.IsRead)
+                                    {
+                                        <span class="badge bg-success">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Unread</span>
+                                    }
+                                </td>
+
+                                <td>@item.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+
+                                <td class="text-center">
+                                    <a asp-area="Management"
+                                       asp-controller="Notifications"
+                                       asp-action="Details"
+                                       asp-route-id="@item.NotificationId"
+                                       class="btn btn-info btn-sm">
+                                        Details
+                                    </a>
+
+                                    @if (!item.IsRead)
+                                    {
+                                        <form asp-area="Management"
+                                              asp-controller="Notifications"
+                                              asp-action="MarkAsRead"
+                                              asp-route-id="@item.NotificationId"
+                                              method="post"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                Mark Read
+                                            </button>
+                                        </form>
+                                    }
+
+                                    <form asp-area="Management"
+                                          asp-controller="Notifications"
+                                          asp-action="Delete"
+                                          asp-route-id="@item.NotificationId"
+                                          method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete this notification?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

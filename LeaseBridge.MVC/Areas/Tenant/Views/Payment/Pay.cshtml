@@ -1,0 +1,99 @@
+﻿@model LeaseBridge.API.Models.Payment
+
+@{
+    ViewData["Title"] = "Authorize Payment";
+}
+
+<div class="container mt-5" style="max-width: 550px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white text-center py-3">
+            <h4 class="mb-0 fw-bold">Secure Checkout Portal</h4>
+        </div>
+
+        <div class="card-body p-4">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <div class="text-center mb-4 bg-light p-3 rounded border border-light-subtle">
+                <span class="text-muted d-block small mb-1">Outstanding Balance</span>
+
+                <h1 class="text-success fw-bold m-0">
+                    @Model.Amount.ToString("0.000") <span class="fs-4">BHD</span>
+                </h1>
+
+                <span class="badge bg-secondary-subtle text-secondary border mt-2 px-2">
+                    Payment Ref: #@Model.PaymentId
+                </span>
+            </div>
+
+            <form asp-area="Tenant"
+                  asp-controller="Payment"
+                  asp-action="ProcessPayment"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-secondary">
+                        Select Payment Method
+                    </label>
+
+                    <select name="paymentMethodId" class="form-select shadow-sm" required>
+                        <option value="">-- Select Method --</option>
+                        @foreach (var method in ViewBag.PaymentMethods)
+                        {
+                            <option value="@method.MethodId">@method.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-secondary">
+                        Cardholder Full Name
+                    </label>
+                    <input type="text" class="form-control" placeholder="John Doe" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-secondary">
+                        Card Number
+                    </label>
+                    <input type="text" class="form-control" placeholder="4000 1234 5678 9010" required />
+                </div>
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label fw-semibold text-secondary">
+                            Expiry Date
+                        </label>
+                        <input type="text" class="form-control" placeholder="MM/YY" required />
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label class="form-label fw-semibold text-secondary">
+                            CVC
+                        </label>
+                        <input type="password" class="form-control" placeholder="***" maxlength="3" required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 btn-lg mt-3 fw-bold shadow-sm">
+                    Authorize Payment
+                </button>
+
+                <a asp-area="Tenant"
+                   asp-controller="Payment"
+                   asp-action="MyPayments"
+                   class="btn btn-link w-100 text-center mt-2 text-muted btn-sm">
+                    Cancel & Return to Payments
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

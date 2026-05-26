@@ -1,0 +1,129 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Application>
+
+@{
+    ViewData["Title"] = "Manager Approvals Desk";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Pending Rental Applications</h2>
+            <p class="text-muted mb-0">Review tenant applications and approve or reject lease requests.</p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Application ID</th>
+                        <th>Tenant</th>
+                        <th>Unit</th>
+                        <th>Property</th>
+                        <th>Submission Date</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No pending applications in the queue.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var app in Model)
+                        {
+                            <tr>
+                                <td>@app.ApplicationId</td>
+
+                                <td>
+                                    @if (app.Tenant != null)
+                                    {
+                                        <span>@app.Tenant.FirstName @app.Tenant.LastName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Tenant #@app.TenantId</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (app.Unit != null)
+                                    {
+                                        <span>Unit @app.Unit.UnitNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Unit #@app.UnitId</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (app.Unit?.Property != null)
+                                    {
+                                        <span>@app.Unit.Property.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+
+                                <td>@app.ApplicationDate.ToString("dd MMM yyyy")</td>
+
+                                <td class="text-end">
+                                    <form asp-area="Management"
+                                          asp-controller="Dashboard"
+                                          asp-action="ApproveApplication"
+                                          asp-route-id="@app.ApplicationId"
+                                          method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Approve
+                                        </button>
+                                    </form>
+
+                                    <form asp-area="Management"
+                                          asp-controller="Dashboard"
+                                          asp-action="RejectApplication"
+                                          asp-route-id="@app.ApplicationId"
+                                          method="post"
+                                          class="d-inline ms-1">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to reject this application?');">
+                                            Reject
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

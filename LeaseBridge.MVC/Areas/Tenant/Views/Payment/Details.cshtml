@@ -1,0 +1,87 @@
+﻿@model LeaseBridge.API.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<div class="container mt-4" style="max-width: 750px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Payment Details</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Payment ID</dt>
+                <dd class="col-sm-8">@Model.PaymentId</dd>
+
+                <dt class="col-sm-4">Property</dt>
+                <dd class="col-sm-8">@(Model.Lease?.Unit?.Property?.Name ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Unit</dt>
+                <dd class="col-sm-8">@(Model.Lease?.Unit?.UnitNumber ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Amount</dt>
+                <dd class="col-sm-8">@Model.Amount.ToString("0.000") BHD</dd>
+
+                <dt class="col-sm-4">Due Date</dt>
+                <dd class="col-sm-8">@Model.DueDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-4">Payment Date</dt>
+                <dd class="col-sm-8">
+                    @(Model.PaymentDate.HasValue
+                                        ? Model.PaymentDate.Value.ToString("dd MMM yyyy")
+                                        : "Not Paid")
+                </dd>
+
+                <dt class="col-sm-4">Payment Method</dt>
+                <dd class="col-sm-8">@(Model.Method?.Name ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.Status?.Name == "Paid")
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else if (Model.Status?.Name == "Overdue")
+                    {
+                        <span class="badge bg-danger">Overdue</span>
+                    }
+                    else if (Model.Status?.Name == "Pending")
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            @(Model.Status?.Name ?? "Unknown")
+                        </span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Transaction Reference</dt>
+                <dd class="col-sm-8">@(Model.TransactionReference ?? "N/A")</dd>
+            </dl>
+
+            <div class="d-flex gap-2">
+                @if (Model.Status?.Name != "Paid")
+                {
+                    <a asp-area="Tenant"
+                       asp-controller="Payment"
+                       asp-action="Pay"
+                       asp-route-id="@Model.PaymentId"
+                       class="btn btn-success">
+                        Pay Now
+                    </a>
+                }
+
+                <a asp-area="Tenant"
+                   asp-controller="Payment"
+                   asp-action="MyPayments"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,4 +18,9 @@
     <ProjectReference Include="..\LeaseBridge.API\LeaseBridge.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Management\Models\" />
+    <Folder Include="Areas\Tenant\Models\" />
+  </ItemGroup>
+
 </Project>

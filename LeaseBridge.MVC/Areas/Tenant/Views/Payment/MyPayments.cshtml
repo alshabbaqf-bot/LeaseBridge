@@ -1,0 +1,132 @@
+﻿@model IEnumerable<LeaseBridge.API.Models.Payment>
+
+@{
+    ViewData["Title"] = "My Payments";
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>My Payments</h2>
+        <p class="text-muted">
+            View your lease payment records, due dates, and payment statuses.
+        </p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No payment records found.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Property / Unit</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Payment Date</th>
+                            <th>Status</th>
+                            <th>Method</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td>@payment.PaymentId</td>
+
+                                <td>
+                                    <strong>@(payment.Lease?.Unit?.Property?.Name ?? "N/A")</strong>
+                                    <br />
+                                    <small class="text-muted">
+                                        Unit @(payment.Lease?.Unit?.UnitNumber ?? "N/A")
+                                    </small>
+                                </td>
+
+                                <td>@payment.Amount.ToString("0.000") BHD</td>
+                                <td>@payment.DueDate.ToString("dd MMM yyyy")</td>
+
+                                <td>
+                                    @(payment.PaymentDate.HasValue
+                                                                ? payment.PaymentDate.Value.ToString("dd MMM yyyy")
+                                                                : "Not Paid")
+                        </td>
+
+                                <td>
+                            @if (payment.Status?.Name == "Paid")
+                                    {
+                                        <span class="badge bg-success">Paid</span>
+                                    }
+                                    else if (payment.Status?.Name == "Overdue")
+                                    {
+                                        <span class="badge bg-danger">Overdue</span>
+                                    }
+                                    else if (payment.Status?.Name == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @(payment.Status?.Name ?? "Unknown")
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>@(payment.Method?.Name ?? "N/A")</td>
+
+                                <td class="text-center">
+                                    <a asp-area="Tenant"
+                                       asp-controller="Payment"
+                                       asp-action="Details"
+                                       asp-route-id="@payment.PaymentId"
+                                       class="btn btn-info btn-sm">
+                                        Details
+                                    </a>
+
+                                    @if (payment.Status?.Name != "Paid")
+                                    {
+                                        <a asp-area="Tenant"
+                                           asp-controller="Payment"
+                                           asp-action="Pay"
+                                           asp-route-id="@payment.PaymentId"
+                                           class="btn btn-success btn-sm">
+                                            Pay
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Paid</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
