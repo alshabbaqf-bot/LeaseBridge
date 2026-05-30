@@ -1,13 +1,11 @@
 ﻿@{
-
     ViewData["Title"] = "Add Invoice";
-
 }
 
-<div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Add Invoice</h4>
+<div class="page-container d-flex justify-content-center align-items-center">
+    <div class="card card-custom" style="width: 100%; max-width: 600px;">
+        <div class="card-header-navy">
+            <h4 class="mb-0 fw-bold">Add New Invoice</h4>
         </div>
 
         <div class="card-body">
@@ -20,58 +18,53 @@
 
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Lease</label>
-                    <select name="leaseId" class="form-select" asp-items="ViewBag.LeaseId" required>
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy">Lease</label>
+                    <select name="leaseId" class="form-select modern-input" asp-items="ViewBag.LeaseId" required>
                         <option value="">-- Select Lease --</option>
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Invoice Number</label>
-                    <input name="invoiceNumber"
-                           class="form-control"
-                           placeholder="Example: INV-2026-001"
-                           required />
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy">Invoice Number</label>
+                    <input name="invoiceNumber" class="form-control modern-input"
+                           placeholder="Example: INV-2026-001" required />
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Amount</label>
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy">Amount</label>
                     <div class="input-group">
-                        <input name="amount" type="number" step="0.001" min="0.001" class="form-control" required />
-                        <span class="input-group-text">BHD</span>
+                        <input name="amount" type="number" step="0.001" min="0.001"
+                               class="form-control modern-input" required />
+                        <span class="input-group-text bg-light border-0">BHD</span>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Issued Date</label>
-                    <input name="issuedDate" type="date" class="form-control" required />
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold text-navy">Issued Date</label>
+                        <input name="issuedDate" type="date" class="form-control modern-input" required />
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-bold text-navy">Due Date</label>
+                        <input name="dueDate" type="date" class="form-control modern-input" required />
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Due Date</label>
-                    <input name="dueDate" type="date" class="form-control" required />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Invoice Status</label>
-                    <select name="statusId" class="form-select" asp-items="ViewBag.StatusId" required>
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy">Invoice Status</label>
+                    <select name="statusId" class="form-select modern-input" asp-items="ViewBag.StatusId" required>
                         <option value="">-- Select Status --</option>
                     </select>
                 </div>
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-success">
-
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-navy rounded-pill">
                         Save Invoice
                     </button>
-
-                    <a asp-area="Management"
-                       asp-controller="PaymentsManagement"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-
-                        Back
+                    <a asp-area="Management" asp-controller="PaymentsManagement" asp-action="Index"
+                       class="btn btn-outline-secondary px-4 rounded-pill">
+                        Cancel
                     </a>
                 </div>
             </form>

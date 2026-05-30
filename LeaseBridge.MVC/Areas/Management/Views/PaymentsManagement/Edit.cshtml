@@ -4,96 +4,64 @@
     ViewData["Title"] = "Edit Invoice";
 }
 
-<div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Edit Invoice</h4>
+<div class="page-container d-flex justify-content-center">
+    <div class="card card-custom" style="width: 100%; max-width: 750px;">
+        <div class="card-header-navy">
+            <h4 class="mb-0 fw-bold">Edit Invoice: @Model.InvoiceNumber</h4>
         </div>
 
-        <div class="card-body">
-            <form asp-area="Management"
-                  asp-controller="PaymentsManagement"
-                  asp-action="Edit"
-                  asp-route-id="@Model.InvoiceId"
-                  method="post">
-
+        <div class="card-body p-4">
+            <form asp-action="Edit" asp-route-id="@Model.InvoiceId" method="post">
                 @Html.AntiForgeryToken()
-
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Lease</label>
-                    <select name="leaseId" class="form-select" asp-items="ViewBag.LeaseId" required>
-                        <option value="">-- Select Lease --</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Invoice Number</label>
-                    <input name="invoiceNumber"
-                           class="form-control"
-                           value="@Model.InvoiceNumber"
-                           required />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Amount</label>
-                    <div class="input-group">
-                        <input name="amount"
-                               type="number"
-                               step="0.001"
-                               min="0.001"
-                               class="form-control"
-                               value="@Model.Amount"
-                               required />
-                        <span class="input-group-text">BHD</span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-navy">Lease</label>
+                        <select name="leaseId" class="form-select rounded-pill" asp-items="ViewBag.LeaseId" required>
+                            <option value="">-- Select Lease --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-navy">Invoice Number</label>
+                        <input name="invoiceNumber" class="form-control rounded-pill" value="@Model.InvoiceNumber" required />
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Issued Date</label>
-                    <input name="issuedDate"
-                           type="date"
-                           class="form-control"
-                           value="@Model.IssuedDate.ToString("yyyy-MM-dd")"
-                           required />
+                    <label class="form-label fw-bold text-navy">Amount</label>
+                    <div class="input-group">
+                        <input name="amount" type="number" step="0.001" min="0.001"
+                               class="form-control rounded-start-pill" value="@Model.Amount" required />
+                        <span class="input-group-text rounded-end-pill bg-light">BHD</span>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Due Date</label>
-                    <input name="dueDate"
-                           type="date"
-                           class="form-control"
-                           value="@Model.DueDate.ToString("yyyy-MM-dd")"
-                           required />
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-navy">Issued Date</label>
+                        <input name="issuedDate" type="date" class="form-control rounded-pill"
+                               value="@Model.IssuedDate.ToString("yyyy-MM-dd")" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-navy">Due Date</label>
+                        <input name="dueDate" type="date" class="form-control rounded-pill"
+                               value="@Model.DueDate.ToString("yyyy-MM-dd")" required />
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Invoice Status</label>
-                    <select name="statusId" class="form-select" asp-items="ViewBag.StatusId" required>
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy">Invoice Status</label>
+                    <select name="statusId" class="form-select rounded-pill" asp-items="ViewBag.StatusId" required>
                         <option value="">-- Select Status --</option>
                     </select>
                 </div>
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-success">
-                        Save Changes
-                    </button>
-
-                    <a asp-area="Management"
-                       asp-controller="PaymentsManagement"
-                       asp-action="Details"
-                       asp-route-id="@Model.InvoiceId"
-                       class="btn btn-info">
-                        Details
-                    </a>
-
-                    <a asp-area="Management"
-                       asp-controller="PaymentsManagement"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-                        Back
-                    </a>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-navy px-4 rounded-pill flex-grow-1">Save Changes</button>
+                    <a asp-action="Details" asp-route-id="@Model.InvoiceId"
+                       class="btn btn-outline-info px-4 rounded-pill">Details</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill">Cancel</a>
                 </div>
             </form>
         </div>

@@ -3,23 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>@ViewData["Title"] - LeaseBridge</title>
 
     <script type="importmap"></script>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaseBridge.MVC.styles.css" asp-append-version="true" />
 </head>
-
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-3">
+            <div class="container-fluid px-4">
 
-                <a class="navbar-brand" href="/">
-                    LeaseBridge
+                <a class="navbar-brand text-uppercase d-inline-block text-nowrap" href="/"
+                   style="color: var(--navy-blue) !important; font-weight: 800; letter-spacing: 1.5px; font-size: 1.25rem;">
+                    LEASE BRIDGE
                 </a>
 
                 <button class="navbar-toggler"
@@ -32,136 +33,69 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <!-- Flex container to align centered links and components -->
+                <div class="navbar-collapse collapse d-sm-flex align-items-center w-100">
 
+                    <!-- Centered Menu Items via mx-auto -->
+                    <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/">
-                                Home
-                            </a>
+                            <a class="nav-link custom-nav-link" href="/">Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/PublicUnits">
-                                Browse Units
-                            </a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="PublicUnits" asp-action="Index">Browse Units</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Tracker">
-                                Track Application
-                            </a>
+                            <a class="nav-link custom-nav-link" href="/Tracker">Track Application</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark"
-                               href="#"
-                               id="tenantDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
+                            <a class="nav-link dropdown-toggle custom-nav-link" href="#" id="tenantDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Tenant
                             </a>
-
-                            <ul class="dropdown-menu" aria-labelledby="tenantDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Home/Index">
-                                        Tenant Dashboard
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/AvailableUnits/Index">
-                                        Available Units
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Application/MyApplications">
-                                        My Applications
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Maintenance/MyRequests">
-                                        My Maintenance
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Maintenance/RaiseTicket">
-                                        Raise Maintenance Ticket
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Payment/MyPayments">
-                                        My Payments
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/Tenant/Notifications/Index">
-                                        My Notifications
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="tenantDropdown">
+                                <li><a class="dropdown-item py-2" href="/Tenant/Home/Index">Tenant Dashboard</a></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/AvailableUnits/Index">Available Units</a></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/Application/MyApplications">My Applications</a></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/Maintenance/MyRequests">My Maintenance</a></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/Maintenance/RaiseTicket">Raise Maintenance Ticket</a></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/Payment/MyPayments">My Payments</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2" href="/Tenant/Notifications/Index">My Notifications</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark"
-                               href="#"
-                               id="managementDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
+                            <a class="nav-link dropdown-toggle custom-nav-link" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Management
                             </a>
-
-                            <ul class="dropdown-menu" aria-labelledby="managementDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="/Management/Dashboard/Index">
-                                        Dashboard / Approvals
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Management/MaintenanceManagement/Dashboard">
-                                        Maintenance Requests
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Management/PaymentsManagement/Index">
-                                        Payments
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="/Management/Notifications/Index">
-                                        Notifications
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="managementDropdown">
+                                <li><a class="dropdown-item py-2" href="/Management/Dashboard/Index">Dashboard / Approvals</a></li>
+                                <li><a class="dropdown-item py-2" href="/Management/MaintenanceManagement/Dashboard">Maintenance Requests</a></li>
+                                <li><a class="dropdown-item py-2" href="/Management/PaymentsManagement/Index">Payments</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2" href="/Management/Notifications/Index">Notifications</a></li>
                             </ul>
                         </li>
-
                     </ul>
+
+                    <!-- Authentication Layout Block -->
+                    <div class="d-flex align-items-center">
+                        <partial name="_LoginPartial" />
+                    </div>
+
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main role="main">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LeaseBridge -
-            <a href="/Home/Privacy">Privacy</a>
-        </div>
-    </footer>
+    <partial name="_Footer" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

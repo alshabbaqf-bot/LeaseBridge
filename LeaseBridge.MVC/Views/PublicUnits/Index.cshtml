@@ -3,40 +3,52 @@
     ViewData["Title"] = "Find Your Next Home";
 }
 
-<div class="container mt-4">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold text-primary">Discover Available Properties</h1>
-        <p class="lead text-muted">Browse top-tier listings across premier locations without needing an account.</p>
+<!-- High-Contrast Hero Section with Sharp Corners -->
+<div class="position-relative overflow-hidden mb-5 text-center d-flex align-items-center"
+     style="background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat; min-height: 440px; padding: 4rem 2rem;">
+
+    <!-- Dark overlay layer for maximum text legibility -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(15, 23, 42, 0.65); z-index: 1;"></div>
+
+    <div class="position-relative w-100 text-white mx-auto" style="z-index: 2;">
+        <h1 class="display-4 fw-bold mb-2" style="letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">Discover Available Properties</h1>
+        <p class="lead mx-auto mb-2" style="font-size: 1.1rem; max-w: 600px; color: rgba(255, 255, 255, 0.9) !important; text-shadow: 0 1px 3px rgba(0,0,0,0.4);">Browse top-tier listings across premier locations without needing an account.</p>
+
+        <!-- Original Search Box White Card (Slimmer & Spaced Downwards) -->
+        <div class="container text-start mt-5" style="max-w: 920px;">
+            <form asp-area="" asp-controller="PublicUnits" asp-action="Index" method="get" class="row g-3 px-4 py-3 bg-white rounded-4 shadow-lg border-0 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-navy text-uppercase mb-1" style="font-size: 0.725rem; letter-spacing: 0.3px; color: #1e3a8a;">Where would you like to live?</label>
+                    <div class="input-group" style="box-shadow: var(--shadow-sm); border-radius: 12px;">
+                        <span class="input-group-text bg-transparent border-end-0" style="border-color: #e2e8f0; color: #64748b;"><i class="bi bi-search"></i></span>
+                        <input type="text" name="searchString" class="form-control modern-input border-start-0 ps-0 text-dark" style="border-radius: 0 12px 12px 0; border-color: #e2e8f0; height: 42px; font-size: 0.9rem;" placeholder="Search by property name or location..." />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-navy text-uppercase mb-1" style="font-size: 0.725rem; letter-spacing: 0.3px; color: #1e3a8a;">Maximum Monthly Rent (BHD)</label>
+                    <div class="input-group" style="box-shadow: var(--shadow-sm); border-radius: 12px;">
+                        <span class="input-group-text border-end-0 fw-bold bg-light" style="border-radius: 12px 0 0 12px; border-color: #e2e8f0; color: #1e3a8a; font-size: 0.85rem;">BHD</span>
+                        <input type="number" name="maxPrice" class="form-control modern-input border-start-0 text-dark" style="border-radius: 0 12px 12px 0; border-color: #e2e8f0; height: 42px; font-size: 0.9rem;" placeholder="e.g. 450" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-navy w-100 fw-bold shadow-sm d-flex align-items-center justify-content-center" style="height: 42px; border-radius: 12px; background-color: #1e3a8a; border: none; color: white; font-size: 0.95rem;">Search</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <form asp-controller="PublicUnits" asp-action="Index" method="get" class="row g-3 mb-5 p-4 bg-white rounded shadow-sm border">
-        <div class="col-md-6">
-            <label class="form-label fw-semibold text-secondary">Where would you like to live?</label>
-            <div class="input-group">
-                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by property name or location..." />
-            </div>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label fw-semibold text-secondary">Maximum Monthly Rent (BHD)</label>
-            <div class="input-group">
-                <span class="input-group-text bg-light">BHD</span>
-                <input type="number" name="maxPrice" class="form-control" placeholder="e.g. 450" />
-            </div>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Search</button>
-        </div>
-    </form>
-
+<!-- Property Listings Grid Container -->
+<div class="container">
     <div class="row">
         @if (!Model.Any())
         {
-            <div class="col-12 text-center my-5 py-5 bg-white rounded border">
-                <i class="bi bi-building-exclamation text-warning display-1"></i>
-                <h3 class="mt-3 text-dark fw-bold">No Vacancies Found</h3>
+            <div class="col-12 text-center my-5 py-5 bg-white card-custom" style="border-radius: 16px;">
+                <i class="bi bi-building-exclamation display-1 mb-3 d-block" style="color: #f59e0b !important;"></i>
+                <h3 class="text-dark fw-bold">No Vacancies Found</h3>
                 <p class="text-muted">Try adjusting your budget cap or searching for a different area.</p>
-                <a asp-action="Index" class="btn btn-outline-primary mt-2">Clear All Filters</a>
+                <a asp-area="" asp-controller="PublicUnits" asp-action="Index" class="btn btn-outline-navy mt-2 px-4" style="border-radius: 10px;">Clear All Filters</a>
             </div>
         }
         else
@@ -44,29 +56,32 @@
             @foreach (var unit in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm border-0 bg-white">
-                        <div class="card-body p-4">
-                            <span class="badge bg-light text-primary border border-primary-subtle px-2.5 py-1.5 mb-3 fw-bold">Available For Lease</span>
-                            <h4 class="card-title text-dark fw-bold mb-1">@unit.Property?.Name</h4>
-                            <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i> @unit.Property?.Location</p>
+                    <div class="card h-100 card-custom hover-lift border-0 shadow-sm" style="border-radius: 16px; background: #ffffff; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;">
+                        <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div>
+                                <span class="badge px-3 py-2 mb-3 fw-bold border" style="background-color: #fffbeb; color: #b45309; border-color: #fde68a !important; font-size: 0.725rem; border-radius: 6px;">Available For Lease</span>
 
-                            <div class="row bg-light rounded p-2 text-center g-0 my-3 border border-light-subtle">
-                                <div class="col-6 border-end">
-                                    <span class="text-muted small d-block">Unit Code</span>
-                                    <strong class="text-dark">#@unit.UnitNumber</strong>
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-muted small d-block">Total Space</span>
-                                    <strong class="text-dark">@unit.Size SqFt</strong>
+                                <h4 class="card-title text-navy fw-bold mb-1" style="color: #0f172a !important; font-size: 1.25rem;">@unit.Property?.Name</h4>
+                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill me-1" style="color: #ef4444 !important;"></i> @unit.Property?.Location</p>
+
+                                <div class="row rounded p-2.5 text-center g-0 my-3 border border-light-subtle" style="border-radius: 12px !important; background-color: #f8fafc !important; border-color: #e2e8f0 !important;">
+                                    <div class="col-6 border-end" style="border-color: #e2e8f0 !important;">
+                                        <span class="text-muted small d-block mb-0.5" style="font-size: 0.7rem; text-uppercase; letter-spacing: 0.5px; color: #64748b !important;">Unit Code</span>
+                                        <strong style="color: #1e293b !important; font-size: 0.95rem; font-weight: 700;">#@unit.UnitNumber</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="text-muted small d-block mb-0.5" style="font-size: 0.7rem; text-uppercase; letter-spacing: 0.5px; color: #64748b !important;">Total Space</span>
+                                        <strong style="color: #1e293b !important; font-size: 0.95rem; font-weight: 700;">@unit.Size SqFt</strong>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
+                            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top" style="border-color: #f1f5f9 !important;">
                                 <div>
-                                    <span class="text-muted small d-block">Monthly Rent</span>
-                                    <h3 class="text-success fw-bold m-0">@unit.RentAmount <span class="fs-6 fw-normal text-muted">BHD</span></h3>
+                                    <span class="text-muted small d-block mb-0.5" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b !important;">Monthly Rent</span>
+                                    <h3 class="fw-bold m-0" style="color: #10b981 !important; font-size: 1.5rem; letter-spacing: -0.5px;">@unit.RentAmount <span class="fs-6 fw-normal text-muted" style="color: #64748b !important;">BHD</span></h3>
                                 </div>
-                                <a asp-controller="PublicUnits" asp-action="Details" asp-route-id="@unit.UnitId" class="btn btn-outline-primary fw-bold px-3">View Details</a>
+                                <a asp-area="" asp-controller="PublicUnits" asp-action="Details" asp-route-id="@unit.UnitId" class="btn btn-navy fw-bold px-3 py-2.5 shadow-sm" style="border-radius: 10px; font-size: 0.85rem; background-color: #0f172a; border-color: #0f172a;">View Details</a>
                             </div>
                         </div>
                     </div>
