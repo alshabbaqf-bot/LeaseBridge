@@ -4,72 +4,63 @@
     ViewData["Title"] = "Notification Details";
 }
 
-<div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Notification Details</h4>
+<div class="container mt-5 mb-5" style="max-width: 750px;">
+    <div class="card card-custom shadow border-0">
+        <!-- Navy Header consistent with your other pages -->
+        <div class="card-header card-header-navy py-4">
+            <h5 class="mb-0 fw-bold text-white">
+                <i class="bi bi-bell-fill me-2"></i> Notification Details
+            </h5>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Notification ID</dt>
-                <dd class="col-sm-8">@Model.NotificationId</dd>
+        <div class="card-body p-4">
+            <!-- Details List -->
+            <dl class="row mb-4">
+                <dt class="col-sm-4 text-muted">Notification ID</dt>
+                <dd class="col-sm-8 fw-bold">@Model.NotificationId</dd>
 
-                <dt class="col-sm-4">Message</dt>
-                <dd class="col-sm-8">@Model.Message</dd>
+                <dt class="col-sm-4 text-muted">Message</dt>
+                <dd class="col-sm-8 text-dark">@Model.Message</dd>
 
-                <dt class="col-sm-4">Type</dt>
-                <dd class="col-sm-8">@(Model.NotificationType ?? "General")</dd>
+                <dt class="col-sm-4 text-muted">Type</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-light text-navy border">@(Model.NotificationType ?? "General")</span>
+                </dd>
 
-                <dt class="col-sm-4">Read Status</dt>
+                <dt class="col-sm-4 text-muted">Status</dt>
                 <dd class="col-sm-8">
                     @if (Model.IsRead)
                     {
-                        <span class="badge bg-success">Read</span>
+                        <span class="badge bg-success-subtle text-success px-3 rounded-pill">Read</span>
                     }
                     else
                     {
-                        <span class="badge bg-warning text-dark">Unread</span>
+                        <span class="badge bg-warning-subtle text-warning px-3 rounded-pill">Unread</span>
                     }
                 </dd>
 
-                <dt class="col-sm-4">Created At</dt>
-                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
-
-                <dt class="col-sm-4">User ID</dt>
-                <dd class="col-sm-8">@Model.UserId</dd>
-
-                <dt class="col-sm-4">Maintenance Request ID</dt>
-                <dd class="col-sm-8">
-                    @(Model.MaintenanceRequestId.HasValue? Model.MaintenanceRequestId.Value.ToString() : "N/A")
-                </dd>
-
-                <dt class="col-sm-4">Application ID</dt>
-                <dd class="col-sm-8">
-                    @(Model.ApplicationId.HasValue? Model.ApplicationId.Value.ToString() : "N/A")
-                </dd>
+                <dt class="col-sm-4 text-muted">Created At</dt>
+                <dd class="col-sm-8 text-dark">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
             </dl>
 
-            <div class="d-flex gap-2 mt-4">
+            <hr class="my-4">
+
+            <!-- Footer Actions -->
+            <div class="d-flex gap-3 mt-4">
                 @if (!Model.IsRead)
                 {
-                    <form asp-area="Management"
-                          asp-controller="Notifications"
-                          asp-action="MarkAsRead"
-                          asp-route-id="@Model.NotificationId"
-                          method="post">
+                    <form asp-area="Management" asp-controller="Notifications" asp-action="MarkAsRead"
+                          asp-route-id="@Model.NotificationId" method="post">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-navy px-4">
                             Mark as Read
                         </button>
                     </form>
                 }
 
-                <a asp-area="Management"
-                   asp-controller="Notifications"
-                   asp-action="Index"
-                   class="btn btn-secondary">
-                    Back
+                <a asp-area="Management" asp-controller="Notifications" asp-action="Index"
+                   class="btn btn-outline-secondary px-4">
+                    Back to List
                 </a>
             </div>
         </div>
