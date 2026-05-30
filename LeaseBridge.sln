@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaseBridge.API", "LeaseBri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaseBridge.MVC", "LeaseBridge.MVC\LeaseBridge.MVC.csproj", "{F04447F0-B705-4C4E-AC1F-B0CBE854E542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaseBridge.Reporting", "LeaseBridge.Reporting\LeaseBridge.Reporting.csproj", "{897923DB-142B-4B64-B2A9-FE8CDF59913D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaseBridge.Reporting", "LeaseBridge.Reporting\LeaseBridge.Reporting.csproj", "{4D220E6D-3CC3-DAE4-9CF8-8B808D935CCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{F04447F0-B705-4C4E-AC1F-B0CBE854E542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F04447F0-B705-4C4E-AC1F-B0CBE854E542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F04447F0-B705-4C4E-AC1F-B0CBE854E542}.Release|Any CPU.Build.0 = Release|Any CPU
-		{897923DB-142B-4B64-B2A9-FE8CDF59913D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{897923DB-142B-4B64-B2A9-FE8CDF59913D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{897923DB-142B-4B64-B2A9-FE8CDF59913D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{897923DB-142B-4B64-B2A9-FE8CDF59913D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D220E6D-3CC3-DAE4-9CF8-8B808D935CCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D220E6D-3CC3-DAE4-9CF8-8B808D935CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D220E6D-3CC3-DAE4-9CF8-8B808D935CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D220E6D-3CC3-DAE4-9CF8-8B808D935CCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
