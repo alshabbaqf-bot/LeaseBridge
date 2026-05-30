@@ -1,8 +1,138 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Management Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="mb-4 pb-2 border-bottom">
+        <h2 class="text-navy fw-bold mb-0"> Dashbaord</h2>
+    </div>
+
+    <!-- Cards -->
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Total Units</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">150</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Active Leases</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">124</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Resolution Rate</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">8 Days</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Overdue Payments</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">450 BHD</h3>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="row mt-4">
+            <!-- New Maintenance Requests -->
+            <div class="col-lg-6">
+                <div class="card-custom p-4 shadow-sm bg-white">
+                    <h5 class="text-navy fw-bold mb-3"> New Maintenance Requests</h5>
+                    <table class="table table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Unit</th>
+                                <th>Issue</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Hardcoded sample data -->
+                            <tr>
+                                <td>MR-101</td>
+                                <td>A101</td>
+                                <td>Air Conditioning Repair</td>
+                                <td>12 May 2026</td>
+                            </tr>
+                            <tr>
+                                <td>MR-102</td>
+                                <td>B110</td>
+                                <td>Water Leak</td>
+                                <td>11 May 2026</td>
+                            </tr>
+                            <tr>
+                                <td>MR-103</td>
+                                <td>C305</td>
+                                <td>Electrical Issue</td>
+                                <td>10 May 2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lease Expiration Soon -->
+            <div class="col-lg-6">
+                <div class="card-custom p-4 shadow-sm bg-white">
+                    <h5 class="text-navy fw-bold mb-3"> Lease Expiring Soon</h5>
+                    <table class="table table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tenant</th>
+                                <th>Unit</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            <!-- Hardcoded sample data -->
+                            <tr>
+                                <td>Ahmed Ali</td>
+                                <td>A-101</td>
+                                <td>20 May 2026</td>
+                                <td>
+                                    <span class="badge bg-warning">  Expiring Soon </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fatima Abdulla</td>
+                                <td>B-204</td>
+                                <td>25 May 2026</td>
+                                <td>
+                                    <span class="badge bg-warning"> Expiring Soon</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Omar Hassan</td>
+                                <td>C-301</td>
+                                <td>28 May 2026</td>
+                                <td>
+                                    <span class="badge bg-warning">Expiring Soon </span>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
