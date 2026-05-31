@@ -229,6 +229,7 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var invoice = await _context.Set<Invoice>()
+                .Include(i => i.Lease)
                 .Include(i => i.Status)
                 .FirstOrDefaultAsync(i => i.InvoiceId == id);
 
@@ -238,6 +239,7 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             }
 
             await LoadDropdownsAsync(invoice);
+
             return View(invoice);
         }
 
@@ -250,10 +252,10 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             string invoiceNumber,
             decimal amount,
             DateTime issuedDate,
-            DateTime dueDate,
-            int statusId)
+            DateTime dueDate)
         {
-            var invoice = await _context.Set<Invoice>().FirstOrDefaultAsync(i => i.InvoiceId == id);
+            var invoice = await _context.Set<Invoice>()
+                .FirstOrDefaultAsync(i => i.InvoiceId == id);
 
             if (invoice == null)
             {
@@ -270,26 +272,21 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
                 ModelState.AddModelError("amount", "Amount must be greater than zero.");
             }
 
-            var leaseExists = await _context.Leases.AnyAsync(l => l.LeaseId == leaseId);
+            if (dueDate.Date < issuedDate.Date)
+            {
+                ModelState.AddModelError("dueDate", "Due date cannot be before the issued date.");
+            }
+
+            var leaseExists = await _context.Leases
+                .AnyAsync(l => l.LeaseId == leaseId && l.IsActive);
+
             if (!leaseExists)
             {
-                ModelState.AddModelError("leaseId", "Please select a valid lease.");
-            }
-
-            var statusExists = await _context.Set<InvoiceStatus>().AnyAsync(s => s.StatusId == statusId);
-            if (!statusExists)
-            {
-                ModelState.AddModelError("statusId", "Please select a valid invoice status.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                await LoadDropdownsAsync(invoice);
-                return View(invoice);
+                ModelState.AddModelError("leaseId", "Please select a valid active lease.");
             }
 
             var paidStatus = await _context.Set<InvoiceStatus>()
-    .FirstOrDefaultAsync(s => s.Name == "Paid");
+                .FirstOrDefaultAsync(s => s.Name == "Paid");
 
             var pendingStatus = await _context.Set<InvoiceStatus>()
                 .FirstOrDefaultAsync(s => s.Name == "Pending");
@@ -297,11 +294,21 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             var overdueStatus = await _context.Set<InvoiceStatus>()
                 .FirstOrDefaultAsync(s => s.Name == "Overdue");
 
-            if (invoice.StatusId != paidStatus!.StatusId)
+            if (paidStatus == null || pendingStatus == null || overdueStatus == null)
             {
-                invoice.StatusId = invoice.DueDate.Date < DateTime.Today
-                    ? overdueStatus!.StatusId
-                    : pendingStatus!.StatusId;
+                ModelState.AddModelError("", "Invoice statuses Paid, Pending, or Overdue were not found.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                invoice.LeaseId = leaseId;
+                invoice.InvoiceNumber = invoiceNumber;
+                invoice.Amount = amount;
+                invoice.IssuedDate = issuedDate;
+                invoice.DueDate = dueDate;
+
+                await LoadDropdownsAsync(invoice);
+                return View(invoice);
             }
 
             invoice.LeaseId = leaseId;
@@ -309,7 +316,15 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             invoice.Amount = amount;
             invoice.IssuedDate = issuedDate;
             invoice.DueDate = dueDate;
-            invoice.StatusId = statusId;
+
+            // If invoice is already paid, keep it paid.
+            // Otherwise calculate Pending/Overdue automatically.
+            if (invoice.StatusId != paidStatus!.StatusId)
+            {
+                invoice.StatusId = dueDate.Date < DateTime.Today
+                    ? overdueStatus!.StatusId
+                    : pendingStatus!.StatusId;
+            }
 
             await _context.SaveChangesAsync();
 
@@ -451,7 +466,7 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
                 .Include(l => l.Tenant)
                 .Include(l => l.Unit)
                     .ThenInclude(u => u.Property)
-                .Where(l => l.IsActive)
+                .Where(l => l.IsActive || l.LeaseId == invoice!.LeaseId)
                 .OrderBy(l => l.LeaseId)
                 .Select(l => new
                 {
@@ -470,13 +485,8 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
                 "DisplayText",
                 invoice?.LeaseId
             );
+            var selectedLeaseId = invoice?.LeaseId;
 
-            ViewData["StatusId"] = new SelectList(
-                await _context.Set<InvoiceStatus>().OrderBy(s => s.Name).ToListAsync(),
-                "StatusId",
-                "Name",
-                invoice?.StatusId
-            );
         }
     }
 }
