@@ -1,0 +1,195 @@
+﻿@model LeaseBridge.MVC.Models.MaintenanceLookup.MaintenanceLookupViewModel
+
+@{
+
+    ViewData["Title"] = "Public Maintenance Lookup";
+
+}
+
+<div class="container mt-5" style="max-width: 900px;">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Public Maintenance Lookup</h4>
+        </div>
+
+        <div class="card-body p-4">
+            <p class="text-muted">
+
+                Enter your maintenance ticket number and registered phone number to view your request status.
+
+                Login is not required.
+            </p>
+
+            @if (ViewBag.ErrorMessage != null)
+
+            {
+                <div class="alert alert-danger">
+
+                    @ViewBag.ErrorMessage
+                </div>
+
+            }
+
+            <form asp-area=""
+                  asp-controller="MaintenanceLookup"
+                  asp-action="CheckStatus"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="TicketNumber" class="form-label fw-bold"></label>
+                        <input asp-for="TicketNumber"
+                               class="form-control"
+                               placeholder="Example: TKT-20260531-ABCD" />
+                        <span asp-validation-for="TicketNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
+                        <input asp-for="PhoneNumber"
+                               class="form-control"
+                               placeholder="Example: 33330001" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-dark mt-4">
+
+                    Check Maintenance Status
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Result != null)
+
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Maintenance Request Details</h5>
+            </div>
+
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Ticket Number</dt>
+                    <dd class="col-sm-8">@Model.Result.TicketNumber</dd>
+
+                    <dt class="col-sm-4">Tenant</dt>
+                    <dd class="col-sm-8">@Model.Result.TenantName</dd>
+
+                    <dt class="col-sm-4">Property</dt>
+                    <dd class="col-sm-8">@Model.Result.PropertyName</dd>
+
+                    <dt class="col-sm-4">Unit</dt>
+                    <dd class="col-sm-8">@Model.Result.UnitNumber</dd>
+
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Result.Title</dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@(Model.Result.Description ?? "No description provided.")</dd>
+
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">@Model.Result.CategoryName</dd>
+
+                    <dt class="col-sm-4">Priority</dt>
+                    <dd class="col-sm-8">@Model.Result.PriorityName</dd>
+
+                    <dt class="col-sm-4">Current Status</dt>
+                    <dd class="col-sm-8">
+
+                        @if (Model.Result.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+
+                                            Model.Result.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+
+                        {
+                            <span class="badge bg-success">@Model.Result.StatusName</span>
+
+                        }
+
+                        else if (Model.Result.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
+
+                        {
+                            <span class="badge bg-warning text-dark">@Model.Result.StatusName</span>
+
+                        }
+
+                        else
+
+                        {
+                            <span class="badge bg-info text-white">@Model.Result.StatusName</span>
+
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Submitted At</dt>
+                    <dd class="col-sm-8">@Model.Result.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                </dl>
+
+                <hr />
+
+                <h5>Update History</h5>
+
+                @if (Model.Result.Updates == null || !Model.Result.Updates.Any())
+
+                {
+                    <div class="alert alert-info">
+
+                        No updates have been added yet.
+                    </div>
+
+                }
+
+                else
+
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Old Status</th>
+                                    <th>New Status</th>
+                                    <th>Updated By</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var update in Model.Result.Updates)
+
+                                {
+                                    <tr>
+                                        <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                        <td>@update.OldStatusName</td>
+                                        <td>@update.NewStatusName</td>
+                                        <td>@update.UpdatedByName</td>
+                                        <td>@update.Notes</td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+    }
+</div>
+
+@section Scripts {
+
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

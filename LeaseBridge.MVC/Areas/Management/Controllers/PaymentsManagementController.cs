@@ -3,12 +3,12 @@ using LeaseBridge.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LeaseBridge.MVC.Areas.Management.Controllers
 {
     [Area("Management")]
-    // [Authorize(Roles = "Property Manager")]
+    [Authorize(Roles = "Property Manager")]
     public class PaymentsManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,22 +19,39 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         }
 
         // GET: /Management/PaymentsManagement
+
         public async Task<IActionResult> Index()
+
         {
+
+            await UpdateInvoiceStatusesByDueDateAsync();
+
             var invoices = await _context.Set<Invoice>()
+
                 .Include(i => i.Status)
+
                 .Include(i => i.Lease)
+
                     .ThenInclude(l => l.Tenant)
+
                 .Include(i => i.Lease)
+
                     .ThenInclude(l => l.Unit)
+
                         .ThenInclude(u => u.Property)
+
                 .Include(i => i.Payments)
+
                     .ThenInclude(p => p.Method)
+
                 .OrderByDescending(i => i.DueDate)
+
                 .ToListAsync();
 
             return View(invoices);
+
         }
+
 
         // GET: /Management/PaymentsManagement/Details/5
         public async Task<IActionResult> Details(int id)
@@ -66,60 +83,147 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         }
 
         // POST: /Management/PaymentsManagement/Create
+
         [HttpPost]
+
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Create(
+
             int leaseId,
+
             string invoiceNumber,
+
             decimal amount,
+
             DateTime issuedDate,
-            DateTime dueDate,
-            int statusId)
+
+            DateTime dueDate)
+
         {
+
             if (string.IsNullOrWhiteSpace(invoiceNumber))
+
             {
+
                 ModelState.AddModelError("invoiceNumber", "Invoice number is required.");
+
             }
 
             if (amount <= 0)
+
             {
+
                 ModelState.AddModelError("amount", "Amount must be greater than zero.");
+
             }
 
-            var leaseExists = await _context.Leases.AnyAsync(l => l.LeaseId == leaseId);
-            if (!leaseExists)
+            if (dueDate.Date < issuedDate.Date)
+
             {
-                ModelState.AddModelError("leaseId", "Please select a valid lease.");
+
+                ModelState.AddModelError("dueDate", "Due date cannot be before the issued date.");
+
             }
 
-            var statusExists = await _context.Set<InvoiceStatus>().AnyAsync(s => s.StatusId == statusId);
-            if (!statusExists)
+            var lease = await _context.Leases
+
+                .Include(l => l.Tenant)
+
+                .Include(l => l.Unit)
+
+                .FirstOrDefaultAsync(l => l.LeaseId == leaseId && l.IsActive);
+
+            if (lease == null)
+
             {
-                ModelState.AddModelError("statusId", "Please select a valid invoice status.");
+
+                ModelState.AddModelError("leaseId", "Please select a valid active lease.");
+
+            }
+
+            var pendingStatus = await _context.Set<InvoiceStatus>()
+
+                .FirstOrDefaultAsync(s => s.Name == "Pending");
+
+            var overdueStatus = await _context.Set<InvoiceStatus>()
+
+                .FirstOrDefaultAsync(s => s.Name == "Overdue");
+
+            if (pendingStatus == null || overdueStatus == null)
+
+            {
+
+                ModelState.AddModelError("", "Invoice statuses Pending/Overdue were not found.");
+
             }
 
             if (!ModelState.IsValid)
+
             {
+
                 await LoadDropdownsAsync();
+
                 return View();
+
             }
 
+            var today = DateTime.Today;
+
+            var automaticStatusId = dueDate.Date < today
+
+                ? overdueStatus!.StatusId
+
+                : pendingStatus!.StatusId;
+
             var invoice = new Invoice
+
             {
+
                 LeaseId = leaseId,
+
                 InvoiceNumber = invoiceNumber.Trim(),
+
                 Amount = amount,
+
                 IssuedDate = issuedDate,
+
                 DueDate = dueDate,
-                StatusId = statusId
+
+                StatusId = automaticStatusId
+
             };
 
             _context.Set<Invoice>().Add(invoice);
+
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Invoice created successfully.";
+            var notification = new Notification
+
+            {
+
+                UserId = lease!.TenantId,
+
+                Message = $"A new invoice {invoice.InvoiceNumber} has been created for {invoice.Amount:0.000} BHD.",
+
+                NotificationType = "Invoice Created",
+
+                IsRead = false,
+
+                CreatedAt = DateTime.UtcNow
+
+            };
+
+            _context.Notifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Invoice created successfully and tenant was notified.";
+
             return RedirectToAction(nameof(Index));
+
         }
+
 
         // GET: /Management/PaymentsManagement/Edit/5
         public async Task<IActionResult> Edit(int id)
@@ -182,6 +286,22 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             {
                 await LoadDropdownsAsync(invoice);
                 return View(invoice);
+            }
+
+            var paidStatus = await _context.Set<InvoiceStatus>()
+    .FirstOrDefaultAsync(s => s.Name == "Paid");
+
+            var pendingStatus = await _context.Set<InvoiceStatus>()
+                .FirstOrDefaultAsync(s => s.Name == "Pending");
+
+            var overdueStatus = await _context.Set<InvoiceStatus>()
+                .FirstOrDefaultAsync(s => s.Name == "Overdue");
+
+            if (invoice.StatusId != paidStatus!.StatusId)
+            {
+                invoice.StatusId = invoice.DueDate.Date < DateTime.Today
+                    ? overdueStatus!.StatusId
+                    : pendingStatus!.StatusId;
             }
 
             invoice.LeaseId = leaseId;
@@ -266,16 +386,81 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
             return View("Index", invoices);
         }
 
+        private async Task UpdateInvoiceStatusesByDueDateAsync()
+
+        {
+
+            var paidStatus = await _context.Set<InvoiceStatus>()
+
+                .FirstOrDefaultAsync(s => s.Name == "Paid");
+
+            var pendingStatus = await _context.Set<InvoiceStatus>()
+
+                .FirstOrDefaultAsync(s => s.Name == "Pending");
+
+            var overdueStatus = await _context.Set<InvoiceStatus>()
+
+                .FirstOrDefaultAsync(s => s.Name == "Overdue");
+
+            if (paidStatus == null || pendingStatus == null || overdueStatus == null)
+
+            {
+
+                return;
+
+            }
+
+            var today = DateTime.Today;
+
+            var invoices = await _context.Set<Invoice>()
+
+                .Where(i => i.StatusId != paidStatus.StatusId)
+
+                .ToListAsync();
+
+            foreach (var invoice in invoices)
+
+            {
+
+                if (invoice.DueDate.Date < today)
+
+                {
+
+                    invoice.StatusId = overdueStatus.StatusId;
+
+                }
+
+                else
+
+                {
+
+                    invoice.StatusId = pendingStatus.StatusId;
+
+                }
+
+            }
+
+            await _context.SaveChangesAsync();
+
+        }
+
+
         private async Task LoadDropdownsAsync(Invoice? invoice = null)
         {
             var leases = await _context.Leases
                 .Include(l => l.Tenant)
+                .Include(l => l.Unit)
+                    .ThenInclude(u => u.Property)
+                .Where(l => l.IsActive)
                 .OrderBy(l => l.LeaseId)
                 .Select(l => new
                 {
                     l.LeaseId,
-                    DisplayText = "Lease #" + l.LeaseId + " - " +
-                                  l.Tenant.FirstName + " " + l.Tenant.LastName
+                    DisplayText =
+                        "Lease #" + l.LeaseId +
+                        " - " + l.Tenant.FirstName + " " + l.Tenant.LastName +
+                        " - Unit " + l.Unit.UnitNumber +
+                        " - " + l.Unit.Property.Name
                 })
                 .ToListAsync();
 

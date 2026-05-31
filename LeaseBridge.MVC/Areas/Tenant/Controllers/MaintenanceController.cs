@@ -1,6 +1,6 @@
 ﻿using LeaseBridge.API.Data;
 using LeaseBridge.API.Models;
-// using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -9,7 +9,7 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
 {
     [Area("Tenant")]
     [Route("Tenant/[controller]/[action]")]
-    // [Authorize(Roles = "Tenant")]
+    [Authorize(Roles = "Tenant")]
     public class MaintenanceController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -190,6 +190,19 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
             _context.MaintenanceRequests.Add(request);
             await _context.SaveChangesAsync();
 
+            var notification = new Notification
+            {
+                UserId = tenant.UserId,
+                MaintenanceRequestId = request.RequestId,
+                Message = $"Your maintenance request {request.TicketNumber} has been submitted successfully.",
+                NotificationType = "Maintenance Submitted",
+                IsRead = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
             TempData["SuccessMessage"] = $"Ticket {request.TicketNumber} submitted successfully.";
 
             return RedirectToAction(
@@ -247,6 +260,32 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
                 return NotFound();
             }
 
+            request.Updates = await _context.MaintenanceUpdates
+                .Where(u => u.RequestId == id)
+                .OrderByDescending(u => u.CreatedAt)
+                .Select(u => new TenantMaintenanceUpdateViewModel
+                {
+                    UpdateId = u.UpdateId,
+                    Notes = u.Notes ?? "",
+                    CreatedAt = u.CreatedAt,
+
+                    OldStatusName = _context.MaintenanceStatuses
+                        .Where(s => s.StatusId == u.OldStatusId)
+                        .Select(s => s.Name)
+                        .FirstOrDefault() ?? "N/A",
+
+                    NewStatusName = _context.MaintenanceStatuses
+                        .Where(s => s.StatusId == u.NewStatusId)
+                        .Select(s => s.Name)
+                        .FirstOrDefault() ?? "Unknown",
+
+                    UpdatedByName = _context.AppUsers
+                        .Where(user => user.UserId == u.UpdatedBy)
+                        .Select(user => user.FirstName + " " + user.LastName)
+                        .FirstOrDefault() ?? "System"
+                })
+                .ToListAsync();
+
             return View(request);
         }
 
@@ -298,5 +337,22 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
         public string PriorityName { get; set; } = string.Empty;
 
         public string StatusName { get; set; } = string.Empty;
+
+        public List<TenantMaintenanceUpdateViewModel> Updates { get; set; } = new();
+    }
+
+    public class TenantMaintenanceUpdateViewModel
+    {
+        public int UpdateId { get; set; }
+
+        public string Notes { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; }
+
+        public string OldStatusName { get; set; } = string.Empty;
+
+        public string NewStatusName { get; set; } = string.Empty;
+
+        public string UpdatedByName { get; set; } = string.Empty;
     }
 }

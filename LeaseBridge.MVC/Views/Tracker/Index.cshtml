@@ -1,53 +1,45 @@
 ﻿@{
-    ViewData["Title"] = "Public Maintenance Lookup";
+    ViewData["Title"] = "Track Application";
 }
 
-<div class="container page-container d-flex align-items-center justify-content-center">
-    <div class="card card-custom w-100" style="max-width: 550px;">
-        <div class="card-header-navy text-center">
-            <h4 class="mb-0 fw-bold"><i class="bi bi-tools me-2"></i>Track Maintenance Request</h4>
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white text-center">
+            <h4 class="mb-0">Track Application Status</h4>
         </div>
 
         <div class="card-body p-4">
-            <p class="text-muted text-center mb-4">
-                Enter your maintenance ticket number and registered phone number to check the request status.
+            <p class="text-muted text-center">
+                Enter your application reference ID to check your rental application status.
             </p>
 
-            @if (ViewBag.ErrorMessage != null)
-            {
-                <div class="alert alert-danger border-0 shadow-sm rounded-3">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>@ViewBag.ErrorMessage
-                </div>
-            }
-
-            <form asp-controller="Tracker"
-                  asp-action="CheckMaintenanceStatus"
+            <form asp-area=""
+                  asp-controller="Tracker"
+                  asp-action="CheckStatus"
                   method="post">
 
                 @Html.AntiForgeryToken()
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold text-navy">Maintenance Ticket Number</label>
-                    <input type="text"
-                           name="ticketNumber"
-                           class="form-control modern-input"
-                           placeholder="Example: TKT-20260526-ABCD"
+                    <label class="form-label fw-bold">Application Reference ID</label>
+                    <input type="number"
+                           name="applicationId"
+                           class="form-control"
+                           placeholder="Example: 1024"
                            required />
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold text-navy">Registered Phone Number</label>
-                    <input type="text"
-                           name="phoneNumber"
-                           class="form-control modern-input"
-                           placeholder="Example: 39991234"
-                           required />
-                </div>
-
-                <button type="submit" class="btn btn-navy w-100 py-2.5 shadow-sm">
-                    Check Status <i class="bi bi-arrow-right ms-1"></i>
+                <button type="submit" class="btn btn-dark w-100">
+                    Check Application Status
                 </button>
             </form>
+
+            @if (ViewBag.Status != null)
+            {
+                <div class="alert alert-info mt-4 text-center border">
+                    <strong>Status:</strong> @ViewBag.Status
+                </div>
+            }
         </div>
     </div>
 </div>

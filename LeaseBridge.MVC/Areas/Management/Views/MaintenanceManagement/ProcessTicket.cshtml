@@ -1,36 +1,57 @@
-﻿@model LeaseBridge.API.Models.MaintenanceRequest
+﻿@model LeaseBridge.MVC.Areas.Management.Controllers.ManagementProcessTicketViewModel
 
 @{
     ViewData["Title"] = "Process Maintenance Request";
 }
 
-<div class="container mt-5 mb-5" style="max-width: 650px;">
-
-    <div class="card card-custom shadow border-0">
-        <div class="card-header card-header-navy py-4">
+<div class="container mt-5" style="max-width: 750px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-danger text-white py-3">
             <h5 class="mb-0 fw-bold">
-                <i class="bi bi-gear-fill me-2"></i>
                 Process Maintenance Request
             </h5>
             <small class="text-white-50">Ticket Number: @Model.TicketNumber</small>
         </div>
 
-        <div class="card-body p-4 bg-light">
-            <div class="p-4 bg-white border rounded mb-4" style="box-shadow: var(--shadow-sm);">
-                <label class="small fw-bold text-uppercase text-muted mb-2">Tenant Reported Issue</label>
-                <p class="mb-3 text-dark fs-6 @(string.IsNullOrEmpty(Model.Description) ? "text-muted" : "")">
-                    @(Model.Description ?? "No text description provided by tenant.")
-                </p>
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="p-3 bg-white border rounded mb-4 shadow-sm">
+                <h6 class="fw-bold text-secondary mb-2">Request Summary</h6>
 
-                <div class="pt-3 border-top d-flex align-items-center">
-                    <i class="bi bi-clock-history text-muted me-2"></i>
-                    <small class="text-muted">Logged: @Model.CreatedAt.ToString("g")</small>
-                </div>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Tenant</dt>
+                    <dd class="col-sm-8">@Model.TenantName</dd>
+
+                    <dt class="col-sm-4">Unit</dt>
+                    <dd class="col-sm-8">@Model.UnitName</dd>
+
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@(Model.Description ?? "No text description provided by tenant.")</dd>
+
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info text-dark">@Model.CategoryName</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Priority</dt>
+                    <dd class="col-sm-8">@Model.PriorityName</dd>
+
+                    <dt class="col-sm-4">Current Status</dt>
+                    <dd class="col-sm-8">@Model.CurrentStatusName</dd>
+
+                    <dt class="col-sm-4">Assigned Staff</dt>
+                    <dd class="col-sm-8">@Model.AssignedStaffName</dd>
+
+                    <dt class="col-sm-4">Logged Timestamp</dt>
+                    <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                </dl>
             </div>
 
             @if (TempData["ManagementError"] != null)
             {
-                <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+                <div class="alert alert-danger">
                     @TempData["ManagementError"]
                 </div>
             }
@@ -41,35 +62,62 @@
                   method="post">
 
                 @Html.AntiForgeryToken()
+
                 <input type="hidden" name="requestId" value="@Model.RequestId" />
 
                 <div class="mb-4">
-                    <label class="form-label fw-bold text-navy">
+                    <label class="form-label fw-bold text-secondary">
                         Update Maintenance Status
                     </label>
 
-                    <select name="statusId" class="form-select modern-input shadow-sm py-2" required>
-                        @foreach (var status in ViewBag.Statuses)
-                        {
-                            <option value="@status.StatusId" selected="@(status.StatusId == Model.StatusId)">
-                                @status.Name
-                            </option>
-                        }
+                    <select name="statusId"
+                            class="form-select shadow-sm"
+                            asp-items="ViewBag.StatusId"
+                            required>
+                        <option value="">-- Select Status --</option>
                     </select>
                 </div>
 
-                <div class="row g-3 pt-2">
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">
+                        Assign Staff
+                    </label>
+
+                    <select name="staffId"
+                            class="form-select shadow-sm"
+                            asp-items="ViewBag.StaffId">
+                        <option value="">-- Leave Unassigned --</option>
+                    </select>
+
+                    <small class="text-muted">
+                        Only available staff with the matching skill/category for
+                        <strong>@Model.CategoryName</strong> are shown.
+                    </small>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">
+                        Manager Notes
+                    </label>
+
+                    <textarea name="managerNotes"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Optional note for staff/tenant, e.g. Assigned to technician for inspection."></textarea>
+                </div>
+
+                <div class="row pt-2">
                     <div class="col-6">
                         <a asp-area="Management"
                            asp-controller="MaintenanceManagement"
                            asp-action="Dashboard"
-                           class="btn btn-outline-secondary w-100 fw-bold py-2">
-                            Return
+                           class="btn btn-outline-secondary w-100 fw-bold">
+                            Return to Dashboard
                         </a>
                     </div>
 
                     <div class="col-6">
-                        <button type="submit" class="btn btn-navy w-100 fw-bold shadow-sm py-2">
+                        <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
                             Save Changes
                         </button>
                     </div>

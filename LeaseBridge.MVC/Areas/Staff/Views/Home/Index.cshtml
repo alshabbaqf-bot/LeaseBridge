@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>Staff Dashboard</h2>
+        <p class="text-muted">
+            View your assigned maintenance tasks, update progress, and check notifications.
+        </p>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">My Assigned Tasks</h5>
+                    <p class="card-text text-muted">
+                        View maintenance requests assigned to you.
+                    </p>
+
+                    <a asp-area="Staff"
+                       asp-controller="MaintenanceTasks"
+                       asp-action="MyTasks"
+                       class="btn btn-primary">
+                        View Tasks
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Update Progress</h5>
+                    <p class="card-text text-muted">
+                        Add progress notes and update maintenance request status.
+                    </p>
+
+                    <a asp-area="Staff"
+                       asp-controller="MaintenanceTasks"
+                       asp-action="MyTasks"
+                       class="btn btn-outline-primary">
+                        Update Tasks
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">My Notifications</h5>
+                    <p class="card-text text-muted">
+                        View assignment alerts and maintenance updates sent to you.
+                    </p>
+
+                    <a asp-area="Staff"
+                       asp-controller="Notifications"
+                       asp-action="Index"
+                       class="btn btn-info">
+                        View Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
