@@ -1,6 +1,9 @@
-﻿@model LeaseBridge.Reporting.ViewModel.LoginViewModel
+﻿@* @model LeaseBridge.Reporting.ViewModel.LoginViewModel *@
+@model LeaseBridge.Reporting.Dtos.LoginRequest
+
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
@@ -17,9 +20,12 @@
                     </div>
 
                     <div class="card-body p-4 p-md-5">
-                        <form asp-action="Login" method="post">
+                        <form asp-action="Login" asp-route-returnUrl="@returnUrl" method="post">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="All" class="text-danger small"></div>
+
                             <div class="mb-3">
-                                <label class="form-label small fw-bold text-navy text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Email</label>
+                                <label asp-for="Email" class="form-label small fw-bold text-navy text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;"></label>
                                 <input asp-for="Email" class="form-control modern-input" placeholder="Email"
                                        style="padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd;">
                                 <span asp-validation-for="Email" class="text-danger small"></span>
@@ -27,18 +33,11 @@
 
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <label class="form-label small fw-bold text-navy text-uppercase m-0" style="font-size: 0.75rem; letter-spacing: 0.5px;">Password</label>
+                                    <label asp-for="Password" class="form-label small fw-bold text-navy text-uppercase m-0" style="font-size: 0.75rem; letter-spacing: 0.5px;"></label>
                                 </div>
                                 <input asp-for="Password" class="form-control modern-input" placeholder="Password"
                                        style="padding: 12px 15px; border-radius: 10px; border: 1px solid #ddd;">
                                 <span asp-validation-for="Password" class="text-danger small"></span>
-                            </div>
-
-                            <div class="mb-4 d-flex justify-content-between align-items-center">
-                                <div class="form-check">
-                                    <input asp-for="RememberMe" class="form-check-input" id="rememberMe">
-                                    <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
-                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-navy w-100 py-3 fw-bold shadow-sm mb-3" style="border-radius: 10px;">

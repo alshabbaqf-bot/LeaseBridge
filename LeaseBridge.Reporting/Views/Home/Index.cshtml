@@ -1,12 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Management Dashboard";
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="container-fluid">
 
     <!-- Header -->
     <div class="mb-4 pb-2 border-bottom">
-        <h2 class="text-navy fw-bold mb-0"> Dashbaord</h2>
+        <h1 class="text-navy fw-bold mb-0">Dashbaord</h1>
     </div>
 
     <!-- Cards -->
@@ -16,7 +16,23 @@
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
                 <small class="text-muted fw-bold text-uppercase">Total Units</small>
                 <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">150</h3>
+                <h3 class="text-navy fw-bold mt-1">120</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Occupied Units</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">95</h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
+                <small class="text-muted fw-bold text-uppercase">Vacant Units</small>
+                <!--Hardcoded-->
+                <h3 class="text-navy fw-bold mt-1">25</h3>
             </div>
         </div>
 
@@ -24,23 +40,23 @@
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
                 <small class="text-muted fw-bold text-uppercase">Active Leases</small>
                 <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">124</h3>
+                <h3 class="text-navy fw-bold mt-1">90</h3>
             </div>
         </div>
 
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Resolution Rate</small>
+                <small class="text-muted fw-bold text-uppercase">Open Maintenance Requests</small>
                 <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">8 Days</h3>
+                <h3 class="text-navy fw-bold mt-1">18</h3>
             </div>
         </div>
 
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Overdue Payments</small>
+                <small class="text-muted fw-bold text-uppercase">Overdue Invoices</small>
                 <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">450 BHD</h3>
+                <h3 class="text-navy fw-bold mt-1">20</h3>
             </div>
         </div>
 
@@ -94,8 +110,6 @@
                                 <th>Tenant</th>
                                 <th>Unit</th>
                                 <th>End Date</th>
-                                <th>Status</th>
-                            </tr>
 
                         </thead>
                         <tbody>
@@ -105,25 +119,16 @@
                                 <td>Ahmed Ali</td>
                                 <td>A-101</td>
                                 <td>20 May 2026</td>
-                                <td>
-                                    <span class="badge bg-warning">  Expiring Soon </span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>Fatima Abdulla</td>
                                 <td>B-204</td>
                                 <td>25 May 2026</td>
-                                <td>
-                                    <span class="badge bg-warning"> Expiring Soon</span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>Omar Hassan</td>
                                 <td>C-301</td>
                                 <td>28 May 2026</td>
-                                <td>
-                                    <span class="badge bg-warning">Expiring Soon </span>
-                                </td>
                             </tr>
                         </tbody>
 
