@@ -1,10 +1,12 @@
 ﻿using LeaseBridge.API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaseBridge.MVC.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Roles = "Property Manager")]
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +20,8 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
         public async Task<IActionResult> Index()
         {
             var notifications = await _context.Notifications
-                .OrderByDescending(n => n.CreatedAt)
+                .OrderBy(n => n.IsRead)
+                .ThenByDescending(n => n.CreatedAt)
                 .ToListAsync();
 
             return View(notifications);

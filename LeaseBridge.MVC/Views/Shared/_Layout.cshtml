@@ -18,38 +18,57 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
 
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     LeaseBridge
                 </a>
 
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div id="mainNavbar" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index">
                                 Home
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/PublicUnits">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="PublicUnits"
+                               asp-action="Index">
                                 Browse Units
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Tracker">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="Tracker"
+                               asp-action="Index">
                                 Track Application
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-controller="MaintenanceLookup"
+                               asp-action="Index">
+                                Track Maintenance
                             </a>
                         </li>
 
@@ -65,42 +84,64 @@
 
                             <ul class="dropdown-menu" aria-labelledby="tenantDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Home/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Home"
+                                       asp-action="Index">
                                         Tenant Dashboard
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/AvailableUnits/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="AvailableUnits"
+                                       asp-action="Index">
                                         Available Units
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Application/MyApplications">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Application"
+                                       asp-action="MyApplications">
                                         My Applications
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Maintenance/MyRequests">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Maintenance"
+                                       asp-action="MyRequests">
                                         My Maintenance
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Maintenance/RaiseTicket">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Maintenance"
+                                       asp-action="RaiseTicket">
                                         Raise Maintenance Ticket
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Payment/MyPayments">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Payment"
+                                       asp-action="MyPayments">
                                         My Payments
                                     </a>
                                 </li>
+
                                 <li>
-                                    <a class="dropdown-item" href="/Tenant/Notifications/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Tenant"
+                                       asp-controller="Notifications"
+                                       asp-action="Index">
                                         My Notifications
                                     </a>
                                 </li>
@@ -119,32 +160,145 @@
 
                             <ul class="dropdown-menu" aria-labelledby="managementDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="/Management/Dashboard/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="Dashboard"
+                                       asp-action="Index">
                                         Dashboard / Approvals
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Management/MaintenanceManagement/Dashboard">
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="MaintenanceManagement"
+                                       asp-action="Dashboard">
                                         Maintenance Requests
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Management/PaymentsManagement/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="PaymentsManagement"
+                                       asp-action="Index">
                                         Payments
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="/Management/Notifications/Index">
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="Notifications"
+                                       asp-action="Index">
                                         Notifications
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="LeaseManagement"
+                                       asp-action="Index">
+                                        Lease Management
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Management"
+                                       asp-controller="StaffManagement"
+                                       asp-action="Index">
+                                        Staff Management
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark"
+                               href="#"
+                               id="staffDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Staff
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Staff"
+                                       asp-controller="Home"
+                                       asp-action="Index">
+                                        Staff Dashboard
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Staff"
+                                       asp-controller="MaintenanceTasks"
+                                       asp-action="MyTasks">
+                                        My Assigned Tasks
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Staff"
+                                       asp-controller="Notifications"
+                                       asp-action="Index">
+                                        My Notifications
                                     </a>
                                 </li>
                             </ul>
                         </li>
 
                     </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark">
+                                    @User.Identity.Name
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <form asp-area=""
+                                      asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="d-inline">
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit" class="btn btn-link nav-link text-dark">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-area=""
+                                   asp-controller="Account"
+                                   asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-area=""
+                                   asp-controller="Account"
+                                   asp-action="Register">
+                                    Register
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
                 </div>
             </div>
         </nav>
@@ -159,7 +313,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - LeaseBridge -
-            <a href="/Home/Privacy">Privacy</a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 

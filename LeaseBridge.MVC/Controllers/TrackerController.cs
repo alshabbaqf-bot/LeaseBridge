@@ -1,100 +1,63 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+﻿using LeaseBridge.API.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LeaseBridge.MVC.Controllers
 {
     public class TrackerController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public TrackerController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public TrackerController(ApplicationDbContext context)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
+            _context = context;
         }
 
         // GET: /Tracker
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        // POST: /Tracker/CheckMaintenanceStatus
+        // POST: /Tracker/CheckStatus
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CheckMaintenanceStatus(string ticketNumber, string phoneNumber)
+        public async Task<IActionResult> CheckStatus(int applicationId)
         {
-            if (string.IsNullOrWhiteSpace(ticketNumber) || string.IsNullOrWhiteSpace(phoneNumber))
+            if (applicationId <= 0)
             {
-                ViewBag.ErrorMessage = "Please enter both ticket number and registered phone number.";
+                ViewBag.Status = "Please enter a valid application reference ID.";
                 return View("Index");
             }
 
-            var apiBaseUrl = _configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7122";
+            var application = await _context.Applications
+                .Include(a => a.Status)
+                .Include(a => a.Unit)
+                    .ThenInclude(u => u.Property)
+                .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
 
-            var apiUrl =
-                $"{apiBaseUrl}/api/public/maintenance-lookup?ticketNumber={Uri.EscapeDataString(ticketNumber.Trim())}&phoneNumber={Uri.EscapeDataString(phoneNumber.Trim())}";
-
-            try
+            if (application == null)
             {
-                var client = _httpClientFactory.CreateClient();
-
-                var response = await client.GetAsync(apiUrl);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    ViewBag.ErrorMessage = "No maintenance request was found using the provided ticket number and phone number.";
-                    return View("Index");
-                }
-
-                var json = await response.Content.ReadAsStringAsync();
-
-                var result = JsonSerializer.Deserialize<MaintenanceLookupResultViewModel>(
-                    json,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                if (result == null)
-                {
-                    ViewBag.ErrorMessage = "The maintenance lookup response could not be read.";
-                    return View("Index");
-                }
-
-                return View("Result", result);
-            }
-            catch
-            {
-                ViewBag.ErrorMessage = "Could not reach the maintenance lookup service right now.";
+                ViewBag.Status = "Application record was not found.";
                 return View("Index");
             }
+
+            var unitText = application.Unit != null
+                ? $"Unit {application.Unit.UnitNumber}"
+                : "Selected unit";
+
+            var propertyText = application.Unit?.Property != null
+                ? application.Unit.Property.Name
+                : "Property not available";
+
+            var statusText = application.Status != null
+                ? application.Status.Name
+                : $"Status ID {application.StatusId}";
+
+            ViewBag.Status = $"{unitText} - {propertyText} | Current Status: {statusText}";
+
+            return View("Index");
         }
-    }
-
-    public class MaintenanceLookupResultViewModel
-    {
-        public string TicketNumber { get; set; } = string.Empty;
-
-        public string TenantName { get; set; } = string.Empty;
-
-        public string UnitNumber { get; set; } = string.Empty;
-
-        public string PropertyName { get; set; } = string.Empty;
-
-        public string Title { get; set; } = string.Empty;
-
-        public string? Description { get; set; }
-
-        public string CategoryName { get; set; } = string.Empty;
-
-        public string PriorityName { get; set; } = string.Empty;
-
-        public string StatusName { get; set; } = string.Empty;
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using LeaseBridge.API.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddSession();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
 
 // Register database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,6 +38,8 @@ app.MapStaticAssets();
 
 app.UseRouting();
 
+app.UseSession();
+
 // Keep this only if authentication/login is configured in your project
 app.UseAuthentication();
 app.UseAuthorization();
@@ -46,6 +58,12 @@ app.MapControllerRoute(
     name: "tenant",
     pattern: "Tenant/{controller=Home}/{action=Index}/{id?}",
     defaults: new { area = "Tenant" }
+);
+
+app.MapControllerRoute(
+    name: "staff",
+    pattern: "Staff/{controller=Home}/{action=Index}/{id?}",
+    defaults: new { area = "Staff" }
 );
 
 // General area route

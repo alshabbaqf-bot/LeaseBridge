@@ -35,7 +35,9 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
             var unit = await _context.Units
                 .Include(u => u.Property)
                 .Include(u => u.Status)
-                .FirstOrDefaultAsync(u => u.UnitId == id);
+                .FirstOrDefaultAsync(u =>
+                    u.UnitId == id &&
+                    (u.Status.Name == "Vacant" || u.Status.Name == "Available"));
 
             if (unit == null)
             {

@@ -1,0 +1,79 @@
+﻿@model LeaseBridge.API.Models.Lease
+
+@{
+    ViewData["Title"] = "Lease Details";
+}
+
+<div class="container mt-4" style="max-width: 800px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Lease Details</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Lease ID</dt>
+                <dd class="col-sm-8">#@Model.LeaseId</dd>
+
+                <dt class="col-sm-4">Tenant</dt>
+                <dd class="col-sm-8">
+                    @(Model.Tenant != null
+                                        ? Model.Tenant.FirstName + " " + Model.Tenant.LastName
+                                        : "N/A")
+                </dd>
+
+                <dt class="col-sm-4">Property</dt>
+                <dd class="col-sm-8">@(Model.Unit?.Property?.Name ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Unit</dt>
+                <dd class="col-sm-8">@(Model.Unit?.UnitNumber ?? "N/A")</dd>
+
+                <dt class="col-sm-4">Start Date</dt>
+                <dd class="col-sm-8">@Model.StartDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-4">End Date</dt>
+                <dd class="col-sm-8">@Model.EndDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </dd>
+            </dl>
+
+            <div class="d-flex gap-2 mt-4">
+                @if (Model.IsActive)
+                {
+                    <a asp-area="Management"
+                       asp-controller="LeaseManagement"
+                       asp-action="Renew"
+                       asp-route-id="@Model.LeaseId"
+                       class="btn btn-primary">
+                        Renew Lease
+                    </a>
+
+                    <a asp-area="Management"
+                       asp-controller="LeaseManagement"
+                       asp-action="Terminate"
+                       asp-route-id="@Model.LeaseId"
+                       class="btn btn-danger">
+                        Terminate Lease
+                    </a>
+                }
+
+                <a asp-area="Management"
+                   asp-controller="LeaseManagement"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

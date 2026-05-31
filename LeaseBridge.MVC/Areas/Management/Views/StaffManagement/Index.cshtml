@@ -1,0 +1,130 @@
+﻿@model IEnumerable<LeaseBridge.MVC.Areas.Management.Controllers.StaffProfileViewModel>
+
+@{
+    ViewData["Title"] = "Staff Management";
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>Staff Management</h2>
+        <p class="text-muted">
+            Manage staff availability and skill/category profiles.
+        </p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No staff users found.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Staff</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Skill Categories</th>
+                            <th>Availability</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var staff in Model)
+                        {
+                            <tr>
+                                <td>@staff.FullName</td>
+
+                                <td>@staff.Email</td>
+
+                                <td>@staff.PhoneNumber</td>
+
+                                <td>
+                                    @if (staff.SkillNames.Any())
+
+                                    {
+
+                                        foreach (var skill in staff.SkillNames)
+
+                                        {
+                                            <span class="badge bg-info text-dark me-1">
+
+                                                @skill
+                                            </span>
+
+                                        }
+
+                                    }
+
+                                    else
+
+                                    {
+                                        <span class="text-muted">
+
+                                            No skills assigned
+                                        </span>
+
+                                    }
+
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            No categories assigned
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (staff.IsAvailable)
+                                    {
+                                        <span class="badge bg-success">Available</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Unavailable</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    <a asp-area="Management"
+                                       asp-controller="StaffManagement"
+                                       asp-action="ManageSkills"
+                                       asp-route-id="@staff.UserId"
+                                       class="btn btn-primary btn-sm">
+                                        Manage Skills
+                                    </a>
+
+                                    <form asp-area="Management"
+                                          asp-controller="StaffManagement"
+                                          asp-action="ToggleAvailability"
+                                          asp-route-id="@staff.UserId"
+                                          method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            Toggle Availability
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

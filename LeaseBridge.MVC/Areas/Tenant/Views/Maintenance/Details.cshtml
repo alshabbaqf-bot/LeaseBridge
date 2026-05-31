@@ -1,12 +1,10 @@
 ﻿@model LeaseBridge.MVC.Areas.Tenant.Controllers.TenantMaintenanceViewModel
 
 @{
-
     ViewData["Title"] = "Maintenance Request Details";
-
 }
 
-<div class="container mt-4" style="max-width: 750px;">
+<div class="container mt-4" style="max-width: 850px;">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Maintenance Request Details</h4>
@@ -29,30 +27,20 @@
                 <dt class="col-sm-4">Priority</dt>
                 <dd class="col-sm-8">@Model.PriorityName</dd>
 
-                <dt class="col-sm-4">Status</dt>
+                <dt class="col-sm-4">Current Status</dt>
                 <dd class="col-sm-8">
-
                     @if (Model.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
-
                                         Model.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
-
                     {
                         <span class="badge bg-success">@Model.StatusName</span>
-
                     }
-
                     else if (Model.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
-
                     {
                         <span class="badge bg-warning text-dark">@Model.StatusName</span>
-
                     }
-
                     else
-
                     {
                         <span class="badge bg-info text-white">@Model.StatusName</span>
-
                     }
                 </dd>
 
@@ -60,11 +48,64 @@
                 <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
             </dl>
 
+            <hr />
+
+            <h5 class="mb-3">Progress Updates</h5>
+
+            @if (Model.Updates == null || !Model.Updates.Any())
+            {
+                <div class="alert alert-info">
+                    No progress updates have been added yet.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Old Status</th>
+                                <th>New Status</th>
+                                <th>Updated By</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var update in Model.Updates)
+                            {
+                                <tr>
+                                    <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                    <td>@update.OldStatusName</td>
+                                    <td>
+                                        @if (update.NewStatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+                                                                        update.NewStatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <span class="badge bg-success">@update.NewStatusName</span>
+                                        }
+                                        else if (update.NewStatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <span class="badge bg-warning text-dark">@update.NewStatusName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info text-white">@update.NewStatusName</span>
+                                        }
+                                    </td>
+                                    <td>@update.UpdatedByName</td>
+                                    <td>@update.Notes</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
             <a asp-area="Tenant"
                asp-controller="Maintenance"
                asp-action="MyRequests"
-               class="btn btn-secondary">
-
+               class="btn btn-secondary mt-3">
                 Back to My Requests
             </a>
         </div>
