@@ -1,55 +1,103 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LeaseBridge.API.Data;
+
+using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
-using LeaseBridge.API.Data;   // FIX: Pulling Data directly from the API project
-using LeaseBridge.API.Models; // FIX: Pulling Models directly from the API project
 
 namespace LeaseBridge.MVC.Controllers
+
 {
+
     public class PublicUnitsController : Controller
+
     {
+
         private readonly ApplicationDbContext _context;
 
         public PublicUnitsController(ApplicationDbContext context)
+
         {
+
             _context = context;
+
         }
 
         // GET: /PublicUnits
-        public async Task<IActionResult> Index(string searchString, decimal? maxPrice)
+
+        public async Task<IActionResult> Index(string? search)
+
         {
-            // Query the active Units database set from the API layer
-            var query = _context.Units
+
+            var unitsQuery = _context.Units
+
                 .Include(u => u.Property)
-                .Where(u => u.StatusId == 1); // StatusId = 1 maps to 'Available'
 
-            if (!string.IsNullOrEmpty(searchString))
+                .Include(u => u.Status)
+
+                .Where(u =>
+
+                    u.Status.Name == "Vacant" ||
+
+                    u.Status.Name == "Available")
+
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+
             {
-                query = query.Where(u => u.Property.Name.Contains(searchString)
-                                      || u.Property.Location.Contains(searchString));
+
+                var keyword = search.Trim();
+
+                unitsQuery = unitsQuery.Where(u =>
+
+                    u.UnitNumber.Contains(keyword) ||
+
+                    u.Property.Name.Contains(keyword));
+
             }
 
-            if (maxPrice.HasValue)
-            {
-                query = query.Where(u => u.RentAmount <= maxPrice.Value);
-            }
+            var units = await unitsQuery
 
-            List<Unit> availableUnits = await query.ToListAsync();
-            return View(availableUnits);
+                .OrderBy(u => u.RentAmount)
+
+                .ToListAsync();
+
+            ViewBag.Search = search;
+
+            return View(units);
+
         }
 
         // GET: /PublicUnits/Details/5
+
         public async Task<IActionResult> Details(int id)
+
         {
-            Unit? unit = await _context.Units
+
+            var unit = await _context.Units
+
                 .Include(u => u.Property)
-                .FirstOrDefaultAsync(u => u.UnitId == id);
+
+                .Include(u => u.Status)
+
+                .FirstOrDefaultAsync(u =>
+
+                    u.UnitId == id &&
+
+                    (u.Status.Name == "Vacant" || u.Status.Name == "Available"));
 
             if (unit == null)
+
             {
+
                 return NotFound();
+
             }
 
             return View(unit);
+
         }
+
     }
+
 }

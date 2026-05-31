@@ -1,0 +1,114 @@
+﻿@model LeaseBridge.MVC.Areas.Staff.Controllers.StaffMaintenanceTaskViewModel
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<div class="container mt-4" style="max-width: 900px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Maintenance Task Details</h4>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Ticket Number</dt>
+                <dd class="col-sm-8">@Model.TicketNumber</dd>
+
+                <dt class="col-sm-4">Title</dt>
+                <dd class="col-sm-8">@Model.Title</dd>
+
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">@(Model.Description ?? "No description provided.")</dd>
+
+                <dt class="col-sm-4">Tenant</dt>
+                <dd class="col-sm-8">@Model.TenantName</dd>
+
+                <dt class="col-sm-4">Unit</dt>
+                <dd class="col-sm-8">@Model.UnitNumber</dd>
+
+                <dt class="col-sm-4">Category</dt>
+                <dd class="col-sm-8">@Model.CategoryName</dd>
+
+                <dt class="col-sm-4">Priority</dt>
+                <dd class="col-sm-8">@Model.PriorityName</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+                                        Model.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="badge bg-success">@Model.StatusName</span>
+                    }
+                    else if (Model.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="badge bg-warning text-dark">@Model.StatusName</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info text-white">@Model.StatusName</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Created At</dt>
+                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+
+                <dt class="col-sm-4">Assigned Date</dt>
+                <dd class="col-sm-8">@Model.AssignedDate.ToString("dd MMM yyyy HH:mm")</dd>
+            </dl>
+
+            <hr />
+
+            <h5>Progress Updates</h5>
+
+            @if (Model.Updates == null || !Model.Updates.Any())
+            {
+                <div class="alert alert-info">
+                    No progress updates have been added yet.
+                </div>
+            }
+            else
+            {
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Staff</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var update in Model.Updates)
+                        {
+                            <tr>
+                                <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>@update.StatusName</td>
+                                <td>@update.StaffName</td>
+                                <td>@update.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            <div class="d-flex gap-2 mt-4">
+                <a asp-area="Staff"
+                   asp-controller="MaintenanceTasks"
+                   asp-action="UpdateProgress"
+                   asp-route-id="@Model.RequestId"
+                   class="btn btn-warning">
+                    Update Progress
+                </a>
+
+                <a asp-area="Staff"
+                   asp-controller="MaintenanceTasks"
+                   asp-action="MyTasks"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,12 +7,16 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-navy">Maintenance Support Log</h2>
-            <p class="text-muted mb-0">Track maintenance requests raised for your leased unit.</p>
+            <h2>Maintenance Support Log</h2>
+            <p class="text-muted mb-0">
+                Track maintenance requests raised for your leased unit.
+            </p>
         </div>
 
-        <a asp-area="Tenant" asp-controller="Maintenance" asp-action="RaiseTicket"
-           class="btn btn-navy rounded-pill px-4 shadow-sm">
+        <a asp-area="Tenant"
+           asp-controller="Maintenance"
+           asp-action="RaiseTicket"
+           class="btn btn-primary fw-bold shadow-sm">
             Open New Ticket
         </a>
     </div>
@@ -21,7 +25,11 @@
     {
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
         </div>
     }
 
@@ -29,22 +37,26 @@
     {
         <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
             @TempData["ErrorMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
         </div>
     }
 
-    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-        <div class="table-responsive">
-            <table class="table align-middle m-0">
-                <thead class="table-header-custom text-white">
+    <div class="card shadow-sm border rounded">
+        <div class="table-responsive bg-white p-3 rounded">
+            <table class="table table-hover align-middle m-0">
+                <thead class="table-light">
                     <tr>
-                        <th class="p-3">Ticket Reference</th>
-                        <th class="p-3">Subject</th>
-                        <th class="p-3">Category</th>
-                        <th class="p-3">Priority</th>
-                        <th class="p-3">Date Raised</th>
-                        <th class="p-3">Status</th>
-                        <th class="p-3 text-center">Action</th>
+                        <th>Ticket Reference</th>
+                        <th>Subject</th>
+                        <th>Category</th>
+                        <th>Priority</th>
+                        <th>Date Raised</th>
+                        <th>Status</th>
+                        <th class="text-center">Details</th>
                     </tr>
                 </thead>
 
@@ -52,7 +64,9 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="7" class="text-center p-5 text-muted">No maintenance requests have been submitted yet.</td>
+                            <td colspan="7" class="text-center py-4 text-muted">
+                                No maintenance requests have been submitted yet.
+                            </td>
                         </tr>
                     }
                     else
@@ -60,48 +74,53 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td class="p-3 fw-bold text-navy">@item.TicketNumber</td>
+                                <td class="fw-bold text-primary">@item.TicketNumber</td>
 
-                                <td class="p-3">
-                                    <div class="fw-semibold">@item.Title</div>
-                                    <small class="text-muted text-truncate d-block" style="max-width: 250px;">
+                                <td>
+                                    <span class="d-block fw-bold text-dark">@item.Title</span>
+                                    <small class="text-muted d-inline-block text-truncate" style="max-width: 250px;">
                                         @(item.Description ?? "No description provided.")
                                     </small>
                                 </td>
 
-                                <td class="p-3">@item.CategoryName</td>
+                                <td>@item.CategoryName</td>
 
-                                <td class="p-3">
-                                    @if (item.PriorityName?.ToLower() == "high" || item.PriorityName?.ToLower() == "urgent")
+                                <td>
+                                    @if (item.PriorityName.Equals("High", StringComparison.OrdinalIgnoreCase) ||
+                                                                item.PriorityName.Equals("Urgent", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-danger-subtle text-danger rounded-pill px-3">@item.PriorityName</span>
+                                        <span class="badge bg-danger">@item.PriorityName</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3">@item.PriorityName</span>
+                                        <span class="badge bg-light text-dark border">@item.PriorityName</span>
                                     }
                                 </td>
 
-                                <td class="p-3">@item.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
 
-                                <td class="p-3">
-                                    @if (item.StatusName?.ToLower() == "completed" || item.StatusName?.ToLower() == "resolved")
+                                <td>
+                                    @if (item.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+                                                                item.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-success-subtle text-success rounded-pill px-3">@item.StatusName</span>
+                                        <span class="badge bg-success">@item.StatusName</span>
                                     }
-                                    else if (item.StatusName?.ToLower() == "in progress")
+                                    else if (item.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-warning-subtle text-warning rounded-pill px-3">@item.StatusName</span>
+                                        <span class="badge bg-warning text-dark">@item.StatusName</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-info-subtle text-info rounded-pill px-3">@item.StatusName</span>
+                                        <span class="badge bg-info text-white">@item.StatusName</span>
                                     }
                                 </td>
 
-                                <td class="p-3 text-center">
-                                    <a asp-area="Tenant" asp-controller="Maintenance" asp-action="Details" asp-route-id="@item.RequestId"
-                                       class="btn btn-sm btn-navy rounded-pill px-3 shadow-sm">
+                                <td class="text-center">
+                                    <a asp-area="Tenant"
+                                       asp-controller="Maintenance"
+                                       asp-action="Details"
+                                       asp-route-id="@item.RequestId"
+                                       class="btn btn-sm btn-outline-primary">
                                         View
                                     </a>
                                 </td>

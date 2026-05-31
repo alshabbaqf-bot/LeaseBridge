@@ -1,6 +1,6 @@
 ﻿using LeaseBridge.API.Data;
 using LeaseBridge.API.Models;
-// using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace LeaseBridge.MVC.Areas.Tenant.Controllers
 {
     [Area("Tenant")]
-    // [Authorize(Roles = "Tenant")]
+    [Authorize(Roles = "Tenant")]
     public class PaymentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +36,7 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
                         .ThenInclude(u => u.Property)
                 .Include(i => i.Payments)
                     .ThenInclude(p => p.Method)
-                .Where(i => i.Lease.TenantId == tenant.UserId)
+                .Where(i => i.Lease != null && i.Lease.TenantId == tenant.UserId)
                 .OrderByDescending(i => i.DueDate)
                 .ToListAsync();
 
@@ -171,8 +171,25 @@ namespace LeaseBridge.MVC.Areas.Tenant.Controllers
 
             await _context.SaveChangesAsync();
 
+            var notification = new Notification
+            {
+                UserId = tenant.UserId,
+                Message = $"Your payment for invoice {invoice.InvoiceNumber} was completed successfully.",
+                NotificationType = "Payment Completed",
+                IsRead = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
             TempData["SuccessMessage"] = "Payment completed successfully.";
-            return RedirectToAction(nameof(MyPayments));
+
+            return RedirectToAction(
+                actionName: nameof(MyPayments),
+                controllerName: "Payment",
+                routeValues: new { area = "Tenant" }
+            );
         }
 
         private async Task<AppUser?> GetCurrentTenantAsync()

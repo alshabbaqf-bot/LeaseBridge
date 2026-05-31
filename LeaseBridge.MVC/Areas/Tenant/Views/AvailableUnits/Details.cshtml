@@ -4,55 +4,48 @@
     ViewData["Title"] = "Unit Details";
 }
 
-<div class="page-container container" style="max-width: 850px;">
-
-    <div class="card card-custom shadow-lg">
-
-        <div class="card-header-navy">
-            <h4 class="mb-0 fw-bold">Unit @Model.UnitNumber Details</h4>
+<div class="container mt-4" style="max-width: 800px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Unit @Model.UnitNumber Details</h4>
         </div>
 
-        <div class="card-body p-4">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <span class="text-muted small">Property</span>
-                        <div class="fw-bold text-navy">@(Model.Property?.Name ?? "N/A")</div>
-                    </div>
-                    <div class="mb-3">
-                        <span class="text-muted small">Unit Number</span>
-                        <div class="fw-semibold text-dark">@Model.UnitNumber</div>
-                    </div>
-                    <div class="mb-3">
-                        <span class="text-muted small">Size</span>
-                        <div class="fw-semibold text-dark">@Model.Size sqft</div>
-                    </div>
-                </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Property</dt>
+                <dd class="col-sm-8">@(Model.Property?.Name ?? "N/A")</dd>
 
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <span class="text-muted small">Monthly Rent</span>
-                        <div class="fw-bold text-navy fs-4">@Model.RentAmount.ToString("0.000") BHD</div>
-                    </div>
-                    <div class="mb-3">
-                        <span class="text-muted small">Status</span><br />
-                        @{
-                            string statusName = Model.Status?.Name ?? "Available";
-                            string badgeClass = statusName == "Available" ? "bg-success text-white" : "bg-light text-navy border";
-                        }
-                        <span class="badge @badgeClass px-3 py-2">@statusName</span>
-                    </div>
-                </div>
-            </div>
+                <dt class="col-sm-4">Unit Number</dt>
+                <dd class="col-sm-8">@Model.UnitNumber</dd>
 
-            <div class="d-flex gap-2 mt-4 pt-3 border-top">
-                <a asp-area="Tenant" asp-controller="Application" asp-action="Apply"
-                   asp-route-unitId="@Model.UnitId" class="btn btn-navy rounded-pill px-4">
+                <dt class="col-sm-4">Size</dt>
+                <dd class="col-sm-8">@Model.Size sqft</dd>
+
+                <dt class="col-sm-4">Monthly Rent</dt>
+                <dd class="col-sm-8">@Model.RentAmount.ToString("0.000") BHD</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-success">
+                        @(Model.Status?.Name ?? "Available")
+                    </span>
+                </dd>
+            </dl>
+
+            <div class="d-flex gap-2 mt-4">
+                <a asp-area="Tenant"
+                   asp-controller="Application"
+                   asp-action="Apply"
+                   asp-route-unitId="@Model.UnitId"
+                   class="btn btn-primary">
                     Apply for this Unit
                 </a>
-                <a asp-area="Tenant" asp-controller="AvailableUnits" asp-action="Index"
-                   class="btn btn-outline-secondary rounded-pill px-4">
-                    Back
+
+                <a asp-area="Tenant"
+                   asp-controller="AvailableUnits"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Back to Available Units
                 </a>
             </div>
         </div>
