@@ -4,10 +4,9 @@
     ViewData["Title"] = "Process Maintenance Request";
 }
 
-<div class="container mt-5 mb-5" style="max-width: 650px;">
-
-    <div class="card card-custom shadow border-0">
-        <div class="card-header card-header-navy py-4">
+<div class="container mt-5" style="max-width: 650px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-danger text-white py-3">
             <h5 class="mb-0 fw-bold">
                 <i class="bi bi-gear-fill me-2"></i>
                 Process Maintenance Request
@@ -15,22 +14,24 @@
             <small class="text-white-50">Ticket Number: @Model.TicketNumber</small>
         </div>
 
-        <div class="card-body p-4 bg-light">
-            <div class="p-4 bg-white border rounded mb-4" style="box-shadow: var(--shadow-sm);">
-                <label class="small fw-bold text-uppercase text-muted mb-2">Tenant Reported Issue</label>
-                <p class="mb-3 text-dark fs-6 @(string.IsNullOrEmpty(Model.Description) ? "text-muted" : "")">
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="p-3 bg-white border rounded mb-4 shadow-sm">
+                <h6 class="fw-bold text-secondary mb-1">Tenant Reported Issue Description:</h6>
+
+                <p class="mb-0 text-dark @(string.IsNullOrEmpty(Model.Description) ? "text-muted" : "")">
                     @(Model.Description ?? "No text description provided by tenant.")
                 </p>
 
-                <div class="pt-3 border-top d-flex align-items-center">
-                    <i class="bi bi-clock-history text-muted me-2"></i>
-                    <small class="text-muted">Logged: @Model.CreatedAt.ToString("g")</small>
-                </div>
+                <hr class="my-2">
+
+                <small class="text-muted d-block">
+                    Logged Timestamp: @Model.CreatedAt.ToString("g")
+                </small>
             </div>
 
             @if (TempData["ManagementError"] != null)
             {
-                <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+                <div class="alert alert-danger">
                     @TempData["ManagementError"]
                 </div>
             }
@@ -41,35 +42,41 @@
                   method="post">
 
                 @Html.AntiForgeryToken()
+
                 <input type="hidden" name="requestId" value="@Model.RequestId" />
 
                 <div class="mb-4">
-                    <label class="form-label fw-bold text-navy">
+                    <label class="form-label fw-bold text-secondary">
                         Update Maintenance Status
                     </label>
 
-                    <select name="statusId" class="form-select modern-input shadow-sm py-2" required>
+                    <select name="statusId" class="form-select shadow-sm" required>
                         @foreach (var status in ViewBag.Statuses)
                         {
-                            <option value="@status.StatusId" selected="@(status.StatusId == Model.StatusId)">
-                                @status.Name
-                            </option>
+                            if (status.StatusId == Model.StatusId)
+                            {
+                                <option value="@status.StatusId" selected>@status.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@status.StatusId">@status.Name</option>
+                            }
                         }
                     </select>
                 </div>
 
-                <div class="row g-3 pt-2">
+                <div class="row pt-2">
                     <div class="col-6">
                         <a asp-area="Management"
                            asp-controller="MaintenanceManagement"
                            asp-action="Dashboard"
-                           class="btn btn-outline-secondary w-100 fw-bold py-2">
-                            Return
+                           class="btn btn-outline-secondary w-100 fw-bold">
+                            Return to Dashboard
                         </a>
                     </div>
 
                     <div class="col-6">
-                        <button type="submit" class="btn btn-navy w-100 fw-bold shadow-sm py-2">
+                        <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
                             Save Changes
                         </button>
                     </div>
