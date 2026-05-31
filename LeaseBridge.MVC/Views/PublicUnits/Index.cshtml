@@ -1,77 +1,139 @@
 ﻿@model IEnumerable<LeaseBridge.API.Models.Unit>
+
 @{
-    ViewData["Title"] = "Find Your Next Home";
+
+    ViewData["Title"] = "Browse Units";
+
 }
 
 <div class="container mt-4">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold text-primary">Discover Available Properties</h1>
-        <p class="lead text-muted">Browse top-tier listings across premier locations without needing an account.</p>
+    <div class="text-center mb-4">
+        <h2>Available Rental Units</h2>
+        <p class="text-muted">
+
+            Browse available units. Login is required only when submitting an application.
+        </p>
     </div>
 
-    <form asp-controller="PublicUnits" asp-action="Index" method="get" class="row g-3 mb-5 p-4 bg-white rounded shadow-sm border">
-        <div class="col-md-6">
-            <label class="form-label fw-semibold text-secondary">Where would you like to live?</label>
-            <div class="input-group">
-                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by property name or location..." />
-            </div>
+    <form asp-area=""
+          asp-controller="PublicUnits"
+          asp-action="Index"
+          method="get"
+          class="row g-2 mb-4">
+
+        <div class="col-md-10">
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.Search"
+                   class="form-control"
+                   placeholder="Search by unit number or property name..." />
         </div>
-        <div class="col-md-4">
-            <label class="form-label fw-semibold text-secondary">Maximum Monthly Rent (BHD)</label>
-            <div class="input-group">
-                <span class="input-group-text bg-light">BHD</span>
-                <input type="number" name="maxPrice" class="form-control" placeholder="e.g. 450" />
-            </div>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Search</button>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark w-100">
+
+                Search
+            </button>
         </div>
     </form>
 
-    <div class="row">
-        @if (!Model.Any())
-        {
-            <div class="col-12 text-center my-5 py-5 bg-white rounded border">
-                <i class="bi bi-building-exclamation text-warning display-1"></i>
-                <h3 class="mt-3 text-dark fw-bold">No Vacancies Found</h3>
-                <p class="text-muted">Try adjusting your budget cap or searching for a different area.</p>
-                <a asp-action="Index" class="btn btn-outline-primary mt-2">Clear All Filters</a>
-            </div>
-        }
-        else
-        {
+    @if (!Model.Any())
+
+    {
+        <div class="alert alert-info text-center">
+
+            No available rental units match your search.
+        </div>
+
+    }
+
+    else
+
+    {
+        <div class="row">
+
             @foreach (var unit in Model)
+
             {
+
+                var applyReturnUrl = Url.Action(
+
+                action: "Apply",
+
+                controller: "Application",
+
+                values: new { area = "Tenant", unitId = unit.UnitId });
+
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm border-0 bg-white">
-                        <div class="card-body p-4">
-                            <span class="badge bg-light text-primary border border-primary-subtle px-2.5 py-1.5 mb-3 fw-bold">Available For Lease</span>
-                            <h4 class="card-title text-dark fw-bold mb-1">@unit.Property?.Name</h4>
-                            <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill text-danger me-1"></i> @unit.Property?.Location</p>
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Unit @unit.UnitNumber</h5>
 
-                            <div class="row bg-light rounded p-2 text-center g-0 my-3 border border-light-subtle">
-                                <div class="col-6 border-end">
-                                    <span class="text-muted small d-block">Unit Code</span>
-                                    <strong class="text-dark">#@unit.UnitNumber</strong>
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-muted small d-block">Total Space</span>
-                                    <strong class="text-dark">@unit.Size SqFt</strong>
-                                </div>
-                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">
 
-                            <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
-                                <div>
-                                    <span class="text-muted small d-block">Monthly Rent</span>
-                                    <h3 class="text-success fw-bold m-0">@unit.RentAmount <span class="fs-6 fw-normal text-muted">BHD</span></h3>
-                                </div>
-                                <a asp-controller="PublicUnits" asp-action="Details" asp-route-id="@unit.UnitId" class="btn btn-outline-primary fw-bold px-3">View Details</a>
-                            </div>
+                                @(unit.Property?.Name ?? "Property not specified")
+                            </h6>
+
+                            <p class="card-text mb-1">
+                                <strong>Size:</strong> @unit.Size sqft
+                            </p>
+
+                            <p class="card-text mb-1">
+                                <strong>Status:</strong> @(unit.Status?.Name ?? "Available")
+                            </p>
+
+                            <hr />
+
+                            <h4 class="text-primary">
+
+                                @unit.RentAmount.ToString("0.000") BHD
+                                <small class="text-muted">/ month</small>
+                            </h4>
+                        </div>
+
+                        <div class="card-footer bg-white border-top-0">
+                            <a asp-area=""
+                               asp-controller="PublicUnits"
+                               asp-action="Details"
+                               asp-route-id="@unit.UnitId"
+                               class="btn btn-outline-secondary w-100 mb-2">
+
+                                View Details
+                            </a>
+
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+
+                            {
+                                <a asp-area="Tenant"
+                                   asp-controller="Application"
+                                   asp-action="Apply"
+                                   asp-route-unitId="@unit.UnitId"
+                                   class="btn btn-primary w-100">
+
+                                    Apply Now
+                                </a>
+
+                            }
+
+                            else
+
+                            {
+                                <a asp-area=""
+                                   asp-controller="Account"
+                                   asp-action="Login"
+                                   asp-route-returnUrl="@applyReturnUrl"
+                                   class="btn btn-primary w-100">
+
+                                    Apply Now
+                                </a>
+
+                            }
                         </div>
                     </div>
                 </div>
+
             }
-        }
-    </div>
+        </div>
+
+    }
 </div>

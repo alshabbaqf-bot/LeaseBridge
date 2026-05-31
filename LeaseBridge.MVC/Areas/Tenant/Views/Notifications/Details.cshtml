@@ -1,7 +1,9 @@
 ﻿@model LeaseBridge.API.Models.Notification
 
 @{
+
     ViewData["Title"] = "Notification Details";
+
 }
 
 <div class="container mt-4" style="max-width: 750px;">
@@ -20,13 +22,19 @@
 
                 <dt class="col-sm-4">Status</dt>
                 <dd class="col-sm-8">
+
                     @if (Model.IsRead)
+
                     {
                         <span class="badge bg-success">Read</span>
+
                     }
+
                     else
+
                     {
                         <span class="badge bg-warning text-dark">Unread</span>
+
                     }
                 </dd>
 
@@ -35,40 +43,53 @@
 
                 <dt class="col-sm-4">Related Maintenance Request</dt>
                 <dd class="col-sm-8">
+
                     @(Model.MaintenanceRequestId.HasValue
+
                                         ? Model.MaintenanceRequestId.Value.ToString()
+
                                         : "N/A")
                 </dd>
 
                 <dt class="col-sm-4">Related Application</dt>
                 <dd class="col-sm-8">
+
                     @(Model.ApplicationId.HasValue
+
                                         ? Model.ApplicationId.Value.ToString()
+
                                         : "N/A")
                 </dd>
             </dl>
 
             <div class="d-flex gap-2">
+
                 @if (!Model.IsRead)
+
                 {
                     <form asp-area="Tenant"
                           asp-controller="Notifications"
                           asp-action="MarkAsRead"
                           asp-route-id="@Model.NotificationId"
-                          method="post">
+                          method="post"
+                          class="d-inline">
+
                         @Html.AntiForgeryToken()
 
                         <button type="submit" class="btn btn-success">
+
                             Mark as Read
                         </button>
                     </form>
+
                 }
 
                 <a asp-area="Tenant"
                    asp-controller="Notifications"
                    asp-action="Index"
                    class="btn btn-secondary">
-                    Back
+
+                    Back to Notifications
                 </a>
             </div>
         </div>
