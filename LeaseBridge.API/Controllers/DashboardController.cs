@@ -8,7 +8,7 @@ namespace LeaseBridge.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager")]
     public class DashboardController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -92,6 +92,28 @@ namespace LeaseBridge.API.Controllers
             });
         }
 
+        [HttpGet("overdue-invoices")]
+        public async Task<IActionResult> GetOverdueInvoices()
+        {
+            var invoices = await _context.Invoices
+                .Where(i => i.StatusId == 3)
+                .Select(i => new OverdueInvoiceDto
+                {
+                    InvoiceId = i.InvoiceId,
+                    InvoiceNumber = i.InvoiceNumber,
+                    Amount = i.Amount,
+                    DueDate = i.DueDate,
+
+                    TenantName =
+                        i.Lease.Tenant.FirstName + " " +
+                        i.Lease.Tenant.LastName
+                })
+                .OrderBy(i => i.DueDate)
+                .ToListAsync();
+
+            return Ok(invoices);
+        }
+
         // MAINTENANCE STATISTICS
         [HttpGet("maintenance")]
         public async Task<IActionResult> GetMaintenanceStatistics()
@@ -123,6 +145,23 @@ namespace LeaseBridge.API.Controllers
                 HighPriorityRequests = highPriorityRequests,
                 TotalAssignments = totalAssignments
             });
+        }
+
+        [HttpGet("high-priority-requests")]
+        public async Task<IActionResult> GetHighPriorityRequests()
+        {
+            var requests = await _context.MaintenanceRequests
+                .Where(r => r.PriorityId == 3)
+                .Select(r => new HighPriorityRequestDto
+                {
+                    RequestId = r.RequestId,
+                    UnitNumber = r.Unit.UnitNumber,
+                    Title = r.Title,
+                    Status = r.Status.Name
+                })
+                .ToListAsync();
+
+            return Ok(requests);
         }
 
         // APPLICATION STATISTICS
@@ -183,16 +222,19 @@ namespace LeaseBridge.API.Controllers
         [HttpGet("occupancy-by-property")]
         public async Task<IActionResult> GetOccupancyByProperty()
         {
-            var result = await _context.Properties
+            var properties = await _context.Properties
                 .Select(p => new PropertyOccupancyDto
                 {
                     PropertyName = p.Name,
 
-                    OccupiedUnits = p.Units.Count(u => u.StatusId == 2),
+                    OccupiedUnits =
+                        p.Units.Count(u => u.StatusId == 2),
 
-                    AvailableUnits = p.Units.Count(u => u.StatusId == 1),
+                    AvailableUnits =
+                        p.Units.Count(u => u.StatusId == 1),
 
-                    TotalUnits = p.Units.Count(),
+                    TotalUnits =
+                        p.Units.Count(),
 
                     OccupancyRate =
                         p.Units.Count() == 0
@@ -204,7 +246,7 @@ namespace LeaseBridge.API.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(result);
+            return Ok(properties);
         }
     }
 }
