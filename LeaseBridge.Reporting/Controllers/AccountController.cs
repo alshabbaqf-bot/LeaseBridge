@@ -54,8 +54,7 @@ namespace LeaseBridge.Reporting.Controllers
             // Store the JWT in the cookie's authentication properties
             var authProperties = new AuthenticationProperties
             {
-                // ExpiresUtc = response.ExpiresAt,
-                ExpiresUtc = DateTime.UtcNow.AddHours(1),
+                ExpiresUtc = response.ExpiresAt,
                 IsPersistent = false
             };
 
