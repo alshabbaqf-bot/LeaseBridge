@@ -169,54 +169,53 @@ namespace LeaseBridge.MVC.Controllers
         }
 
         // POST: /Account/Register
-
         [HttpPost]
-
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> Register(RegisterViewModel model)
-
         {
-
             if (!ModelState.IsValid)
-
             {
-
                 return View(model);
-
             }
-
             var apiBaseUrl = _configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7122";
-
             var client = _httpClientFactory.CreateClient();
-
-            var json = JsonSerializer.Serialize(model);
-
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await client.PostAsync($"{apiBaseUrl}/api/Auth/register", content);
-
-            if (!response.IsSuccessStatusCode)
-
+            var registerRequest = new
             {
-
-                var error = await response.Content.ReadAsStringAsync();
-
-                ViewBag.ErrorMessage = string.IsNullOrWhiteSpace(error)
-
-                    ? "Registration failed."
-
-                    : error;
-
-                return View(model);
-
+                model.FirstName,
+                model.LastName,
+                model.Email,
+                model.PhoneNumber,
+                model.Password,
+                Role = "Tenant"
+            };
+            var json = JsonSerializer.Serialize(registerRequest);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.PostAsync($"{apiBaseUrl}/api/Auth/register", content);
             }
-
-            TempData["SuccessMessage"] = "Registration successful. Please log in.";
-
+            catch
+            {
+                ViewBag.ErrorMessage = "Registration service is not available. Please make sure the API project is running.";
+                return View(model);
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    ViewBag.ErrorMessage = error;
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Registration failed. Please check your information and try again.";
+                }
+                return View(model);
+            }
+            TempData["SuccessMessage"] = "Account created successfully. Please login.";
             return RedirectToAction("Login", "Account", new { area = "" });
         }
-
         // POST: /Account/Logout
 
         [HttpPost]
