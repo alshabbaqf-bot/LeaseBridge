@@ -154,9 +154,14 @@ namespace LeaseBridge.API.Controllers
             // Get user roles
             var roles = await _userManager.GetRolesAsync(user);
 
+            // Store the expiration date
+            var expiry = DateTime.UtcNow.AddMinutes(
+                Convert.ToDouble(_configuration["Jwt:DurationInMinutes"]));
+
             return Ok(new
             {
                 Token = token,
+                ExpiresAt = expiry,
                 Email = user.Email,
                 Roles = roles
             });
