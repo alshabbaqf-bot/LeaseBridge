@@ -5,107 +5,118 @@
 }
 
 <div class="container mt-4" style="max-width: 900px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Maintenance Task Details</h4>
+    <div class="card-custom shadow-sm border-0 mb-4">
+        <div class="card-header-navy py-3">
+            <h4 class="mb-0 fw-bold fs-5">Maintenance Task Details</h4>
         </div>
 
         <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Ticket Number</dt>
-                <dd class="col-sm-8">@Model.TicketNumber</dd>
+            <dl class="row g-3 border-bottom pb-3 mb-4">
+                <dt class="col-sm-4 text-navy fw-bold">Ticket Number</dt>
+                <dd class="col-sm-8 fw-bold text-dark">@Model.TicketNumber</dd>
 
-                <dt class="col-sm-4">Title</dt>
-                <dd class="col-sm-8">@Model.Title</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Title</dt>
+                <dd class="col-sm-8 text-dark fw-semibold">@Model.Title</dd>
 
-                <dt class="col-sm-4">Description</dt>
-                <dd class="col-sm-8">@(Model.Description ?? "No description provided.")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Description</dt>
+                <dd class="col-sm-8 text-muted">@(Model.Description ?? "No description provided.")</dd>
 
-                <dt class="col-sm-4">Tenant</dt>
-                <dd class="col-sm-8">@Model.TenantName</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Tenant</dt>
+                <dd class="col-sm-8 text-dark">@Model.TenantName</dd>
 
-                <dt class="col-sm-4">Unit</dt>
-                <dd class="col-sm-8">@Model.UnitNumber</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Unit</dt>
+                <dd class="col-sm-8 fw-bold text-secondary">@Model.UnitNumber</dd>
 
-                <dt class="col-sm-4">Category</dt>
-                <dd class="col-sm-8">@Model.CategoryName</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Category</dt>
+                <dd class="col-sm-8 text-dark">@Model.CategoryName</dd>
 
-                <dt class="col-sm-4">Priority</dt>
-                <dd class="col-sm-8">@Model.PriorityName</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Priority</dt>
+                <dd class="col-sm-8">
+                    @if (Model.PriorityName.Equals("High", StringComparison.OrdinalIgnoreCase) ||
+                                        Model.PriorityName.Equals("Urgent", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill fw-bold">@Model.PriorityName</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark border px-2.5 py-1.5 rounded-pill fw-semibold">@Model.PriorityName</span>
+                    }
+                </dd>
 
-                <dt class="col-sm-4">Status</dt>
+                <dt class="col-sm-4 text-navy fw-bold">Status</dt>
                 <dd class="col-sm-8">
                     @if (Model.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
                                         Model.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                     {
-                        <span class="badge bg-success">@Model.StatusName</span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-bold">@Model.StatusName</span>
                     }
                     else if (Model.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                     {
-                        <span class="badge bg-warning text-dark">@Model.StatusName</span>
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-pill fw-bold">@Model.StatusName</span>
                     }
                     else
                     {
-                        <span class="badge bg-info text-white">@Model.StatusName</span>
+                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1.5 rounded-pill fw-bold">@Model.StatusName</span>
                     }
                 </dd>
 
-                <dt class="col-sm-4">Created At</dt>
-                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Created At</dt>
+                <dd class="col-sm-8 text-muted">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
 
-                <dt class="col-sm-4">Assigned Date</dt>
-                <dd class="col-sm-8">@Model.AssignedDate.ToString("dd MMM yyyy HH:mm")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Assigned Date</dt>
+                <dd class="col-sm-8 text-muted">@Model.AssignedDate.ToString("dd MMM yyyy HH:mm")</dd>
             </dl>
 
-            <hr />
-
-            <h5>Progress Updates</h5>
+            <h5 class="text-navy fw-bold mb-3">Progress Updates</h5>
 
             @if (Model.Updates == null || !Model.Updates.Any())
             {
-                <div class="alert alert-info">
+                <div class="alert bg-info-subtle text-info-emphasis border-0 shadow-sm mb-4">
                     No progress updates have been added yet.
                 </div>
             }
             else
             {
-                <table class="table table-sm table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Staff</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var update in Model.Updates)
-                        {
+                <div class="table-responsive border rounded-3 mb-4 shadow-sm">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-header-custom table-header-uppercase">
                             <tr>
-                                <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
-                                <td>@update.StatusName</td>
-                                <td>@update.StaffName</td>
-                                <td>@update.Notes</td>
+                                <th class="ps-3">Date</th>
+                                <th>Status</th>
+                                <th>Staff Member</th>
+                                <th class="pe-3">Notes</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var update in Model.Updates)
+                            {
+                                <tr>
+                                    <td class="text-muted text-nowrap ps-3">@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                    <td>
+                                        <span class="fw-semibold text-dark">@update.StatusName</span>
+                                    </td>
+                                    <td class="text-secondary fw-medium">@update.StaffName</td>
+                                    <td class="text-dark pe-3">@update.Notes</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
 
-            <div class="d-flex gap-2 mt-4">
+            <div class="d-flex gap-2 pt-2">
                 <a asp-area="Staff"
                    asp-controller="MaintenanceTasks"
                    asp-action="UpdateProgress"
                    asp-route-id="@Model.RequestId"
-                   class="btn btn-warning">
+                   class="btn btn-navy px-4">
                     Update Progress
                 </a>
 
                 <a asp-area="Staff"
                    asp-controller="MaintenanceTasks"
                    asp-action="MyTasks"
-                   class="btn btn-secondary">
+                   class="btn btn-secondary px-4">
                     Back
                 </a>
             </div>

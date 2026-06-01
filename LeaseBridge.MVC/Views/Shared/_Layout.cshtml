@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - LeaseBridge</title>
 
     <script type="importmap"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaseBridge.MVC.styles.css" asp-append-version="true" />
@@ -15,14 +15,14 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
+            <div class="container-fluid px-4">
 
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    LeaseBridge
+                    LEASE BRIDGE
                 </a>
 
-                <button class="navbar-toggler"
+                <button class="navbar-toggler border-0"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#mainNavbar"
@@ -32,48 +32,34 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div id="mainNavbar" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div id="mainNavbar" class="navbar-collapse collapse">
 
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
 
+                        <!--Public page -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Home
-                            </a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="Index">  Home </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="PublicUnits"
-                               asp-action="Index">
-                                Browse Units
-                            </a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="PublicUnits" asp-action="Index"> Browse Units </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Tracker"
-                               asp-action="Index">
-                                Track Application
-                            </a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="Tracker" asp-action="Index">  Track Application   </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="MaintenanceLookup"
-                               asp-action="Index">
-                                Track Maintenance
-                            </a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="MaintenanceLookup" asp-action="Index"> Track Maintenance</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="About">  About  </a>
+                        </li>
+
+                        <!--tenant-->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark"
+                            <a class="nav-link dropdown-toggle custom-nav-link"
                                href="#"
                                id="tenantDropdown"
                                role="button"
@@ -82,9 +68,10 @@
                                 Tenant
                             </a>
 
-                            <ul class="dropdown-menu" aria-labelledby="tenantDropdown">
+
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="tenantDropdown">
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Home"
                                        asp-action="Index">
@@ -93,7 +80,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="AvailableUnits"
                                        asp-action="Index">
@@ -102,7 +89,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Application"
                                        asp-action="MyApplications">
@@ -111,7 +98,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Maintenance"
                                        asp-action="MyRequests">
@@ -120,7 +107,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Maintenance"
                                        asp-action="RaiseTicket">
@@ -129,7 +116,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Payment"
                                        asp-action="MyPayments">
@@ -138,7 +125,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Tenant"
                                        asp-controller="Notifications"
                                        asp-action="Index">
@@ -148,8 +135,9 @@
                             </ul>
                         </li>
 
+                        <!--management-->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark"
+                            <a class="nav-link dropdown-toggle custom-nav-link"
                                href="#"
                                id="managementDropdown"
                                role="button"
@@ -158,9 +146,9 @@
                                 Management
                             </a>
 
-                            <ul class="dropdown-menu" aria-labelledby="managementDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="managementDropdown">
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="Dashboard"
                                        asp-action="Index">
@@ -169,7 +157,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="MaintenanceManagement"
                                        asp-action="Dashboard">
@@ -178,7 +166,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="PaymentsManagement"
                                        asp-action="Index">
@@ -187,7 +175,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="Notifications"
                                        asp-action="Index">
@@ -195,7 +183,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="LeaseManagement"
                                        asp-action="Index">
@@ -203,7 +191,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Management"
                                        asp-controller="StaffManagement"
                                        asp-action="Index">
@@ -213,8 +201,9 @@
                             </ul>
                         </li>
 
+                        <!--staff-->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark"
+                            <a class="nav-link dropdown-toggle custom-nav-link"
                                href="#"
                                id="staffDropdown"
                                role="button"
@@ -223,9 +212,9 @@
                                 Staff
                             </a>
 
-                            <ul class="dropdown-menu" aria-labelledby="staffDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="staffDropdown">
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Staff"
                                        asp-controller="Home"
                                        asp-action="Index">
@@ -234,7 +223,7 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Staff"
                                        asp-controller="MaintenanceTasks"
                                        asp-action="MyTasks">
@@ -242,7 +231,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item py-2"
                                        asp-area="Staff"
                                        asp-controller="Notifications"
                                        asp-action="Index">
@@ -254,12 +243,12 @@
 
                     </ul>
 
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-center gap-2">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span class="nav-link text-dark">
-                                    @User.Identity.Name
+                                <span class="nav-link fw-semibold text-navy px-3">
+                                    <i class="bi bi-person-circle me-1"></i> @User.Identity.Name
                                 </span>
                             </li>
 
@@ -271,7 +260,7 @@
                                       class="d-inline">
                                     @Html.AntiForgeryToken()
 
-                                    <button type="submit" class="btn btn-link nav-link text-dark">
+                                    <button type="submit" class="btn btn-link nav-link custom-nav-link text-danger">
                                         Logout
                                     </button>
                                 </form>
@@ -280,7 +269,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark"
+                                <a class="nav-link custom-nav-link px-3"
                                    asp-area=""
                                    asp-controller="Account"
                                    asp-action="Login">
@@ -289,7 +278,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark"
+                                <a class="btn btn-navy px-3 py-2"
                                    asp-area=""
                                    asp-controller="Account"
                                    asp-action="Register">
@@ -304,19 +293,14 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="page-container container">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LeaseBridge -
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
+    <!--Footer-->
+    <partial name="_Footer" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

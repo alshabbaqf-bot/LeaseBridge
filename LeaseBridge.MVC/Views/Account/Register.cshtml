@@ -2,69 +2,110 @@
 @{
     ViewData["Title"] = "Create Account";
 }
+
 <div class="container mt-5" style="max-width: 800px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white text-center">
-            <h4 class="mb-0">Create Tenant Account</h4>
+    <div class="card-custom shadow-sm">
+        <div class="card-header-navy text-center">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-person-plus me-2"></i>Join Lease Bridge</h4>
         </div>
         <div class="card-body p-4">
-            <p class="text-muted text-center">
-                Register as a tenant to apply for units, submit maintenance requests, and manage payments.
+            <p class="text-muted text-center mb-4">
+                Create your account to start managing your leases efficiently
             </p>
+
             @if (ViewBag.ErrorMessage != null)
             {
-                <div class="alert alert-danger">
-                    @ViewBag.ErrorMessage
+                <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>@ViewBag.ErrorMessage</div>
                 </div>
             }
+
             <form asp-area=""
                   asp-controller="Account"
                   asp-action="Register"
                   method="post">
                 @Html.AntiForgeryToken()
+
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                <div class="row">
+
+                <div class="row text-navy">
                     <div class="col-md-6 mb-3">
                         <label asp-for="FirstName" class="form-label fw-bold"></label>
-                        <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input asp-for="FirstName" class="form-control border-start-0 ps-0" placeholder="First Name" />
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
                     </div>
+
                     <div class="col-md-6 mb-3">
                         <label asp-for="LastName" class="form-label fw-bold"></label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input asp-for="LastName" class="form-control border-start-0 ps-0" placeholder="Last Name" />
+                        </div>
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
                     </div>
                 </div>
-                <div class="mb-3">
+
+                <div class="mb-3 text-navy">
                     <label asp-for="Email" class="form-label fw-bold"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                        <input asp-for="Email" class="form-control border-start-0 ps-0" placeholder="name@example.com" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
-                <div class="mb-3">
+
+                <div class="mb-3 text-navy">
                     <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                            <i class="bi bi-telephone"></i>
+                        </span>
+                        <input asp-for="PhoneNumber" class="form-control border-start-0 ps-0" placeholder="3xxxxxxx" />
+                    </div>
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
                 </div>
-                <div class="mb-3">
+
+                <div class="mb-4 text-navy">
                     <label asp-for="Password" class="form-label fw-bold"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                            <i class="bi bi-key"></i>
+                        </span>
+                        <input asp-for="Password" type="password" class="form-control border-start-0 ps-0" placeholder="Create password" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
+
                 <input type="hidden" name="Role" value="Tenant" />
-                <button type="submit" class="btn btn-primary w-100">
+
+                <button type="submit" class="btn btn-navy w-100 py-2 shadow-sm fw-semibold mb-2">
                     Register
                 </button>
-                <div class="text-center mt-3">
+
+                <div class="text-center mt-4">
                     <a asp-area=""
                        asp-controller="Account"
-                       asp-action="Login">
-                        Already have an account? Login
+                       asp-action="Login"
+                       class="custom-nav-link fw-semibold text-decoration-none small"
+                       style="color: var(--navy-blue);">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Already a member? Login
                     </a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -5,41 +5,44 @@
 }
 
 <div class="container-fluid mt-4 px-4">
+    <!-- Console Control Header -->
     <div class="mb-4">
-        <h2>Maintenance Management</h2>
+        <h2 class="text-navy fw-bold mb-1">Maintenance Management</h2>
         <p class="text-muted">
             Review incoming maintenance requests, assign staff, and update ticket workflow status.
         </p>
     </div>
 
+    <!-- System Response Feedbacks -->
     @if (TempData["ManagementSuccess"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            @TempData["ManagementSuccess"]
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["ManagementSuccess"]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
     @if (TempData["ManagementError"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            @TempData["ManagementError"]
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ManagementError"]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
-    <div class="card shadow-sm border rounded">
-        <div class="table-responsive bg-white p-3 rounded">
-            <table class="table table-striped table-hover align-middle m-0">
-                <thead class="table-dark">
+    <!-- Modern Work-Grid Console Wrapper -->
+    <div class="card-custom shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-header-custom table-header-uppercase">
                     <tr>
-                        <th>Ticket</th>
+                        <th class="ps-3">Ticket</th>
                         <th>Tenant / Unit</th>
                         <th>Issue Details</th>
                         <th>Priority</th>
                         <th>Status</th>
                         <th>Assigned Staff</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center pe-3">Action</th>
                     </tr>
                 </thead>
 
@@ -47,7 +50,8 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">
+                            <td colspan="7" class="text-center py-5 text-muted bg-light-subtle">
+                                <i class="bi bi-tools text-secondary d-block fs-2 mb-2"></i>
                                 No maintenance requests are currently logged.
                             </td>
                         </tr>
@@ -57,74 +61,93 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td class="fw-bold text-secondary">@item.TicketNumber</td>
+                                <!-- Distinct Index Number Column -->
+                                <td class="fw-bold text-navy ps-3">#@item.TicketNumber</td>
 
+                                <!-- Complex Unit Details Frame -->
                                 <td>
-                                    <span class="d-block fw-bold text-dark">@item.TenantName</span>
-                                    <span class="badge bg-secondary text-white">Unit @item.UnitName</span>
+                                    <span class="d-block fw-semibold text-dark mb-1">@item.TenantName</span>
+                                    <span class="badge bg-light text-dark border px-2 py-0.5 fw-semibold">Unit @item.UnitName</span>
                                 </td>
 
+                                <!-- Ticket Breakdown Section -->
                                 <td>
-                                    <span class="fw-bold">@item.Title</span>
-                                    <small class="d-block text-muted">Type: @item.CategoryName</small>
-                                    <small class="d-block text-muted">
+                                    <span class="fw-semibold text-dark d-block mb-1">@item.Title</span>
+                                    <small class="d-block text-secondary mb-0.5">
+                                        <i class="bi bi-tag me-1"></i> Type: @item.CategoryName
+                                    </small>
+                                    <small class="d-block text-muted text-wrap style-desc-max-width">
                                         @(item.Description ?? "No description")
                                     </small>
                                 </td>
 
+                                <!-- Prioritization Flags Layer -->
                                 <td>
                                     @if (item.PriorityName.Equals("High", StringComparison.OrdinalIgnoreCase) ||
                                                                 item.PriorityName.Equals("Urgent", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-danger text-white px-2 py-1">@item.PriorityName</span>
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                            <i class="bi bi-exclamation-circle-fill small me-1"></i> @item.PriorityName
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-light text-dark border px-2 py-1">@item.PriorityName</span>
+                                        <span class="badge bg-light text-secondary border px-2.5 py-1.5 rounded-pill fw-medium">
+                                            @item.PriorityName
+                                        </span>
                                     }
                                 </td>
 
+                                <!-- Operational Process Lifecycles -->
                                 <td>
                                     @if (item.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
                                                                 item.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-success px-2 py-1">@item.StatusName</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                            @item.StatusName
+                                        </span>
                                     }
                                     else if (item.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-warning text-dark px-2 py-1">@item.StatusName</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                            @item.StatusName
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-info text-white px-2 py-1">@item.StatusName</span>
+                                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                            @item.StatusName
+                                        </span>
                                     }
                                 </td>
 
+                                <!-- Staffing Constraints Layer -->
                                 <td>
                                     @if (item.AssignedStaffName == "Unassigned")
                                     {
-                                        <span class="badge bg-secondary">Unassigned</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill fw-medium">
+                                            Unassigned
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="fw-bold">@item.AssignedStaffName</span>
-                                        <br />
-                                        <small class="text-muted">
-                                            Assigned:
-                                            @(item.AssignedDate.HasValue
-                                                                            ? item.AssignedDate.Value.ToString("dd MMM yyyy")
-                                                                            : "N/A")
-                            </small>
-                                                        }
+                                        <span class="fw-semibold text-dark d-block mb-0.5">
+                                            <i class="bi bi-person me-1 text-secondary"></i> @item.AssignedStaffName
+                                        </span>
+                                        <small class="text-muted d-block small">
+                                            Assigned: @(item.AssignedDate.HasValue? item.AssignedDate.Value.ToString("dd MMM yyyy") : "N/A")
+                                        </small>
+                                    }
                                 </td>
 
-                                <td class="text-center">
+                                <!-- Core Call-to-Action Link Block -->
+                                <td class="text-center pe-3">
                                     <a asp-area="Management"
                                        asp-controller="MaintenanceManagement"
                                        asp-action="ProcessTicket"
                                        asp-route-id="@item.RequestId"
-                                       class="btn btn-sm btn-outline-dark fw-bold shadow-sm">
-                                        Manage Request
+                                       class="btn btn-navy btn-sm px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-gear-fill small"></i> Manage Request
                                     </a>
                                 </td>
                             </tr>

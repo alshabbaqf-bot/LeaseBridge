@@ -4,11 +4,11 @@
     ViewData["Title"] = "Management Notifications";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="container page-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2>Management Notifications</h2>
-            <p class="text-muted mb-0">
+            <h2 class="text-navy fw-bold mb-1">Management Notifications</h2>
+            <p class="text-muted small mb-0">
                 View system notifications related to applications, maintenance, and payments.
             </p>
         </div>
@@ -16,14 +16,14 @@
         <a asp-area="Management"
            asp-controller="Dashboard"
            asp-action="Index"
-           class="btn btn-secondary">
+           class="btn btn-secondary shadow-sm">
             Back to Dashboard
         </a>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
             @TempData["SuccessMessage"]
             <button type="button"
                     class="btn-close"
@@ -33,17 +33,17 @@
         </div>
     }
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <table class="table table-striped table-hover align-middle mb-0">
-                <thead class="table-dark">
+    <div class="card-custom">
+        <div class="table-responsive table-min-width">
+            <table class="table align-middle mb-0">
+                <thead class="table-header-custom table-header-uppercase">
                     <tr>
-                        <th>ID</th>
+                        <th class="ps-4">ID</th>
                         <th>Message</th>
                         <th>Type</th>
                         <th>Read</th>
                         <th>Created</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-center pe-4">Actions</th>
                     </tr>
                 </thead>
 
@@ -51,7 +51,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-5">
                                 No notifications found.
                             </td>
                         </tr>
@@ -61,71 +61,77 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.NotificationId</td>
+                                <td class="text-secondary small ps-4">@item.NotificationId</td>
 
                                 <td>
                                     @if (!item.IsRead)
                                     {
-                                        <strong>@item.Message</strong>
+                                        <strong class="text-navy">@item.Message</strong>
                                     }
                                     else
                                     {
-                                        <span>@item.Message</span>
+                                        <span class="text-dark">@item.Message</span>
                                     }
                                 </td>
 
-                                <td>@(item.NotificationType ?? "General")</td>
+                                <td>
+                                    <span class="badge bg-info-subtle text-info-emphasis px-2.5 py-1.5 rounded">
+                                        @(item.NotificationType ?? "General")
+                                    </span>
+                                </td>
 
                                 <td>
                                     @if (item.IsRead)
                                     {
-                                        <span class="badge bg-success">Read</span>
+                                        <span class="badge bg-success-subtle text-success-emphasis px-2.5 py-1.5 rounded">Read</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-warning text-dark">Unread</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis px-2.5 py-1.5 rounded">Unread</span>
                                     }
                                 </td>
 
-                                <td>@item.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td class="text-secondary small">@item.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
 
-                                <td class="text-center">
-                                    <a asp-area="Management"
-                                       asp-controller="Notifications"
-                                       asp-action="Details"
-                                       asp-route-id="@item.NotificationId"
-                                       class="btn btn-info btn-sm">
-                                        Details
-                                    </a>
+                                <td class="text-center pe-4">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-area="Management"
+                                           asp-controller="Notifications"
+                                           asp-action="Details"
+                                           asp-route-id="@item.NotificationId"
+                                           class="btn btn-info-subtle text-info-emphasis btn-sm">
+                                            Details
+                                        </a>
 
-                                    @if (!item.IsRead)
-                                    {
+                                        @if (!item.IsRead)
+                                        {
+                                            <form asp-area="Management"
+                                                  asp-controller="Notifications"
+                                                  asp-action="MarkAsRead"
+                                                  asp-route-id="@item.NotificationId"
+                                                  method="post"
+                                                  class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn bg-success-subtle text-success-emphasis btn-sm rounded-0">
+                                                    Mark Read
+                                                </button>
+                                            </form>
+                                        }
+
                                         <form asp-area="Management"
                                               asp-controller="Notifications"
-                                              asp-action="MarkAsRead"
+                                              asp-action="Delete"
                                               asp-route-id="@item.NotificationId"
                                               method="post"
                                               class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-success btn-sm">
-                                                Mark Read
+                                            <button type="submit"
+                                                    class="btn btn-danger-subtle text-danger btn-sm"
+                                                    onclick="return confirm('Delete this notification?');">
+                                                Delete
                                             </button>
                                         </form>
-                                    }
-
-                                    <form asp-area="Management"
-                                          asp-controller="Notifications"
-                                          asp-action="Delete"
-                                          asp-route-id="@item.NotificationId"
-                                          method="post"
-                                          class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Delete this notification?');">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    </div>
                                 </td>
                             </tr>
                         }

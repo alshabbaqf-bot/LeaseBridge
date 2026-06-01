@@ -16,7 +16,7 @@ namespace LeaseBridge.MVC.Areas.Management.Controllers
 
     [Area("Management")]
 
-    [Authorize(Roles = "Property Manager")]
+    // [Authorize(Roles = "Property Manager")]
 
     public class StaffManagementController : Controller
 
