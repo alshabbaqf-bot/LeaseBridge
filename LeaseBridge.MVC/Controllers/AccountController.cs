@@ -188,34 +188,102 @@ namespace LeaseBridge.MVC.Controllers
                 model.Password,
                 Role = "Tenant"
             };
-            var json = JsonSerializer.Serialize(registerRequest);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response;
+            var registerJson = JsonSerializer.Serialize(registerRequest);
+            var registerContent = new StringContent(registerJson, Encoding.UTF8, "application/json");
+            HttpResponseMessage registerResponse;
             try
             {
-                response = await client.PostAsync($"{apiBaseUrl}/api/Auth/register", content);
+                registerResponse = await client.PostAsync($"{apiBaseUrl}/api/Auth/register", registerContent);
             }
             catch
             {
                 ViewBag.ErrorMessage = "Registration service is not available. Please make sure the API project is running.";
                 return View(model);
             }
-            if (!response.IsSuccessStatusCode)
+            if (!registerResponse.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                if (!string.IsNullOrWhiteSpace(error))
-                {
-                    ViewBag.ErrorMessage = error;
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Registration failed. Please check your information and try again.";
-                }
+                var error = await registerResponse.Content.ReadAsStringAsync();
+                ViewBag.ErrorMessage = !string.IsNullOrWhiteSpace(error)
+                    ? error
+                    : "Registration failed. Please check your information and try again.";
                 return View(model);
             }
-            TempData["SuccessMessage"] = "Account created successfully. Please login.";
-            return RedirectToAction("Login", "Account", new { area = "" });
+            // Automatically login the newly registered tenant
+            var loginRequest = new
+            {
+                model.Email,
+                model.Password
+            };
+            var loginJson = JsonSerializer.Serialize(loginRequest);
+            var loginContent = new StringContent(loginJson, Encoding.UTF8, "application/json");
+            HttpResponseMessage loginResponseMessage;
+            try
+            {
+                loginResponseMessage = await client.PostAsync($"{apiBaseUrl}/api/Auth/login", loginContent);
+            }
+            catch
+            {
+                TempData["SuccessMessage"] = "Account created successfully. Please login.";
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+            if (!loginResponseMessage.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Account created successfully. Please login.";
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+            var responseBody = await loginResponseMessage.Content.ReadAsStringAsync();
+            var loginResponse = JsonSerializer.Deserialize<LoginResponseViewModel>(
+                responseBody,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            if (loginResponse == null || string.IsNullOrWhiteSpace(loginResponse.Token))
+            {
+                TempData["SuccessMessage"] = "Account created successfully. Please login.";
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(loginResponse.Token);
+            var identityUserId =
+                jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value
+                ?? jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrWhiteSpace(identityUserId))
+            {
+                TempData["SuccessMessage"] = "Account created successfully. Please login.";
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+            var role = loginResponse.Roles.FirstOrDefault() ?? "Tenant";
+            var claims = new List<Claim>
+   {
+       new Claim(ClaimTypes.NameIdentifier, identityUserId),
+       new Claim(ClaimTypes.Email, loginResponse.Email ?? model.Email),
+       new Claim(ClaimTypes.Name, loginResponse.Email ?? model.Email)
+   };
+            foreach (var userRole in loginResponse.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
+            };
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties
+            );
+            HttpContext.Session.SetString("JwtToken", loginResponse.Token);
+            HttpContext.Session.SetString("UserEmail", loginResponse.Email ?? model.Email);
+            HttpContext.Session.SetString("UserRole", role);
+            return RedirectToAction("Index", "Home", new { area = "Tenant" });
         }
+
         // POST: /Account/Logout
 
         [HttpPost]
