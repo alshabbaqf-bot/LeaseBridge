@@ -45,5 +45,21 @@ namespace LeaseBridge.Reporting.Services
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
 
+        public async Task<OccupancyStatisticsDto?> GetOccupancyStatisticsAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/occupancy");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<OccupancyStatisticsDto>();
+        }
+
     }
 }

@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Access Denied";
+    Layout = null; // Use a simple layout or no layout for the access denied page
 }
 
 <h1>Access Denied</h1>
 
 <p>You do not have permission to access this resource.</p>
-<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Return to Home</a>
+<a asp-controller="Account" asp-action="Login" class="btn btn-secondary">Return to Login Page</a>

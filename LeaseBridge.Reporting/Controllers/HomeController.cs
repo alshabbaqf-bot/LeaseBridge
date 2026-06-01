@@ -1,9 +1,11 @@
 using LeaseBridge.Reporting.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace LeaseBridge.Reporting.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
