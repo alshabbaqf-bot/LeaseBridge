@@ -42,6 +42,10 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+/* 
+ * Set up the default route to point to the Account controller's Login action
+ * so the application will redirect to the login page when accessed without a specific route.
+*/
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}")
