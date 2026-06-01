@@ -24,8 +24,11 @@ namespace LeaseBridge.Reporting.Services
         private async Task AttachBearerTokenAsync(HttpRequestMessage request)
         {
             var context = _contextAccessor.HttpContext;
+
             if (context == null) return;
+
             var token = await context.GetTokenAsync("access_token");
+
             if (!string.IsNullOrEmpty(token))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

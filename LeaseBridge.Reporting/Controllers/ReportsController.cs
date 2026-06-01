@@ -17,12 +17,11 @@ namespace LeaseBridge.Reporting.Controllers
         public IActionResult Index() => View();
 
         public async Task<IActionResult> LeaseReports()
-    {
-        var occupancy =
-            await _apiClient.GetOccupancyStatisticsAsync();
+        {
+            var occupancy = await _apiClient.GetOccupancyStatisticsAsync();
 
-        return View(occupancy);
-    }
+            return View(occupancy);
+        }
 
         public IActionResult MaintenanceReports() => View();
     }

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Lease Reports";
 }
 
+@* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> *@
+
 <div class="container mt-4">
     
     <div class="mb-4 pb-2 border-bottom">
@@ -46,7 +48,68 @@
             </div>
         </div>
 
+        <div class="card-custom p-4 shadow-sm">
+            <h5 class="text-navy fw-bold mb-3">Unit Occupancy Distribution</h5>
+
+            <div class="d-flex justify-content-center">
+                <div style="width:350px; height:350px;">
+                    <canvas id="occupancyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <canvas id="occupancyChart"></canvas>
 
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@* <script>
+
+    const ctx =
+        document.getElementById('occupancyChart');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Available', 'Occupied'],
+            datasets: [{
+                data: [
+                    @Model.AvailableUnits,
+                    @Model.OccupiedUnits
+                ]
+            }]
+        }
+    });
+
+</script> *@
+
+<script>
+    const ctx = document.getElementById('occupancyChart');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Available', 'Occupied'],
+            datasets: [{
+                data: [
+                    @Model.AvailableUnits,
+                    @Model.OccupiedUnits
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
+
