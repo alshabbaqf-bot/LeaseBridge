@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace LeaseBridge.MVC.Areas.Staff.Controllers
 {
     [Area("Staff")]
-    //[Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Staff")]
     public class MaintenanceTasksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -249,29 +249,29 @@ namespace LeaseBridge.MVC.Areas.Staff.Controllers
             return LocalRedirect("/Staff/MaintenanceTasks/MyTasks");
         }
 
-        //private async Task<AppUser?> GetCurrentStaffAsync()
-        //{
-        //    var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //    if (string.IsNullOrEmpty(identityUserId))
-        //    {
-        //        return null;
-        //    }
-
-        //    return await _context.AppUsers
-        //        .FirstOrDefaultAsync(u => u.IdentityUserId == identityUserId);
-        //}
-        //test
-        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         private async Task<AppUser?> GetCurrentStaffAsync()
         {
-        //    // TEMPORARY TESTING ONLY:
-        //    // Replace this UserId with a real staff UserId from your AppUsers seed data.
-        const int testStaffUserId = 13;
+           var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-         return await _context.AppUsers
-             .FirstOrDefaultAsync(u => u.UserId == testStaffUserId);
+           if (string.IsNullOrEmpty(identityUserId))
+           {
+               return null;
+           }
+
+                return await _context.AppUsers
+               .FirstOrDefaultAsync(u => u.IdentityUserId == identityUserId);
         }
+        //test
+        /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //private async Task<AppUser?> GetCurrentStaffAsync()
+        //{
+        ////    // TEMPORARY TESTING ONLY:
+        ////    // Replace this UserId with a real staff UserId from your AppUsers seed data.
+        //const int testStaffUserId = 13;
+
+        // return await _context.AppUsers
+        //     .FirstOrDefaultAsync(u => u.UserId == testStaffUserId);
+        //}
     }
 
     public class StaffMaintenanceTaskViewModel

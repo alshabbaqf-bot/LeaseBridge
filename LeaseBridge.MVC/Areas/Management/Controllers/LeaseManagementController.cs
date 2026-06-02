@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace LeaseBridge.MVC.Areas.Management.Controllers
 {
     [Area("Management")]
-    //[Authorize(Roles = "Property Manager")]
+    [Authorize(Roles = "Property Manager")]
     public class LeaseManagementController : Controller
     {
         private readonly ApplicationDbContext _context;

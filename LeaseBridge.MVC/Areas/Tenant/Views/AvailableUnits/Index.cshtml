@@ -30,9 +30,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h5 class="card-title text-navy fw-bold mb-0">Unit @unit.UnitNumber</h5>
 
-                                <button type="button" class="btn btn-success btn-sm px-3 rounded-pill shadow-sm" style="font-size: 0.8rem; pointer-events: none;" disabled>
+                                <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm d-inline-flex align-items-center" style="font-size: 0.8rem;">
                                     <i class="bi bi-check-circle me-1"></i> Available
-                                </button>
+                                </span>
                             </div>
 
                             <h6 class="card-subtitle mb-4 text-muted">
@@ -63,7 +63,8 @@
                                asp-controller="AvailableUnits"
                                asp-action="Details"
                                asp-route-id="@unit.UnitId"
-                               class="btn btn-outline-navy flex-fill fw-semibold py-2">
+                               class="btn btn-outline-navy flex-fill fw-semibold py-2"
+                               style="border: 2px solid var(--light-blue); color: var(--light-blue);">
                                 <i class="bi bi-eye me-1"></i> View Details
                             </a>
 

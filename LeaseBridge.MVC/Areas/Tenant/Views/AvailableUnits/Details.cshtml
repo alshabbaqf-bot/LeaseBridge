@@ -13,27 +13,27 @@
         <div class="card-body p-4">
             <dl class="row mb-0">
                 <dt class="col-sm-4 text-navy fw-bold mb-3">
-                    <i class="bi bi-building me-2"></i>Property
+                   Property
                 </dt>
                 <dd class="col-sm-8 mb-3">@(Model.Property?.Name ?? "N/A")</dd>
 
                 <dt class="col-sm-4 text-navy fw-bold mb-3">
-                    <i class="bi bi-door-open me-2"></i>Unit Number
+                    Unit Number
                 </dt>
                 <dd class="col-sm-8 mb-3">@Model.UnitNumber</dd>
 
                 <dt class="col-sm-4 text-navy fw-bold mb-3">
-                    <i class="bi bi-ruler me-2"></i>Size
+                   Size
                 </dt>
                 <dd class="col-sm-8 mb-3">@Model.Size sqft</dd>
 
                 <dt class="col-sm-4 text-navy fw-bold mb-3">
-                    <i class="bi bi-cash-stack me-2"></i>Monthly Rent
+                    Monthly Rent
                 </dt>
                 <dd class="col-sm-8 mb-3 fw-bold text-dark">@Model.RentAmount.ToString("0.000") BHD</dd>
 
                 <dt class="col-sm-4 text-navy fw-bold mb-3">
-                    <i class="bi bi-info-circle me-2"></i>Status
+                    Status
                 </dt>
                 <dd class="col-sm-8 mb-3">
                     <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">
@@ -44,7 +44,13 @@
 
             <hr class="my-4" style="color: var(--pop-color); opacity: 0.2;" />
 
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 justify-content-end">
+                <a asp-area="Tenant"
+                   asp-controller="AvailableUnits"
+                   asp-action="Index"
+                   class="btn btn-outline-navy fw-semibold px-4 py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Available Units
+                </a>
                 <a asp-area="Tenant"
                    asp-controller="Application"
                    asp-action="Apply"
@@ -52,13 +58,7 @@
                    class="btn btn-navy fw-semibold px-4 py-2">
                     <i class="bi bi-file-earmark-plus me-1"></i> Apply for this Unit
                 </a>
-
-                <a asp-area="Tenant"
-                   asp-controller="AvailableUnits"
-                   asp-action="Index"
-                   class="btn btn-outline-navy fw-semibold px-4 py-2">
-                    <i class="bi bi-arrow-left me-1"></i> Back to Available Units
-                </a>
+                
             </div>
         </div>
     </div>
