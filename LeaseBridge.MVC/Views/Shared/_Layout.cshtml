@@ -36,7 +36,6 @@
 
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
 
-                        <!--Public page -->
                         <li class="nav-item">
                             <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="Index">  Home </a>
                         </li>
@@ -57,189 +56,198 @@
                             <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="About">  About  </a>
                         </li>
 
-                        <!--tenant-->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle custom-nav-link"
-                               href="#"
-                               id="tenantDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Tenant
-                            </a>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Tenant"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle custom-nav-link"
+                                       href="#"
+                                       id="tenantDropdown"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        Tenant
+                                    </a>
 
 
-                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="tenantDropdown">
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Home"
-                                       asp-action="Index">
-                                        Tenant Dashboard
-                                    </a>
-                                </li>
+                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="tenantDropdown">
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Home"
+                                               asp-action="Index">
+                                                Tenant Dashboard
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="AvailableUnits"
-                                       asp-action="Index">
-                                        Available Units
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="AvailableUnits"
+                                               asp-action="Index">
+                                                Available Units
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Application"
-                                       asp-action="MyApplications">
-                                        My Applications
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Application"
+                                               asp-action="MyApplications">
+                                                My Applications
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Maintenance"
-                                       asp-action="MyRequests">
-                                        My Maintenance
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Maintenance"
+                                               asp-action="MyRequests">
+                                                My Maintenance
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Maintenance"
-                                       asp-action="RaiseTicket">
-                                        Raise Maintenance Ticket
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Maintenance"
+                                               asp-action="RaiseTicket">
+                                                Raise Maintenance Ticket
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Payment"
-                                       asp-action="MyPayments">
-                                        My Payments
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Payment"
+                                               asp-action="MyPayments">
+                                                My Payments
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Tenant"
-                                       asp-controller="Notifications"
-                                       asp-action="Index">
-                                        My Notifications
-                                    </a>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Tenant"
+                                               asp-controller="Notifications"
+                                               asp-action="Index">
+                                                My Notifications
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
+                            }
 
-                        <!--management-->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle custom-nav-link"
-                               href="#"
-                               id="managementDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Management
-                            </a>
+                            @if (User.IsInRole("Manager") )
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle custom-nav-link"
+                                       href="#"
+                                       id="managementDropdown"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        Management
+                                    </a>
 
-                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="managementDropdown">
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="Dashboard"
-                                       asp-action="Index">
-                                        Dashboard / Approvals
-                                    </a>
-                                </li>
+                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="managementDropdown">
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="Dashboard"
+                                               asp-action="Index">
+                                                Dashboard / Approvals
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="MaintenanceManagement"
-                                       asp-action="Dashboard">
-                                        Maintenance Requests
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="MaintenanceManagement"
+                                               asp-action="Dashboard">
+                                                Maintenance Requests
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="PaymentsManagement"
-                                       asp-action="Index">
-                                        Payments
-                                    </a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="PaymentsManagement"
+                                               asp-action="Index">
+                                                Payments
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="Notifications"
-                                       asp-action="Index">
-                                        Notifications
-                                    </a>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="Notifications"
+                                               asp-action="Index">
+                                                Notifications
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="LeaseManagement"
+                                               asp-action="Index">
+                                                Lease Management
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Management"
+                                               asp-controller="StaffManagement"
+                                               asp-action="Index">
+                                                Staff Management
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="LeaseManagement"
-                                       asp-action="Index">
-                                        Lease Management
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Management"
-                                       asp-controller="StaffManagement"
-                                       asp-action="Index">
-                                        Staff Management
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                            }
 
-                        <!--staff-->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle custom-nav-link"
-                               href="#"
-                               id="staffDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Staff
-                            </a>
+                            @if (User.IsInRole("Staff"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle custom-nav-link"
+                                       href="#"
+                                       id="staffDropdown"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        Staff
+                                    </a>
 
-                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="staffDropdown">
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Staff"
-                                       asp-controller="Home"
-                                       asp-action="Index">
-                                        Staff Dashboard
-                                    </a>
-                                </li>
+                                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" aria-labelledby="staffDropdown">
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Staff"
+                                               asp-controller="Home"
+                                               asp-action="Index">
+                                                Staff Dashboard
+                                            </a>
+                                        </li>
 
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Staff"
-                                       asp-controller="MaintenanceTasks"
-                                       asp-action="MyTasks">
-                                        My Assigned Tasks
-                                    </a>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Staff"
+                                               asp-controller="MaintenanceTasks"
+                                               asp-action="MyTasks">
+                                                My Assigned Tasks
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2"
+                                               asp-area="Staff"
+                                               asp-controller="Notifications"
+                                               asp-action="Index">
+                                                My Notifications
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item py-2"
-                                       asp-area="Staff"
-                                       asp-controller="Notifications"
-                                       asp-action="Index">
-                                        My Notifications
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                            }
+                        }
 
                     </ul>
 
@@ -299,7 +307,6 @@
         </main>
     </div>
 
-    <!--Footer-->
     <partial name="_Footer" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

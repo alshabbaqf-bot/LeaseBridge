@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace LeaseBridge.MVC.Areas.Management.Controllers
 {
     [Area("Management")]
-    [Authorize(Roles = "Property Manager")]
+    [Authorize(Roles = " Manager")]
     public class HomeController : Controller
     {
         public IActionResult Index()
