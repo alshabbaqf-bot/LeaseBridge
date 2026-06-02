@@ -1,112 +1,141 @@
 ﻿@{
-
     ViewData["Title"] = "Tenant Dashboard";
-
 }
 
-<div class="container mt-4">
-    <div class="mb-4">
-        <h2>Tenant Dashboard</h2>
+<div class="container mt-5">
+    <div class="mb-5">
+        <h2 class="text-navy fw-bold mb-1">Tenant Dashboard</h2>
         <p class="text-muted">
-
             Manage your lease applications, maintenance requests, and payments.
         </p>
     </div>
 
-    <div class="row g-3">
+    <div class="row g-4">
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Browse Units</h5>
-                    <p class="card-text text-muted">
-
+            <div class="card-custom shadow-sm border-0 h-100 d-flex flex-column justify-content-between p-3" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="card-body p-2">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 rounded-3 me-3 d-flex align-items-center justify-content-center text-navy" style="background-color: var(--bg-light); width: 50px; height: 50px;">
+                            <i class="bi bi-building fs-4"></i>
+                        </div>
+                        <h5 class="card-title text-navy fw-bold mb-0">Browse Units</h5>
+                    </div>
+                    <p class="card-text text-muted small">
                         View available rental units and submit a lease application.
                     </p>
+                </div>
+                <div class="p-2 pt-0 mt-3">
                     <a asp-area="Tenant"
                        asp-controller="AvailableUnits"
                        asp-action="Index"
-                       class="btn btn-primary">
-
-                        Browse Units
+                       class="btn btn-navy w-100 fw-semibold py-2 shadow-sm">
+                        <i class="bi bi-search me-1"></i> Browse Units
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title">My Applications</h5>
-                    <p class="card-text text-muted">
-
+            <div class="card-custom shadow-sm border-0 h-100 d-flex flex-column justify-content-between p-3" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="card-body p-2">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 rounded-3 me-3 d-flex align-items-center justify-content-center text-navy" style="background-color: var(--bg-light); width: 50px; height: 50px;">
+                            <i class="bi bi-file-earmark-text fs-4"></i>
+                        </div>
+                        <h5 class="card-title text-navy fw-bold mb-0">My Applications</h5>
+                    </div>
+                    <p class="card-text text-muted small">
                         Track your submitted lease applications and their current status.
                     </p>
+                </div>
+                <div class="p-2 pt-0 mt-3">
                     <a asp-area="Tenant"
                        asp-controller="Application"
                        asp-action="MyApplications"
-                       class="btn btn-outline-primary">
-
-                        View Applications
+                       class="btn btn-navy w-100 fw-semibold py-2 shadow-sm">
+                        <i class="bi bi-folder2-open me-1"></i> View Applications
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Maintenance Requests</h5>
-                    <p class="card-text text-muted">
-
+            <div class="card-custom shadow-sm border-0 h-100 d-flex flex-column justify-content-between p-3" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="card-body p-2">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 rounded-3 me-3 d-flex align-items-center justify-content-center text-navy" style="background-color: var(--bg-light); width: 50px; height: 50px;">
+                            <i class="bi bi-tools fs-4"></i>
+                        </div>
+                        <h5 class="card-title text-navy fw-bold mb-0">Maintenance Requests</h5>
+                    </div>
+                    <p class="card-text text-muted small">
                         Submit a maintenance request or check existing request statuses.
                     </p>
+                </div>
+                <div class="p-2 pt-0 mt-3">
                     <a asp-area="Tenant"
                        asp-controller="Maintenance"
                        asp-action="MyRequests"
-                       class="btn btn-outline-primary">
-
-                        My Maintenance
+                       class="btn btn-navy w-100 fw-semibold py-2 shadow-sm">
+                        <i class="bi bi-list-task me-1"></i> My Maintenance
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Submit Maintenance</h5>
-                    <p class="card-text text-muted">
-
-                        Report an issue in your rented unit.
+            <div class="card-custom shadow-sm border-0 h-100 d-flex flex-column justify-content-between p-3" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="card-body p-2">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 rounded-3 me-3 d-flex align-items-center justify-content-center text-navy" style="background-color: var(--bg-light); width: 50px; height: 50px;">
+                            <i class="bi bi-exclamation-triangle fs-4"></i>
+                        </div>
+                        <h5 class="card-title text-navy fw-bold mb-0">Submit Maintenance</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        Report an issue or technical utility breakdown in your rented unit.
                     </p>
+                </div>
+                <div class="p-2 pt-0 mt-3">
                     <a asp-area="Tenant"
                        asp-controller="Maintenance"
                        asp-action="RaiseTicket"
-                       class="btn btn-warning">
-
-                        Raise Ticket
+                       class="btn btn-navy w-100 fw-semibold py-2 shadow-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Raise Ticket
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title">My Payments</h5>
-                    <p class="card-text text-muted">
-
-                        View your rent payments, due dates, and payment status.
+            <div class="card-custom shadow-sm border-0 h-100 d-flex flex-column justify-content-between p-3" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div class="card-body p-2">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 rounded-3 me-3 d-flex align-items-center justify-content-center text-navy" style="background-color: var(--bg-light); width: 50px; height: 50px;">
+                            <i class="bi bi-credit-card fs-4"></i>
+                        </div>
+                        <h5 class="card-title text-navy fw-bold mb-0">My Payments</h5>
+                    </div>
+                    <p class="card-text text-muted small">
+                        View your rent statements, due dates, history, and payment status.
                     </p>
+                </div>
+                <div class="p-2 pt-0 mt-3">
                     <a asp-area="Tenant"
                        asp-controller="Payment"
                        asp-action="MyPayments"
-                       class="btn btn-outline-success">
-
-                        View Payments
+                       class="btn btn-navy w-100 fw-semibold py-2 shadow-sm">
+                        <i class="bi bi-receipt me-1"></i> View Payments
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card-custom:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08) !important;
+    }
+</style>

@@ -5,20 +5,42 @@
 }
 
 <div class="container mt-4" style="max-width: 650px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Renew Lease</h4>
+    <!-- Modernized Custom Card Design -->
+    <div class="card-custom shadow-sm border-0">
+        <div class="card-header-navy py-3 px-4">
+            <h4 class="mb-0 fw-bold fs-5 d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-repeat"></i> Renew Lease
+            </h4>
         </div>
 
-        <div class="card-body">
-            <div class="alert alert-info">
-                <strong>Lease:</strong> #@Model.LeaseId <br />
-                <strong>Tenant:</strong>
-                @(Model.Tenant != null ? Model.Tenant.FirstName + " " + Model.Tenant.LastName : "N/A") <br />
-                <strong>Unit:</strong> @(Model.Unit?.UnitNumber ?? "N/A") <br />
-                <strong>Current End Date:</strong> @Model.EndDate.ToString("dd MMM yyyy")
+        <div class="card-body p-4">
+            <!-- Refined Contract Context Overview Panel -->
+            <div class="alert bg-info-subtle text-info-emphasis border-0 shadow-sm mb-4 p-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <small class="text-muted d-block uppercase fw-semibold tracking-wider fs-7">Lease ID</small>
+                        <strong class="text-navy">#@Model.LeaseId</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block uppercase fw-semibold tracking-wider fs-7">Unit Number</small>
+                        <strong class="text-dark">@(Model.Unit?.UnitNumber ?? "N/A")</strong>
+                    </div>
+                    <div class="col-12 border-top pt-2 mt-2">
+                        <small class="text-muted d-block uppercase fw-semibold tracking-wider fs-7">Tenant Name</small>
+                        <span class="fw-semibold text-dark">
+                            @(Model.Tenant != null ? Model.Tenant.FirstName + " " + Model.Tenant.LastName : "N/A")
+                        </span>
+                    </div>
+                    <div class="col-12 border-top pt-2 mt-2">
+                        <small class="text-muted d-block uppercase fw-semibold tracking-wider fs-7">Current Expiration Date</small>
+                        <span class="fw-bold text-danger-emphasis">
+                            <i class="bi bi-calendar-event me-1"></i> @Model.EndDate.ToString("dd MMM yyyy")
+                        </span>
+                    </div>
+                </div>
             </div>
 
+            <!-- Operational Form Block -->
             <form asp-area="Management"
                   asp-controller="LeaseManagement"
                   asp-action="Renew"
@@ -27,26 +49,36 @@
 
                 @Html.AntiForgeryToken()
 
-                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                <div asp-validation-summary="All" class="text-danger mb-3 fw-medium small"></div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">New End Date</label>
-                    <input type="date"
-                           name="newEndDate"
-                           class="form-control"
-                           min="@Model.EndDate.AddDays(1).ToString("yyyy-MM-dd")"
-                           required />
+                <!-- Input Component Layer -->
+                <div class="mb-4">
+                    <label class="form-label text-navy fw-bold mb-2">New End Date</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-secondary border-end-0">
+                            <i class="bi bi-calendar-plus"></i>
+                        </span>
+                        <input type="date"
+                               name="newEndDate"
+                               class="form-control border-start-0 ps-0"
+                               min="@Model.EndDate.AddDays(1).ToString("yyyy-MM-dd")"
+                               required />
+                    </div>
+                    <div class="form-text text-muted">
+                        Select a date after the current contract ends.
+                    </div>
                 </div>
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        Renew Lease
+                <!-- Balanced Interaction Controls -->
+                <div class="d-flex align-items-center gap-2 pt-2">
+                    <button type="submit" class="btn btn-navy px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-check2-circle"></i> Renew Lease
                     </button>
 
                     <a asp-area="Management"
                        asp-controller="LeaseManagement"
                        asp-action="Index"
-                       class="btn btn-secondary">
+                       class="btn btn-outline-secondary px-4 fw-semibold d-inline-flex align-items-center gap-2">
                         Cancel
                     </a>
                 </div>

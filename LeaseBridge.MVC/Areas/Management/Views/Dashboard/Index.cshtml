@@ -5,47 +5,51 @@
 }
 
 <div class="container mt-4">
+    <!-- Header Block -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1">Pending Rental Applications</h2>
+            <h2 class="text-navy fw-bold mb-1">Pending Rental Applications</h2>
             <p class="text-muted mb-0">Review tenant applications and approve or reject lease requests.</p>
         </div>
     </div>
 
+    <!-- Feedback Alerts -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["SuccessMessage"]
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["ErrorMessage"]
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
+    <!-- Modernized Data Grid -->
+    <div class="card-custom shadow-sm border-0">
+        <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
+                <thead class="table-header-custom table-header-uppercase">
                     <tr>
-                        <th>Application ID</th>
+                        <th class="ps-3">Application ID</th>
                         <th>Tenant</th>
                         <th>Unit</th>
                         <th>Property</th>
                         <th>Submission Date</th>
-                        <th class="text-end">Actions</th>
+                        <th class="text-end pe-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-5 fs-6 bg-light-subtle">
+                                <i class="bi bi-inbox text-secondary d-block fs-2 mb-2"></i>
                                 No pending applications in the queue.
                             </td>
                         </tr>
@@ -55,23 +59,26 @@
                         foreach (var app in Model)
                         {
                             <tr>
-                                <td>@app.ApplicationId</td>
+                                <!-- Application ID Indicator -->
+                                <td class="fw-bold text-navy ps-3">#@app.ApplicationId</td>
 
-                                <td>
+                                <!-- Tenant Info column -->
+                                <td class="fw-semibold text-dark">
                                     @if (app.Tenant != null)
                                     {
                                         <span>@app.Tenant.FirstName @app.Tenant.LastName</span>
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Tenant #@app.TenantId</span>
+                                        <span class="text-muted fw-normal">Tenant #@app.TenantId</span>
                                     }
                                 </td>
 
+                                <!-- Unit ID Tagging -->
                                 <td>
                                     @if (app.Unit != null)
                                     {
-                                        <span>Unit @app.Unit.UnitNumber</span>
+                                        <span class="badge bg-light text-dark border px-2 py-1 fw-semibold">Unit @app.Unit.UnitNumber</span>
                                     }
                                     else
                                     {
@@ -79,45 +86,50 @@
                                     }
                                 </td>
 
-                                <td>
+                                <!-- Associated Property Name -->
+                                <td class="text-secondary fw-medium">
                                     @if (app.Unit?.Property != null)
                                     {
                                         <span>@app.Unit.Property.Name</span>
                                     }
                                     else
                                     {
-                                        <span class="text-muted">N/A</span>
+                                        <span class="text-muted fw-normal">N/A</span>
                                     }
                                 </td>
 
-                                <td>@app.ApplicationDate.ToString("dd MMM yyyy")</td>
+                                <!-- Formatted Time -->
+                                <td class="text-muted">@app.ApplicationDate.ToString("dd MMM yyyy")</td>
 
-                                <td class="text-end">
-                                    <form asp-area="Management"
-                                          asp-controller="Dashboard"
-                                          asp-action="ApproveApplication"
-                                          asp-route-id="@app.ApplicationId"
-                                          method="post"
-                                          class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-success btn-sm">
-                                            Approve
-                                        </button>
-                                    </form>
+                                <!-- Strategic Form Operations Footer -->
+                                <td class="text-end pe-3">
+                                    <div class="d-inline-flex gap-1">
+                                        <form asp-area="Management"
+                                              asp-controller="Dashboard"
+                                              asp-action="ApproveApplication"
+                                              asp-route-id="@app.ApplicationId"
+                                              method="post"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-success btn-sm px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
+                                                <i class="bi bi-check-lg"></i> Approve
+                                            </button>
+                                        </form>
 
-                                    <form asp-area="Management"
-                                          asp-controller="Dashboard"
-                                          asp-action="RejectApplication"
-                                          asp-route-id="@app.ApplicationId"
-                                          method="post"
-                                          class="d-inline ms-1">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit"
-                                                class="btn btn-outline-danger btn-sm"
-                                                onclick="return confirm('Are you sure you want to reject this application?');">
-                                            Reject
-                                        </button>
-                                    </form>
+                                        <form asp-area="Management"
+                                              asp-controller="Dashboard"
+                                              asp-action="RejectApplication"
+                                              asp-route-id="@app.ApplicationId"
+                                              method="post"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="btn btn-outline-danger btn-sm px-3 fw-semibold d-inline-flex align-items-center gap-1"
+                                                    onclick="return confirm('Are you sure you want to reject this application?');">
+                                                <i class="bi bi-x-lg"></i> Reject
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }

@@ -4,52 +4,109 @@
     ViewData["Title"] = "Delete Invoice";
 }
 
-<div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Delete Invoice</h4>
+<div class="container mt-5" style="max-width: 750px;">
+    <!-- Destructive Action Styled Card Container -->
+    <div class="card shadow border-0 overflow-hidden rounded-3">
+        <!-- Panel Header -->
+        <div class="card-header bg-danger py-3 px-4 d-flex align-items-center justify-content-between">
+            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                <i class="bi bi-trash3-fill"></i> Delete Invoice
+            </h5>
+            <span class="badge bg-white text-danger font-monospace fw-bold px-2.5 py-1.5 fs-7 border border-danger-subtle rounded">
+                CRITICAL ACTION
+            </span>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4 bg-light-subtle">
+            <!-- Dynamic Error Message Banner -->
             @if (TempData["ErrorMessage"] != null)
             {
-                <div class="alert alert-danger">
-                    @TempData["ErrorMessage"]
+                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm p-3 mb-4" role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-exclamation-octagon-fill fs-5"></i>
+                        <span class="fw-medium">@TempData["ErrorMessage"]</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             }
 
-            <div class="alert alert-warning">
-                <strong>Warning:</strong> Are you sure you want to delete this invoice?
-                Invoices with payment transactions cannot be deleted.
+            <!-- System Constraints & Warning Callout Box -->
+            <div class="alert alert-warning-subtle border border-warning-subtle rounded-3 p-3 mb-4 shadow-sm">
+                <div class="d-flex align-items-start gap-2.5">
+                    <i class="bi bi-exclamation-triangle-fill text-warning fs-5 mt-0.5"></i>
+                    <div class="text-dark small lh-base">
+                        <strong class="text-warning-emphasis">Warning:</strong> Are you sure you want to delete this invoice?
+                        Invoices with active payment transactions cannot be deleted from the system ledger.
+                    </div>
+                </div>
             </div>
 
-            <dl class="row">
-                <dt class="col-sm-4">Invoice Number</dt>
-                <dd class="col-sm-8">@Model.InvoiceNumber</dd>
+            <!-- Immutable Data Reference Info-Grid Module -->
+            <div class="bg-white border rounded p-4 shadow-sm mb-4">
+                <div class="row g-3">
+                    <div class="col-sm-6 border-bottom pb-2">
+                        <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8">Invoice Number</small>
+                        <span class="font-monospace fw-bold text-dark fs-6">@Model.InvoiceNumber</span>
+                    </div>
 
-                <dt class="col-sm-4">Lease ID</dt>
-                <dd class="col-sm-8">@Model.LeaseId</dd>
+                    <div class="col-sm-6 border-bottom pb-2">
+                        <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8">Lease Reference</small>
+                        <span class="badge bg-light text-secondary border px-2.5 py-1 fw-semibold mt-1">
+                            <i class="bi bi-file-earmark-text text-muted me-1"></i> ID #@Model.LeaseId
+                        </span>
+                    </div>
 
-                <dt class="col-sm-4">Tenant</dt>
-                <dd class="col-sm-8">
-                    @(Model.Lease?.Tenant != null
-                                        ? Model.Lease.Tenant.FirstName + " " + Model.Lease.Tenant.LastName
-                                        : "N/A")
-                </dd>
+                    <div class="col-sm-6 border-bottom border-sm-bottom-0 pb-2 pb-sm-0">
+                        <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8">Tenant Account</small>
+                        <span class="fw-semibold text-dark">
+                            @(Model.Lease?.Tenant != null
+                                                        ? Model.Lease.Tenant.FirstName + " " + Model.Lease.Tenant.LastName
+                                                        : "N/A")
+                        </span>
+                    </div>
 
-                <dt class="col-sm-4">Amount</dt>
-                <dd class="col-sm-8">@Model.Amount.ToString("0.000") BHD</dd>
+                    <div class="col-sm-6 border-bottom border-sm-bottom-0 pb-2 pb-sm-0">
+                        <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8">System Status</small>
+                        <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle px-2.5 py-1 rounded fw-bold d-inline-flex align-items-center gap-1 mt-1 text-capitalize">
+                            <span class="p-0.5 bg-secondary rounded-circle"></span> @(Model.Status?.Name ?? "N/A")
+                        </span>
+                    </div>
 
-                <dt class="col-sm-4">Due Date</dt>
-                <dd class="col-sm-8">@Model.DueDate.ToString("dd MMM yyyy")</dd>
+                    <div class="col-12 pt-2 border-top mt-3">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8"><i class="bi bi-calendar-x me-1"></i> Due Date</small>
+                                <span class="text-secondary fw-semibold small">@Model.DueDate.ToString("dd MMM yyyy")</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <small class="text-muted d-block text-uppercase tracking-wider font-monospace fs-8 text-end">Total Base Amount</small>
+                                <span class="font-monospace fw-bold text-navy fs-5 d-block">
+                                    @Model.Amount.ToString("0.000") <span class="fs-6 text-muted fw-normal">BHD</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <dt class="col-sm-4">Status</dt>
-                <dd class="col-sm-8">@(Model.Status?.Name ?? "N/A")</dd>
+            <!-- Transaction Dependent Status Badge Line -->
+            <div class="d-flex align-items-center justify-content-between bg-light border rounded p-3 mb-4 shadow-sm">
+                <span class="small fw-semibold text-secondary">Linked Payment Transactions</span>
+                @if (Model.Payments.Count > 0)
+                {
+                    <span class="badge bg-danger text-white rounded-pill px-3 py-1.5 font-monospace fw-bold">
+                        <i class="bi bi-lock-fill me-1"></i> @Model.Payments.Count Transactions
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 font-monospace fw-bold">
+                        <i class="bi bi-unlock-fill me-1"></i> 0 Transactions (Clear)
+                    </span>
+                }
+            </div>
 
-                <dt class="col-sm-4">Payment Count</dt>
-                <dd class="col-sm-8">@Model.Payments.Count</dd>
-            </dl>
-
+            <!-- Contextual Form Control Terminal Layout -->
             <form asp-area="Management"
                   asp-controller="PaymentsManagement"
                   asp-action="Delete"
@@ -59,17 +116,23 @@
 
                 <input type="hidden" name="invoiceId" value="@Model.InvoiceId" />
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-danger">
-                        Delete Invoice
-                    </button>
+                <div class="row g-3">
+                    <div class="col-sm-6 order-sm-2">
+                        <button type="submit"
+                                class="btn btn-danger w-100 fw-bold shadow-sm py-2 d-inline-flex align-items-center justify-content-center gap-2"
+                                @(Model.Payments.Any() ? "disabled title='Cannot delete invoice with existing history'" : "")>
+                            <i class="bi bi-trash-fill"></i> Confirm Permanent Deletion
+                        </button>
+                    </div>
 
-                    <a asp-area="Management"
-                       asp-controller="PaymentsManagement"
-                       asp-action="Index"
-                       class="btn btn-secondary">
-                        Cancel
-                    </a>
+                    <div class="col-sm-6 order-sm-1">
+                        <a asp-area="Management"
+                           asp-controller="PaymentsManagement"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary w-100 fw-semibold py-2 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm">
+                            <i class="bi bi-x-circle"></i> Cancel & Retain
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>

@@ -4,68 +4,71 @@
     ViewData["Title"] = "My Maintenance Requests";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container mt-5">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-5">
         <div>
-            <h2>Maintenance Support Log</h2>
+            <h2 class="text-navy fw-bold mb-1">Maintenance Support Log</h2>
             <p class="text-muted mb-0">
                 Track maintenance requests raised for your leased unit.
             </p>
         </div>
 
-        <a asp-area="Tenant"
-           asp-controller="Maintenance"
-           asp-action="RaiseTicket"
-           class="btn btn-primary fw-bold shadow-sm">
-            Open New Ticket
-        </a>
+        <div>
+            <a asp-area="Tenant"
+               asp-controller="Maintenance"
+               asp-action="RaiseTicket"
+               class="btn btn-navy fw-semibold py-2 px-4 shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Open New Ticket
+            </a>
+        </div>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            @TempData["SuccessMessage"]
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-            </button>
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5 text-success"></i>
+                <div>@TempData["SuccessMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            @TempData["ErrorMessage"]
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-            </button>
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-circle-fill me-2 fs-5 text-danger"></i>
+                <div>@TempData["ErrorMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <div class="card shadow-sm border rounded">
-        <div class="table-responsive bg-white p-3 rounded">
-            <table class="table table-hover align-middle m-0">
-                <thead class="table-light">
+    <div class="card card-custom border-0 shadow-sm overflow-hidden">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 table-min-width">
+                <thead class="table-header-custom text-uppercase table-header-uppercase">
                     <tr>
-                        <th>Ticket Reference</th>
-                        <th>Subject</th>
-                        <th>Category</th>
-                        <th>Priority</th>
-                        <th>Date Raised</th>
-                        <th>Status</th>
-                        <th class="text-center">Details</th>
+                        <th class="py-3 px-4">Ticket Reference</th>
+                        <th class="py-3">Subject & Details</th>
+                        <th class="py-3">Category</th>
+                        <th class="py-3">Priority</th>
+                        <th class="py-3">Date Raised</th>
+                        <th class="py-3">Status</th>
+                        <th class="py-3 text-center px-4">Actions</th>
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="border-0">
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">
-                                No maintenance requests have been submitted yet.
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <div class="py-3">
+                                    <i class="bi bi-inbox text-muted mb-2 d-block fs-1"></i>
+                                    <p class="mb-0 fw-medium">No maintenance requests have been submitted yet.</p>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -74,54 +77,66 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td class="fw-bold text-primary">@item.TicketNumber</td>
+                                <td class="fw-bold text-navy px-4">
+                                    <span>@item.TicketNumber</span>
+                                </td>
 
-                                <td>
-                                    <span class="d-block fw-bold text-dark">@item.Title</span>
-                                    <small class="text-muted d-inline-block text-truncate" style="max-width: 250px;">
+                                <td class="py-3">
+                                    <span class="d-block fw-bold text-dark mb-1">@item.Title</span>
+                                    <small class="text-muted d-inline-block text-truncate text-truncate-description">
                                         @(item.Description ?? "No description provided.")
                                     </small>
                                 </td>
 
-                                <td>@item.CategoryName</td>
+                                <td>
+                                    <span class="text-dark fw-medium">@item.CategoryName</span>
+                                </td>
 
                                 <td>
                                     @if (item.PriorityName.Equals("High", StringComparison.OrdinalIgnoreCase) ||
                                                                 item.PriorityName.Equals("Urgent", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-danger">@item.PriorityName</span>
+                                        <span class="badge bg-danger-subtle text-danger px-2 py-1.5 rounded-2 font-monospace">@item.PriorityName</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-light text-dark border">@item.PriorityName</span>
+                                        <span class="badge bg-light text-secondary border px-2 py-1.5 rounded-2 font-monospace">@item.PriorityName</span>
                                     }
                                 </td>
 
-                                <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td class="text-muted small">
+                                    @item.CreatedAt.ToString("dd MMM yyyy")
+                                </td>
 
                                 <td>
                                     @if (item.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
                                                                 item.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-success">@item.StatusName</span>
+                                        <span class="badge bg-success-subtle text-success px-2.5 py-1.5 rounded-pill fw-semibold small">
+                                            <i class="bi bi-patch-check-fill me-1"></i> @item.StatusName
+                                        </span>
                                     }
                                     else if (item.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <span class="badge bg-warning text-dark">@item.StatusName</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis px-2.5 py-1.5 rounded-pill fw-semibold small">
+                                            <i class="bi bi-gear-wide-connected me-1"></i> @item.StatusName
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-info text-white">@item.StatusName</span>
+                                        <span class="badge bg-info-subtle text-info-emphasis px-2.5 py-1.5 rounded-pill fw-semibold small">
+                                            <i class="bi bi-clock-history me-1"></i> @item.StatusName
+                                        </span>
                                     }
                                 </td>
 
-                                <td class="text-center">
+                                <td class="text-center px-4">
                                     <a asp-area="Tenant"
                                        asp-controller="Maintenance"
                                        asp-action="Details"
                                        asp-route-id="@item.RequestId"
-                                       class="btn btn-sm btn-outline-primary">
-                                        View
+                                       class="btn btn-sm btn-outline-navy fw-semibold px-3 rounded-2">
+                                        View Details
                                     </a>
                                 </td>
                             </tr>

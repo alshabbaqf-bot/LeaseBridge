@@ -1,6 +1,8 @@
 ﻿using LeaseBridge.API.Data;
 
 using LeaseBridge.API.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 // using Microsoft.AspNetCore.Authorization;
 
@@ -16,7 +18,7 @@ namespace LeaseBridge.MVC.Areas.Staff.Controllers
 
     [Area("Staff")]
 
-    // [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Staff")]
 
     public class NotificationsController : Controller
 

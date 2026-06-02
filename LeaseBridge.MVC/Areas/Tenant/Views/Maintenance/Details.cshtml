@@ -4,97 +4,106 @@
     ViewData["Title"] = "Maintenance Request Details";
 }
 
-<div class="container mt-4" style="max-width: 850px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Maintenance Request Details</h4>
+<div class="container mt-5" style="max-width: 850px;">
+    <div class="card-custom mb-4 shadow-sm">
+        <div class="card-header-navy">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-file-earmark-text me-2"></i>Maintenance Request Details</h4>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Ticket Number</dt>
-                <dd class="col-sm-8">@Model.TicketNumber</dd>
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Ticket Number</dt>
+                <dd class="col-sm-8 mb-3 fw-semibold text-dark">#@Model.TicketNumber</dd>
 
-                <dt class="col-sm-4">Title</dt>
-                <dd class="col-sm-8">@Model.Title</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Title</dt>
+                <dd class="col-sm-8 mb-3">@Model.Title</dd>
 
-                <dt class="col-sm-4">Description</dt>
-                <dd class="col-sm-8">@(Model.Description ?? "No description provided.")</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Description</dt>
+                <dd class="col-sm-8 mb-3 text-secondary">@(Model.Description ?? "No description provided.")</dd>
 
-                <dt class="col-sm-4">Category</dt>
-                <dd class="col-sm-8">@Model.CategoryName</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Category</dt>
+                <dd class="col-sm-8 mb-3">@Model.CategoryName</dd>
 
-                <dt class="col-sm-4">Priority</dt>
-                <dd class="col-sm-8">@Model.PriorityName</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Priority</dt>
+                <dd class="col-sm-8 mb-3">@Model.PriorityName</dd>
 
-                <dt class="col-sm-4">Current Status</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Current Status</dt>
+                <dd class="col-sm-8 mb-3">
                     @if (Model.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
                                         Model.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                     {
-                        <span class="badge bg-success">@Model.StatusName</span>
+                        <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-check-circle me-1"></i> @Model.StatusName
+                        </span>
                     }
                     else if (Model.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                     {
-                        <span class="badge bg-warning text-dark">@Model.StatusName</span>
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-hourglass-split me-1"></i> @Model.StatusName
+                        </span>
                     }
                     else
                     {
-                        <span class="badge bg-info text-white">@Model.StatusName</span>
+                        <span class="badge bg-info text-white px-3 py-2 rounded-pill shadow-sm fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-info-circle me-1"></i> @Model.StatusName
+                        </span>
                     }
                 </dd>
 
-                <dt class="col-sm-4">Date Raised</dt>
-                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">Date Raised</dt>
+                <dd class="col-sm-8 mb-3 text-muted">
+                    <i class="bi bi-calendar3 me-1 opacity-70"></i> @Model.CreatedAt.ToString("dd MMM yyyy HH:mm")
+                </dd>
             </dl>
 
-            <hr />
+            <hr class="my-4" style="color: var(--pop-color); opacity: 0.2;" />
 
-            <h5 class="mb-3">Progress Updates</h5>
+            <h5 class="mb-3 text-navy fw-bold"><i class="bi bi-journal-text me-2"></i>Progress Updates</h5>
 
             @if (Model.Updates == null || !Model.Updates.Any())
             {
-                <div class="alert alert-info">
+                <div class="alert alert-info border-0 shadow-sm p-3 mb-3 d-flex align-items-center" style="background-color: var(--bg-light); color: var(--navy-blue);">
+                    <i class="bi bi-info-circle fs-5 me-2"></i>
                     No progress updates have been added yet.
                 </div>
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered align-middle">
-                        <thead class="table-light">
+                <div class="table-responsive border rounded mb-3 overflow-hidden shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark" style="background-color: #0d346d !important; border-bottom: none; color: #ffffff !important;">
                             <tr>
-                                <th>Date</th>
-                                <th>Old Status</th>
-                                <th>New Status</th>
-                                <th>Updated By</th>
-                                <th>Notes</th>
+                                <th class="py-3 ps-3 fw-semibold text-uppercase tracking-wider" style="font-size: 0.8rem; background-color: transparent; color: inherit;">Date</th>
+                                <th class="py-3 fw-semibold text-uppercase tracking-wider" style="font-size: 0.8rem; background-color: transparent; color: inherit;">Old Status</th>
+                                <th class="py-3 fw-semibold text-uppercase tracking-wider" style="font-size: 0.8rem; background-color: transparent; color: inherit;">New Status</th>
+                                <th class="py-3 fw-semibold text-uppercase tracking-wider" style="font-size: 0.8rem; background-color: transparent; color: inherit;">Updated By</th>
+                                <th class="py-3 pe-3 fw-semibold text-uppercase tracking-wider" style="font-size: 0.8rem; background-color: transparent; color: inherit;">Notes</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach (var update in Model.Updates)
                             {
-                                <tr>
-                                    <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
-                                    <td>@update.OldStatusName</td>
-                                    <td>
+                                <tr style="transition: background-color 0.2s ease;">
+                                    <td class="py-3 ps-3 text-muted" style="font-size: 0.9rem;">@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                    <td class="py-3 text-secondary" style="font-size: 0.9rem;">@update.OldStatusName</td>
+                                    <td class="py-3">
                                         @if (update.NewStatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
                                                                         update.NewStatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            <span class="badge bg-success">@update.NewStatusName</span>
+                                            <span class="badge bg-success px-2.5 py-1.5 rounded-pill fw-semibold" style="font-size: 0.75rem;">@update.NewStatusName</span>
                                         }
                                         else if (update.NewStatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            <span class="badge bg-warning text-dark">@update.NewStatusName</span>
+                                            <span class="badge bg-warning text-dark px-2.5 py-1.5 rounded-pill fw-semibold" style="font-size: 0.75rem;">@update.NewStatusName</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-info text-white">@update.NewStatusName</span>
+                                            <span class="badge bg-info text-white px-2.5 py-1.5 rounded-pill fw-semibold" style="font-size: 0.75rem;">@update.NewStatusName</span>
                                         }
                                     </td>
-                                    <td>@update.UpdatedByName</td>
-                                    <td>@update.Notes</td>
+                                    <td class="py-3 fw-semibold text-dark" style="font-size: 0.9rem;">@update.UpdatedByName</td>
+                                    <td class="py-3 pe-3 text-secondary" style="font-size: 0.9rem;">@update.Notes</td>
                                 </tr>
                             }
                         </tbody>
@@ -102,12 +111,17 @@
                 </div>
             }
 
-            <a asp-area="Tenant"
-               asp-controller="Maintenance"
-               asp-action="MyRequests"
-               class="btn btn-secondary mt-3">
-                Back to My Requests
-            </a>
+            <hr class="my-4" style="color: var(--pop-color); opacity: 0.2;" />
+
+            <div class="d-flex justify-content-end">
+                <a asp-area="Tenant"
+                   asp-controller="Maintenance"
+                   asp-action="MyRequests"
+                   class="btn btn-outline-navy fw-semibold px-4 py-2"
+                   style="border: 2px solid var(--navy-blue); color: var(--navy-blue);">
+                    <i class="bi bi-arrow-left me-1"></i> Back to My Requests
+                </a>
+            </div>
         </div>
     </div>
 </div>

@@ -1,77 +1,200 @@
-﻿@model LeaseBridge.API.Models.Notification
+﻿@model LeaseBridge.MVC.Areas.Management.Controllers.ManagementProcessTicketViewModel
 
 @{
-    ViewData["Title"] = "Notification Details";
+    ViewData["Title"] = "Process Maintenance Request";
 }
 
-<div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Notification Details</h4>
+<div class="container mt-5" style="max-width: 750px;">
+    <div class="card-custom shadow border-0 overflow-hidden">
+        <div class="card-header-navy py-3 px-4 d-flex align-items-center justify-content-between">
+            <div>
+                <h5 class="mb-0 fw-bold fs-5 text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-gear-fill"></i> Process Maintenance Request
+                </h5>
+                <small class="text-white-50 opacity-75 d-block mt-0.5">Ticket Number: @Model.TicketNumber</small>
+            </div>
+            <span class="badge bg-white-50 text-navy fw-bold px-2.5 py-1.5 fs-7 border border-light-subtle rounded">CONSOLE</span>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Notification ID</dt>
-                <dd class="col-sm-8">@Model.NotificationId</dd>
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="p-4 bg-white border border-0 shadow-sm rounded mb-4">
+                <h6 class="fw-bold text-navy mb-3 pb-2 border-bottom d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-text-fill text-secondary"></i> Request Summary
+                </h6>
 
-                <dt class="col-sm-4">Message</dt>
-                <dd class="col-sm-8">@Model.Message</dd>
+                <dl class="row mb-0 g-3">
+                    <dt class="col-sm-4 text-secondary fw-semibold">Tenant</dt>
+                    <dd class="col-sm-8 text-dark fw-bold">@Model.TenantName</dd>
 
-                <dt class="col-sm-4">Type</dt>
-                <dd class="col-sm-8">@(Model.NotificationType ?? "General")</dd>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Unit</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-light text-dark border px-2.5 py-1 fw-semibold">
+                            @Model.UnitName
+                        </span>
+                    </dd>
 
-                <dt class="col-sm-4">Read Status</dt>
-                <dd class="col-sm-8">
-                    @if (Model.IsRead)
-                    {
-                        <span class="badge bg-success">Read</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning text-dark">Unread</span>
-                    }
-                </dd>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Title</dt>
+                    <dd class="col-sm-8 text-dark fw-semibold">@Model.Title</dd>
 
-                <dt class="col-sm-4">Created At</dt>
-                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Description</dt>
+                    <dd class="col-sm-8 text-muted fst-normal text-wrap">
+                        @(Model.Description ?? "No text description provided by tenant.")
+                    </dd>
 
-                <dt class="col-sm-4">User ID</dt>
-                <dd class="col-sm-8">@Model.UserId</dd>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Category</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                            @Model.CategoryName
+                        </span>
+                    </dd>
 
-                <dt class="col-sm-4">Maintenance Request ID</dt>
-                <dd class="col-sm-8">
-                    @(Model.MaintenanceRequestId.HasValue? Model.MaintenanceRequestId.Value.ToString() : "N/A")
-                </dd>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Priority</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.PriorityName.Equals("High", StringComparison.OrdinalIgnoreCase) ||
+                                                Model.PriorityName.Equals("Urgent", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                <i class="bi bi-exclamation-circle-fill small me-1"></i> @Model.PriorityName
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-light text-secondary border px-2.5 py-1.5 rounded-pill fw-medium">
+                                @Model.PriorityName
+                            </span>
+                        }
+                    </dd>
 
-                <dt class="col-sm-4">Application ID</dt>
-                <dd class="col-sm-8">
-                    @(Model.ApplicationId.HasValue? Model.ApplicationId.Value.ToString() : "N/A")
-                </dd>
-            </dl>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Current Status</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.CurrentStatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
+                                                Model.CurrentStatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                @Model.CurrentStatusName
+                            </span>
+                        }
+                        else if (Model.CurrentStatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                @Model.CurrentStatusName
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2.5 py-1.5 rounded-pill fw-bold">
+                                @Model.CurrentStatusName
+                            </span>
+                        }
+                    </dd>
 
-            <div class="d-flex gap-2 mt-4">
-                @if (!Model.IsRead)
-                {
-                    <form asp-area="Management"
-                          asp-controller="Notifications"
-                          asp-action="MarkAsRead"
-                          asp-route-id="@Model.NotificationId"
-                          method="post">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-success">
-                            Mark as Read
-                        </button>
-                    </form>
-                }
+                    <dt class="col-sm-4 text-secondary fw-semibold">Assigned Staff</dt>
+                    <dd class="col-sm-8 text-dark fw-semibold">
+                        @if (Model.AssignedStaffName == "Unassigned")
+                        {
+                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill fw-medium">
+                                Unassigned
+                            </span>
+                        }
+                        else
+                        {
+                            <span><i class="bi bi-person text-muted me-1"></i> @Model.AssignedStaffName</span>
+                        }
+                    </dd>
 
-                <a asp-area="Management"
-                   asp-controller="Notifications"
-                   asp-action="Index"
-                   class="btn btn-secondary">
-                    Back
-                </a>
+                    <dt class="col-sm-4 text-secondary fw-semibold">Logged Timestamp</dt>
+                    <dd class="col-sm-8 text-secondary small fw-medium">
+                        <i class="bi bi-clock me-1"></i> @Model.CreatedAt.ToString("dd MMM yyyy HH:mm")
+                    </dd>
+                </dl>
             </div>
+
+            @if (TempData["ManagementError"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ManagementError"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form asp-area="Management"
+                  asp-controller="MaintenanceManagement"
+                  asp-action="ProcessTicket"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="requestId" value="@Model.RequestId" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy mb-2">
+                        Update Maintenance Status
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-secondary border-end-0">
+                            <i class="bi bi-activity"></i>
+                        </span>
+                        <select name="statusId"
+                                class="form-select border-start-0 ps-0 shadow-sm"
+                                asp-items="ViewBag.StatusId"
+                                required>
+                            <option value="">-- Select Status --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy mb-2">
+                        Assign Staff
+                    </label>
+                    <div class="input-group mb-1.5">
+                        <span class="input-group-text bg-white text-secondary border-end-0">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </span>
+                        <select name="staffId"
+                                class="form-select border-start-0 ps-0 shadow-sm"
+                                asp-items="ViewBag.StaffId">
+                            <option value="">-- Leave Unassigned --</option>
+                        </select>
+                    </div>
+                    <div class="form-text text-muted d-flex align-items-start gap-1">
+                        <i class="bi bi-info-circle mt-0.5 small"></i>
+                        <span>Only available staff with the matching skill/category for <strong>@Model.CategoryName</strong> are shown.</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-navy mb-2">
+                        Manager Notes
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-secondary align-items-start pt-2.5 border-end-0">
+                            <i class="bi bi-pencil-square"></i>
+                        </span>
+                        <textarea name="managerNotes"
+                                  class="form-control border-start-0 ps-0"
+                                  rows="4"
+                                  placeholder="Optional note for staff/tenant, e.g. Assigned to technician for inspection."></textarea>
+                    </div>
+                </div>
+
+                <div class="row pt-2 g-3">
+                    <div class="col-6">
+                        <a asp-area="Management"
+                           asp-controller="MaintenanceManagement"
+                           asp-action="Dashboard"
+                           class="btn btn-outline-secondary w-100 fw-bold px-3 py-2 d-inline-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-arrow-left"></i> Return to Dashboard
+                        </a>
+                    </div>
+
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-navy w-100 fw-bold shadow-sm px-3 py-2 d-inline-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-cloud-arrow-up-fill"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

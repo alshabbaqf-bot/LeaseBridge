@@ -4,49 +4,61 @@
     ViewData["Title"] = "Unit Details";
 }
 
-<div class="container mt-4" style="max-width: 800px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Unit @Model.UnitNumber Details</h4>
+<div class="container mt-5" style="max-width: 800px;">
+    <div class="card-custom mb-4 shadow-sm">
+        <div class="card-header-navy">
+            <h4 class="mb-0 fw-bold">Unit @Model.UnitNumber Details</h4>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Property</dt>
-                <dd class="col-sm-8">@(Model.Property?.Name ?? "N/A")</dd>
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-navy fw-bold mb-3">
+                   Property
+                </dt>
+                <dd class="col-sm-8 mb-3">@(Model.Property?.Name ?? "N/A")</dd>
 
-                <dt class="col-sm-4">Unit Number</dt>
-                <dd class="col-sm-8">@Model.UnitNumber</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">
+                    Unit Number
+                </dt>
+                <dd class="col-sm-8 mb-3">@Model.UnitNumber</dd>
 
-                <dt class="col-sm-4">Size</dt>
-                <dd class="col-sm-8">@Model.Size sqft</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">
+                   Size
+                </dt>
+                <dd class="col-sm-8 mb-3">@Model.Size sqft</dd>
 
-                <dt class="col-sm-4">Monthly Rent</dt>
-                <dd class="col-sm-8">@Model.RentAmount.ToString("0.000") BHD</dd>
+                <dt class="col-sm-4 text-navy fw-bold mb-3">
+                    Monthly Rent
+                </dt>
+                <dd class="col-sm-8 mb-3 fw-bold text-dark">@Model.RentAmount.ToString("0.000") BHD</dd>
 
-                <dt class="col-sm-4">Status</dt>
-                <dd class="col-sm-8">
-                    <span class="badge bg-success">
+                <dt class="col-sm-4 text-navy fw-bold mb-3">
+                    Status
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm">
                         @(Model.Status?.Name ?? "Available")
                     </span>
                 </dd>
             </dl>
 
-            <div class="d-flex gap-2 mt-4">
+            <hr class="my-4" style="color: var(--pop-color); opacity: 0.2;" />
+
+            <div class="d-flex gap-2 justify-content-end">
+                <a asp-area="Tenant"
+                   asp-controller="AvailableUnits"
+                   asp-action="Index"
+                   class="btn btn-outline-navy fw-semibold px-4 py-2">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Available Units
+                </a>
                 <a asp-area="Tenant"
                    asp-controller="Application"
                    asp-action="Apply"
                    asp-route-unitId="@Model.UnitId"
-                   class="btn btn-primary">
-                    Apply for this Unit
+                   class="btn btn-navy fw-semibold px-4 py-2">
+                    <i class="bi bi-file-earmark-plus me-1"></i> Apply for this Unit
                 </a>
-
-                <a asp-area="Tenant"
-                   asp-controller="AvailableUnits"
-                   asp-action="Index"
-                   class="btn btn-secondary">
-                    Back to Available Units
-                </a>
+                
             </div>
         </div>
     </div>
