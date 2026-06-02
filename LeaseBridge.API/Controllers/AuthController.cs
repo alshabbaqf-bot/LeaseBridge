@@ -1,11 +1,12 @@
 ﻿using LeaseBridge.API.Data;
 using LeaseBridge.API.DTOs.Auth;
 using LeaseBridge.API.Models;
+using LeaseBridge.API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace LeaseBridge.API.Controllers
@@ -17,17 +18,20 @@ namespace LeaseBridge.API.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
 
         public AuthController(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context,
+            ITokenService tokenService,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _tokenService = tokenService;
             _configuration = configuration;
         }
         private async Task<string> GenerateJwtToken(IdentityUser user)
@@ -127,7 +131,7 @@ namespace LeaseBridge.API.Controllers
             return Ok("User registered successfully.");
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+        public async Task<ActionResult<AuthResponseDto>> Login(LoginDto dto)
         {
             // Validate request
             if (!ModelState.IsValid)
@@ -148,23 +152,42 @@ namespace LeaseBridge.API.Controllers
             if (!passwordValid)
                 return Unauthorized("Invalid email or password.");
 
-            // Generate JWT token
-            var token = await GenerateJwtToken(user);
+            return await BuildAuthResponseAsync(user);
 
-            // Get user roles
+            //// Generate JWT token
+            //var token = await GenerateJwtToken(user);
+
+            //// Get user roles
+            //var roles = await _userManager.GetRolesAsync(user);
+
+            //// Store the expiration date
+            //var expiry = DateTime.UtcNow.AddMinutes(
+            //    Convert.ToDouble(_configuration["Jwt:DurationInMinutes"]));
+
+            //return Ok(new
+            //{
+            //    Token = token,
+            //    ExpiresAt = expiry,
+            //    Email = user.Email,
+            //    Roles = roles
+            //});
+        }
+
+        private async Task<AuthResponseDto> BuildAuthResponseAsync(IdentityUser user)
+        {
+            var token = await _tokenService.CreateTokenAsync(user);
+            var expiryMinutes = int.Parse(_configuration["Jwt:DurationInMinutes"]!);
             var roles = await _userManager.GetRolesAsync(user);
 
-            // Store the expiration date
-            var expiry = DateTime.UtcNow.AddMinutes(
-                Convert.ToDouble(_configuration["Jwt:DurationInMinutes"]));
-
-            return Ok(new
+            return new AuthResponseDto
             {
                 Token = token,
-                ExpiresAt = expiry,
-                Email = user.Email,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(expiryMinutes),
+                Email = user.Email!,
+                DisplayName = user.UserName!,
                 Roles = roles
-            });
+            };
         }
+
     }
 }

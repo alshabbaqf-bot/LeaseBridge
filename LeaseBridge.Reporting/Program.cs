@@ -21,7 +21,7 @@ builder.Services
 builder.Services.AddHttpContextAccessor(); // httpContextAccessor is needed for accessing the current user's information in the ReportingApiClient
 builder.Services.AddHttpClient<ReportingApiClient>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5290/");
+    client.BaseAddress = new Uri("https://localhost:7010/");
 });
 
 var app = builder.Build();
