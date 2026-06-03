@@ -5,73 +5,84 @@
 }
 
 <div class="container mt-4" style="max-width: 800px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Lease Details</h4>
+    <!-- Modernized Custom Card Design -->
+    <div class="card-custom shadow-sm border-0">
+        <div class="card-header-navy py-3 px-4">
+            <h4 class="mb-0 fw-bold fs-5 d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text"></i> Lease Details
+            </h4>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Lease ID</dt>
-                <dd class="col-sm-8">#@Model.LeaseId</dd>
+        <div class="card-body p-4">
+            <!-- Structured Metadata Presentation List -->
+            <dl class="row g-3 border-bottom pb-3 mb-4">
+                <dt class="col-sm-4 text-navy fw-bold">Lease ID</dt>
+                <dd class="col-sm-8 text-navy fw-bold">#@Model.LeaseId</dd>
 
-                <dt class="col-sm-4">Tenant</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-4 text-navy fw-bold">Tenant</dt>
+                <dd class="col-sm-8 text-dark fw-semibold">
                     @(Model.Tenant != null
                                         ? Model.Tenant.FirstName + " " + Model.Tenant.LastName
                                         : "N/A")
                 </dd>
 
-                <dt class="col-sm-4">Property</dt>
-                <dd class="col-sm-8">@(Model.Unit?.Property?.Name ?? "N/A")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Property</dt>
+                <dd class="col-sm-8 text-secondary fw-medium">@(Model.Unit?.Property?.Name ?? "N/A")</dd>
 
-                <dt class="col-sm-4">Unit</dt>
-                <dd class="col-sm-8">@(Model.Unit?.UnitNumber ?? "N/A")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Unit</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-light text-dark border px-2.5 py-1 fw-semibold">
+                        @(Model.Unit?.UnitNumber ?? "N/A")
+                    </span>
+                </dd>
 
-                <dt class="col-sm-4">Start Date</dt>
-                <dd class="col-sm-8">@Model.StartDate.ToString("dd MMM yyyy")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Start Date</dt>
+                <dd class="col-sm-8 text-dark fw-medium">@Model.StartDate.ToString("dd MMM yyyy")</dd>
 
-                <dt class="col-sm-4">End Date</dt>
-                <dd class="col-sm-8">@Model.EndDate.ToString("dd MMM yyyy")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">End Date</dt>
+                <dd class="col-sm-8 text-dark fw-medium">@Model.EndDate.ToString("dd MMM yyyy")</dd>
 
-                <dt class="col-sm-4">Status</dt>
+                <dt class="col-sm-4 text-navy fw-bold">Status</dt>
                 <dd class="col-sm-8">
                     @if (Model.IsActive)
                     {
-                        <span class="badge bg-success">Active</span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-bold">Active</span>
                     }
                     else
                     {
-                        <span class="badge bg-secondary">Inactive</span>
+                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill fw-bold">Inactive</span>
                     }
                 </dd>
             </dl>
 
-            <div class="d-flex gap-2 mt-4">
-                @if (Model.IsActive)
-                {
-                    <a asp-area="Management"
-                       asp-controller="LeaseManagement"
-                       asp-action="Renew"
-                       asp-route-id="@Model.LeaseId"
-                       class="btn btn-primary">
-                        Renew Lease
-                    </a>
+            <!-- Balanced Operational Controls Footer -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-1">
+                <div class="d-flex gap-2">
+                    @if (Model.IsActive)
+                    {
+                        <a asp-area="Management"
+                           asp-controller="LeaseManagement"
+                           asp-action="Renew"
+                           asp-route-id="@Model.LeaseId"
+                           class="btn btn-navy px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                            <i class="bi bi-arrow-repeat"></i> Renew Lease
+                        </a>
 
-                    <a asp-area="Management"
-                       asp-controller="LeaseManagement"
-                       asp-action="Terminate"
-                       asp-route-id="@Model.LeaseId"
-                       class="btn btn-danger">
-                        Terminate Lease
-                    </a>
-                }
+                        <a asp-area="Management"
+                           asp-controller="LeaseManagement"
+                           asp-action="Terminate"
+                           asp-route-id="@Model.LeaseId"
+                           class="btn btn-danger px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                            <i class="bi bi-x-circle"></i> Terminate Lease
+                        </a>
+                    }
+                </div>
 
                 <a asp-area="Management"
                    asp-controller="LeaseManagement"
                    asp-action="Index"
-                   class="btn btn-secondary">
-                    Back
+                   class="btn btn-outline-secondary px-4 fw-semibold d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back
                 </a>
             </div>
         </div>

@@ -3,20 +3,20 @@
 }
 
 <div class="container mt-4" style="max-width: 700px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Update Task Progress</h4>
+    <div class="card-custom shadow-sm border-0">
+        <div class="card-header-navy py-3">
+            <h4 class="mb-0 fw-bold fs-5">Update Task Progress</h4>
         </div>
 
         <div class="card-body">
-            <div class="alert alert-info">
-                <strong>Ticket:</strong> @ViewBag.TicketNumber <br />
-                <strong>Title:</strong> @ViewBag.Title
+            <div class="alert bg-info-subtle text-info-emphasis border-0 shadow-sm mb-4">
+                <div class="mb-1"><strong>Ticket:</strong> <span class="text-navy fw-bold">@ViewBag.TicketNumber</span></div>
+                <div><strong>Title:</strong> <span class="text-dark">@ViewBag.Title</span></div>
             </div>
 
             @if (!ViewData.ModelState.IsValid)
             {
-                <div class="alert alert-danger">
+                <div class="alert alert-danger border-0 shadow-sm">
                     <div asp-validation-summary="All"></div>
                 </div>
             }
@@ -30,10 +30,9 @@
 
                 <input type="hidden" name="requestId" value="@ViewBag.RequestId" />
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">New Status</label>
-
-                    <select name="statusId" class="form-select" required>
+                <div class="mb-4">
+                    <label class="form-label text-navy fw-bold">New Status</label>
+                    <select name="statusId" class="form-select modern-input" required>
                         <option value="">-- Select Status --</option>
 
                         @foreach (var status in ViewBag.Statuses)
@@ -50,25 +49,24 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Progress Notes</label>
-
+                <div class="mb-4">
+                    <label class="form-label text-navy fw-bold">Progress Notes</label>
                     <textarea name="notes"
-                              class="form-control"
+                              class="form-control modern-input"
                               rows="4"
                               placeholder="Example: Inspected the issue and ordered replacement parts."
                               required></textarea>
                 </div>
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-navy px-4">
                         Save Update
                     </button>
 
                     <a asp-area="Staff"
                        asp-controller="MaintenanceTasks"
                        asp-action="MyTasks"
-                       class="btn btn-secondary">
+                       class="btn btn-secondary px-4">
                         Cancel
                     </a>
                 </div>

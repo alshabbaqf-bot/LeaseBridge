@@ -1,33 +1,25 @@
 ﻿@model LeaseBridge.MVC.Models.MaintenanceLookup.MaintenanceLookupViewModel
 
 @{
-
     ViewData["Title"] = "Public Maintenance Lookup";
-
 }
 
-<div class="container mt-5" style="max-width: 900px;">
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-dark text-white">
-            <h4 class="mb-0">Public Maintenance Lookup</h4>
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card-custom mb-4">
+        <div class="card-header-navy text-center">
+            <h4 class="mb-0 fw-bold">Public Maintenance Lookup</h4>
         </div>
 
         <div class="card-body p-4">
-            <p class="text-muted">
-
+            <p class="text-muted text-center">
                 Enter your maintenance ticket number and registered phone number to view your request status.
-
-                Login is not required.
             </p>
 
             @if (ViewBag.ErrorMessage != null)
-
             {
                 <div class="alert alert-danger">
-
                     @ViewBag.ErrorMessage
                 </div>
-
             }
 
             <form asp-area=""
@@ -40,25 +32,24 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label asp-for="TicketNumber" class="form-label fw-bold"></label>
+                    <div class="col-12">
+                        <label asp-for="TicketNumber" class="form-label fw-bold text-navy"></label>
                         <input asp-for="TicketNumber"
                                class="form-control"
-                               placeholder="Example: TKT-20260531-ABCD" />
+                               placeholder="Enter Ticket Number" />
                         <span asp-validation-for="TicketNumber" class="text-danger"></span>
                     </div>
 
-                    <div class="col-md-6">
-                        <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
+                    <div class="col-12">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold text-navy"></label>
                         <input asp-for="PhoneNumber"
                                class="form-control"
-                               placeholder="Example: 33330001" />
+                               placeholder="Enter Phone Number" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-dark mt-4">
-
+                <button type="submit" class="btn btn-navy mt-4 w-100">
                     Check Maintenance Status
                 </button>
             </form>
@@ -66,90 +57,74 @@
     </div>
 
     @if (Model.Result != null)
-
     {
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Maintenance Request Details</h5>
+        <div class="card-custom mb-4">
+            <div class="card-header-navy text-center" style="background-color: var(--light-blue);">
+                <h5 class="mb-0 text-white fw-bold">Maintenance Request Details</h5>
             </div>
 
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-4">Ticket Number</dt>
-                    <dd class="col-sm-8">@Model.Result.TicketNumber</dd>
+            <div class="card-body p-4">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Ticket Number</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.TicketNumber</dd>
 
-                    <dt class="col-sm-4">Tenant</dt>
-                    <dd class="col-sm-8">@Model.Result.TenantName</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Tenant</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.TenantName</dd>
 
-                    <dt class="col-sm-4">Property</dt>
-                    <dd class="col-sm-8">@Model.Result.PropertyName</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Property</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.PropertyName</dd>
 
-                    <dt class="col-sm-4">Unit</dt>
-                    <dd class="col-sm-8">@Model.Result.UnitNumber</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Unit</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.UnitNumber</dd>
 
-                    <dt class="col-sm-4">Title</dt>
-                    <dd class="col-sm-8">@Model.Result.Title</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Title</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.Title</dd>
 
-                    <dt class="col-sm-4">Description</dt>
-                    <dd class="col-sm-8">@(Model.Result.Description ?? "No description provided.")</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Description</dt>
+                    <dd class="col-sm-8 mb-3">@(Model.Result.Description ?? "No description provided.")</dd>
 
-                    <dt class="col-sm-4">Category</dt>
-                    <dd class="col-sm-8">@Model.Result.CategoryName</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Category</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.CategoryName</dd>
 
-                    <dt class="col-sm-4">Priority</dt>
-                    <dd class="col-sm-8">@Model.Result.PriorityName</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Priority</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.PriorityName</dd>
 
-                    <dt class="col-sm-4">Current Status</dt>
-                    <dd class="col-sm-8">
-
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Current Status</dt>
+                    <dd class="col-sm-8 mb-3">
                         @if (Model.Result.StatusName.Equals("Completed", StringComparison.OrdinalIgnoreCase) ||
-
                                             Model.Result.StatusName.Equals("Resolved", StringComparison.OrdinalIgnoreCase))
-
                         {
-                            <span class="badge bg-success">@Model.Result.StatusName</span>
-
+                            <span class="badge bg-success px-3 py-2">@Model.Result.StatusName</span>
                         }
-
                         else if (Model.Result.StatusName.Equals("In Progress", StringComparison.OrdinalIgnoreCase))
-
                         {
-                            <span class="badge bg-warning text-dark">@Model.Result.StatusName</span>
-
+                            <span class="badge bg-warning text-dark px-3 py-2">@Model.Result.StatusName</span>
                         }
-
                         else
-
                         {
-                            <span class="badge bg-info text-white">@Model.Result.StatusName</span>
-
+                            <span class="badge px-3 py-2" style="background-color: var(--navy-blue); color: var(--white);">@Model.Result.StatusName</span>
                         }
                     </dd>
 
-                    <dt class="col-sm-4">Submitted At</dt>
-                    <dd class="col-sm-8">@Model.Result.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                    <dt class="col-sm-4 text-navy fw-bold mb-3">Submitted At</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Result.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
                 </dl>
 
-                <hr />
+                <hr class="my-4" style="color: var(--pop-color);" />
 
-                <h5>Update History</h5>
+                <h5 class="text-navy fw-bold mb-3">Update History</h5>
 
                 @if (Model.Result.Updates == null || !Model.Result.Updates.Any())
-
                 {
-                    <div class="alert alert-info">
-
+                    <div class="alert alert-info border-0 shadow-sm" style="background-color: var(--bg-light); color: var(--navy-blue);">
                         No updates have been added yet.
                     </div>
-
                 }
-
                 else
-
                 {
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped align-middle">
-                            <thead class="table-light">
+                        <table class="table table-hover align-middle border">
+                            <thead class="table-header-custom">
                                 <tr>
                                     <th>Date</th>
                                     <th>Old Status</th>
@@ -158,38 +133,28 @@
                                     <th>Notes</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 @foreach (var update in Model.Result.Updates)
-
                                 {
                                     <tr>
-                                        <td>@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
-                                        <td>@update.OldStatusName</td>
-                                        <td>@update.NewStatusName</td>
+                                        <td class="fw-semibold">@update.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                        <td><span class="badge bg-secondary text-white opacity-75">@update.OldStatusName</span></td>
+                                        <td><span class="badge bg-info text-white">@update.NewStatusName</span></td>
                                         <td>@update.UpdatedByName</td>
-                                        <td>@update.Notes</td>
+                                        <td class="text-muted">@update.Notes</td>
                                     </tr>
-
                                 }
                             </tbody>
                         </table>
                     </div>
-
                 }
             </div>
         </div>
-
     }
 </div>
 
 @section Scripts {
-
     @{
-
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
     }
-
 }

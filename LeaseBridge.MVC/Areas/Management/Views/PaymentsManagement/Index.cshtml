@@ -4,22 +4,22 @@
     ViewData["Title"] = ViewBag.IsOverduePage == true ? "Overdue Invoices" : "Payments Management";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="container page-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2>@ViewData["Title"]</h2>
-            <p class="text-muted mb-0">
+            <h2 class="text-navy fw-bold mb-1">@ViewData["Title"]</h2>
+            <p class="text-muted small mb-0">
                 @(ViewBag.IsOverduePage == true
                                 ? "View unpaid invoices that are overdue."
                                 : "Manage tenant invoices, payment records, and overdue balances.")
             </p>
         </div>
 
-        <div>
+        <div class="d-flex gap-2">
             <a asp-area="Management"
                asp-controller="PaymentsManagement"
                asp-action="Create"
-               class="btn btn-primary">
+               class="btn btn-navy shadow-sm">
                 Add Invoice
             </a>
 
@@ -28,7 +28,7 @@
                 <a asp-area="Management"
                    asp-controller="PaymentsManagement"
                    asp-action="Index"
-                   class="btn btn-secondary">
+                   class="btn btn-secondary shadow-sm">
                     All Invoices
                 </a>
             }
@@ -37,7 +37,7 @@
                 <a asp-area="Management"
                    asp-controller="PaymentsManagement"
                    asp-action="Overdue"
-                   class="btn btn-danger">
+                   class="btn btn-danger shadow-sm">
                     Overdue Invoices
                 </a>
             }
@@ -46,7 +46,7 @@
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
             @TempData["SuccessMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -54,7 +54,7 @@
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
             @TempData["ErrorMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -62,18 +62,18 @@
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">
+        <div class="alert alert-info border-0 shadow-sm">
             No invoice records found.
         </div>
     }
     else
     {
-        <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover align-middle mb-0">
-                    <thead class="table-dark">
+        <div class="card-custom">
+            <div class="table-responsive table-min-width">
+                <table class="table align-middle mb-0">
+                    <thead class="table-header-custom table-header-uppercase">
                         <tr>
-                            <th>Invoice</th>
+                            <th class="ps-4">Invoice</th>
                             <th>Lease</th>
                             <th>Tenant</th>
                             <th>Property / Unit</th>
@@ -81,7 +81,7 @@
                             <th>Due Date</th>
                             <th>Status</th>
                             <th>Last Payment</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center pe-4">Actions</th>
                         </tr>
                     </thead>
 
@@ -93,43 +93,43 @@
                             .FirstOrDefault();
 
                             <tr>
-                                <td>@invoice.InvoiceNumber</td>
+                                <td class="fw-bold text-navy ps-4">@invoice.InvoiceNumber</td>
                                 <td>Lease #@invoice.LeaseId</td>
 
                                 <td>
                                     @if (invoice.Lease?.Tenant != null)
                                     {
-                                        <span>@invoice.Lease.Tenant.FirstName @invoice.Lease.Tenant.LastName</span>
+                                        <span class="fw-semibold">@invoice.Lease.Tenant.FirstName @invoice.Lease.Tenant.LastName</span>
                                     }
                                     else
                                     {
-                                        <span class="text-muted">N/A</span>
+                                        <span class="text-muted italic">N/A</span>
                                     }
                                 </td>
 
                                 <td>
-                                    <strong>@(invoice.Lease?.Unit?.Property?.Name ?? "N/A")</strong>
+                                    <strong class="text-navy">@(invoice.Lease?.Unit?.Property?.Name ?? "N/A")</strong>
                                     <br />
                                     <small class="text-muted">
                                         Unit @(invoice.Lease?.Unit?.UnitNumber ?? "N/A")
                                     </small>
                                 </td>
 
-                                <td>@invoice.Amount.ToString("0.000") BHD</td>
+                                <td class="fw-bold">@invoice.Amount.ToString("0.000") BHD</td>
                                 <td>@invoice.DueDate.ToString("dd MMM yyyy")</td>
 
                                 <td>
                                     @if (invoice.Status?.Name == "Paid")
                                     {
-                                        <span class="badge bg-success">Paid</span>
+                                        <span class="badge bg-success-subtle text-success-emphasis px-2.5 py-1.5 rounded">Paid</span>
                                     }
                                     else if (invoice.Status?.Name == "Overdue")
                                     {
-                                        <span class="badge bg-danger">Overdue</span>
+                                        <span class="badge bg-danger-subtle text-danger px-2.5 py-1.5 rounded">Overdue</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-warning text-dark">
+                                        <span class="badge bg-warning-subtle text-warning-emphasis px-2.5 py-1.5 rounded">
                                             @(invoice.Status?.Name ?? "Pending")
                                         </span>
                                     }
@@ -138,23 +138,23 @@
                                 <td>
                                     @if (latestPayment != null)
                                     {
-                                        <span>@latestPayment.PaymentDate.ToString("dd MMM yyyy")</span>
+                                        <span class="fw-semibold">@latestPayment.PaymentDate.ToString("dd MMM yyyy")</span>
                                         <br />
-                                        <small class="text-muted">@latestPayment.Method?.Name</small>
+                                        <small class="text-muted shadow-none">@latestPayment.Method?.Name</small>
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Not Paid</span>
+                                        <span class="text-muted small">Not Paid</span>
                                     }
                                 </td>
 
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
+                                <td class="text-center pe-4">
+                                    <div class="btn-group shadow-sm" role="group">
                                         <a asp-area="Management"
                                            asp-controller="PaymentsManagement"
                                            asp-action="Details"
                                            asp-route-id="@invoice.InvoiceId"
-                                           class="btn btn-info btn-sm">
+                                           class="btn btn-info-subtle text-info-emphasis btn-sm">
                                             Details
                                         </a>
 
@@ -162,7 +162,7 @@
                                            asp-controller="PaymentsManagement"
                                            asp-action="Edit"
                                            asp-route-id="@invoice.InvoiceId"
-                                           class="btn btn-warning btn-sm">
+                                           class="btn btn-warning-subtle text-warning-emphasis btn-sm">
                                             Edit
                                         </a>
                                     </div>

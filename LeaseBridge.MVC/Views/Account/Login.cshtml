@@ -1,37 +1,31 @@
 ﻿@model LeaseBridge.MVC.Models.Auth.LoginViewModel
 
 @{
-
     ViewData["Title"] = "Login";
-
 }
 
 <div class="container mt-5" style="max-width: 500px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-dark text-white text-center">
-            <h4 class="mb-0">Login</h4>
+    <div class="card-custom shadow-sm">
+        <div class="card-header-navy text-center">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-shield-lock me-2"></i>Login</h4>
         </div>
 
         <div class="card-body p-4">
 
             @if (TempData["SuccessMessage"] != null)
-
             {
-                <div class="alert alert-success">
-
-                    @TempData["SuccessMessage"]
+                <div class="alert alert-success border-0 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <div>@TempData["SuccessMessage"]</div>
                 </div>
-
             }
 
             @if (ViewBag.ErrorMessage != null)
-
             {
-                <div class="alert alert-danger">
-
-                    @ViewBag.ErrorMessage
+                <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>@ViewBag.ErrorMessage</div>
                 </div>
-
             }
 
             <form asp-area=""
@@ -46,28 +40,38 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-bold"></label>
-                    <input asp-for="Email" class="form-control" placeholder="Enter email" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label asp-for="Email" class="form-label fw-bold text-navy"></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                        <input asp-for="Email" class="form-control border-start-0 ps-0" placeholder="Enter email" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-bold"></label>
-                    <input asp-for="Password" class="form-control" placeholder="Enter password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label fw-bold text-navy"></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted" style="background-color: var(--bg-light) !important;">
+                            <i class="bi bi-key"></i>
+                        </span>
+                        <input asp-for="Password" type="password" class="form-control border-start-0 ps-0" placeholder="Enter password" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100">
-
+                <button type="submit" class="btn btn-navy w-100 py-2 shadow-sm fw-semibold">
                     Login
                 </button>
 
-                <div class="text-center mt-3">
+                <div class="text-center mt-4">
                     <a asp-area=""
                        asp-controller="Account"
-                       asp-action="Register">
-
-                        Create a new account
+                       asp-action="Register"
+                       class="custom-nav-link fw-semibold text-decoration-none small"
+                       style="color: var(--navy-blue);">
+                        <i class="bi bi-person-plus me-1"></i> Don't have an account? Register Now
                     </a>
                 </div>
             </form>
@@ -76,11 +80,7 @@
 </div>
 
 @section Scripts {
-
     @{
-
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
     }
-
 }

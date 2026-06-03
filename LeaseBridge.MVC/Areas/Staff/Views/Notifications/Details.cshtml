@@ -5,82 +5,86 @@
 }
 
 <div class="container mt-4" style="max-width: 750px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Notification Details</h4>
+    <div class="card-custom shadow-sm border-0">
+        <div class="card-header-navy py-3 px-4">
+            <h4 class="mb-0 fw-bold fs-5 d-flex align-items-center gap-2">
+                <i class="bi bi-info-circle"></i> Notification Details
+            </h4>
         </div>
 
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Message</dt>
-                <dd class="col-sm-8">@Model.Message</dd>
+        <div class="card-body p-4">
+            <dl class="row g-3 border-bottom pb-3 mb-4">
+                <dt class="col-sm-4 text-navy fw-bold">Message</dt>
+                <dd class="col-sm-8 text-dark fw-medium">@Model.Message</dd>
 
-                <dt class="col-sm-4">Type</dt>
-                <dd class="col-sm-8">@(Model.NotificationType ?? "General")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Type</dt>
+                <dd class="col-sm-8 text-secondary fw-semibold">@(Model.NotificationType ?? "General")</dd>
 
-                <dt class="col-sm-4">Status</dt>
+                <dt class="col-sm-4 text-navy fw-bold">Status</dt>
                 <dd class="col-sm-8">
                     @if (Model.IsRead)
                     {
-                        <span class="badge bg-success">Read</span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-bold">Read</span>
                     }
                     else
                     {
-                        <span class="badge bg-warning text-dark">Unread</span>
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1.5 rounded-pill fw-bold">Unread</span>
                     }
                 </dd>
 
-                <dt class="col-sm-4">Created At</dt>
-                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Created At</dt>
+                <dd class="col-sm-8 text-muted">@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</dd>
 
-                <dt class="col-sm-4">Related Maintenance Request</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-4 text-navy fw-bold">Related Maintenance Request</dt>
+                <dd class="col-sm-8 text-dark">
                     @(Model.MaintenanceRequestId.HasValue
                                         ? Model.MaintenanceRequestId.Value.ToString()
                                         : "N/A")
                 </dd>
 
-                <dt class="col-sm-4">Related Application</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-4 text-navy fw-bold">Related Application</dt>
+                <dd class="col-sm-8 text-dark">
                     @(Model.ApplicationId.HasValue
                                         ? Model.ApplicationId.Value.ToString()
                                         : "N/A")
                 </dd>
             </dl>
 
-            <div class="d-flex gap-2">
-                @if (!Model.IsRead)
-                {
-                    <form asp-area="Staff"
-                          asp-controller="Notifications"
-                          asp-action="MarkAsRead"
-                          asp-route-id="@Model.NotificationId"
-                          method="post"
-                          class="d-inline">
-                        @Html.AntiForgeryToken()
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-2">
+                <div class="d-flex gap-2">
+                    @if (!Model.IsRead)
+                    {
+                        <form asp-area="Staff"
+                              asp-controller="Notifications"
+                              asp-action="MarkAsRead"
+                              asp-route-id="@Model.NotificationId"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
 
-                        <button type="submit" class="btn btn-success">
-                            Mark as Read
-                        </button>
-                    </form>
-                }
+                            <button type="submit" class="btn btn-success px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-check2-circle"></i> Mark as Read
+                            </button>
+                        </form>
+                    }
 
-                @if (Model.MaintenanceRequestId.HasValue)
-                {
-                    <a asp-area="Staff"
-                       asp-controller="MaintenanceTasks"
-                       asp-action="Details"
-                       asp-route-id="@Model.MaintenanceRequestId.Value"
-                       class="btn btn-primary">
-                        View Task
-                    </a>
-                }
+                    @if (Model.MaintenanceRequestId.HasValue)
+                    {
+                        <a asp-area="Staff"
+                           asp-controller="MaintenanceTasks"
+                           asp-action="Details"
+                           asp-route-id="@Model.MaintenanceRequestId.Value"
+                           class="btn btn-navy px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                            <i class="bi bi-arrow-right-circle"></i> View Task
+                        </a>
+                    }
+                </div>
 
                 <a asp-area="Staff"
                    asp-controller="Notifications"
                    asp-action="Index"
-                   class="btn btn-secondary">
-                    Back to Notifications
+                   class="btn btn-outline-secondary px-4 fw-semibold d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back to Notifications
                 </a>
             </div>
         </div>

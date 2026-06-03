@@ -1,32 +1,44 @@
 ﻿@{
-
     ViewData["Title"] = "Submit Rental Application";
-
 }
 
-<div class="container mt-4" style="max-width: 650px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-success text-white">
-            <h4 class="mb-0">Submit Rental Application</h4>
+<div class="container mt-5" style="max-width: 650px;">
+    <div class="card-custom shadow-sm mb-4">
+        <div class="card-header-navy">
+            <h4 class="mb-0 fw-bold">
+                <i class="bi bi-file-earmark-text me-2"></i>Submit Rental Application
+            </h4>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4">
 
             @if (TempData["ErrorMessage"] != null)
-
             {
-                <div class="alert alert-danger">
-
-                    @TempData["ErrorMessage"]
+                <div class="alert alert-danger border-0 shadow-sm p-3 mb-4 d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                    <div>@TempData["ErrorMessage"]</div>
                 </div>
-
             }
 
-            <div class="alert alert-info">
-                <strong>Tenant:</strong> @ViewBag.TenantName <br />
-                <strong>Unit:</strong> @ViewBag.UnitNumber <br />
-                <strong>Property:</strong> @ViewBag.PropertyName <br />
-                <strong>Monthly Rent:</strong> @Convert.ToDecimal(ViewBag.RentAmount).ToString("0.000") BHD
+            <div class="p-4 rounded border-0 shadow-sm mb-4" style="background-color: var(--bg-light); color: var(--navy-blue);">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase tracking-wider d-block" style="font-size: 0.75rem;">Tenant</small>
+                        <strong class="fs-6">@ViewBag.TenantName</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase tracking-wider d-block" style="font-size: 0.75rem;">Unit Number</small>
+                        <strong class="fs-6">Unit @ViewBag.UnitNumber</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase tracking-wider d-block" style="font-size: 0.75rem;">Property</small>
+                        <strong class="fs-6">@ViewBag.PropertyName</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted text-uppercase tracking-wider d-block" style="font-size: 0.75rem;">Monthly Rent</small>
+                        <strong class="fs-6 text-dark">@Convert.ToDecimal(ViewBag.RentAmount).ToString("0.000") BHD</strong>
+                    </div>
+                </div>
             </div>
 
             <form asp-area="Tenant"
@@ -38,23 +50,20 @@
 
                 <input type="hidden" name="unitId" value="@ViewBag.UnitId" />
 
-                <p class="text-muted">
-
-                    By submitting this form, your application will be sent to the property manager for review.
+                <p class="text-muted mb-4 small">
+                    <i class="bi bi-info-circle me-1"></i> By submitting this form, your application will be sent to the property manager for review.
                 </p>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">
-
-                        Submit Application
+                    <button type="submit" class="btn btn-navy fw-semibold px-4 py-2 shadow-sm">
+                        <i class="bi bi-check-circle me-1"></i> Submit Application
                     </button>
 
                     <a asp-area="Tenant"
                        asp-controller="AvailableUnits"
                        asp-action="Index"
-                       class="btn btn-secondary">
-
-                        Back to Units
+                       class="btn btn-outline-navy fw-semibold px-4 py-2">
+                        <i class="bi bi-x-circle me-1"></i> Back to Units
                     </a>
                 </div>
             </form>

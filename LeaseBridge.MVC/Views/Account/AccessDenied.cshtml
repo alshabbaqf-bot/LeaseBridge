@@ -2,23 +2,29 @@
     ViewData["Title"] = "Access Denied";
 }
 
-<div class="container mt-5" style="max-width: 650px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Access Denied</h4>
-        </div>
+<div class="lookup-full-bg container">
+    <div class="row w-100 justify-content-center m-0">
+        <div class="col-12" style="max-width: 500px;">
 
-        <div class="card-body">
-            <p class="mb-3">
-                You do not have permission to access this page.
-            </p>
+            <div class="card-modern hover-lift text-center overflow-hidden">
+                <div class="auth-header d-flex flex-column align-items-center">
+                    <i class="bi bi-shield-lock-fill mb-2"></i> <h2 class="h4 fw-bold mb-0">Access Denied</h2>
+                </div>
 
-            <a asp-area=""
-               asp-controller="Home"
-               asp-action="Index"
-               class="btn btn-secondary">
-                Back to Home
-            </a>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        You do not have permission to view this resource. Please verify your credentials or contact an administrator.
+                    </p>
+
+                    <a asp-area=""
+                       asp-controller="Home"
+                       asp-action="Index"
+                       class="btn btn-navy w-100 py-2">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

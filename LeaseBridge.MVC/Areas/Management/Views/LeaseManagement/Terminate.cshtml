@@ -5,35 +5,48 @@
 }
 
 <div class="container mt-4" style="max-width: 650px;">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Terminate Lease</h4>
+    <!-- Modernized Custom Destructive Card Wrapper -->
+    <div class="card-custom shadow-sm border-0">
+        <div class="card-header-navy bg-danger text-white py-3 px-4">
+            <h4 class="mb-0 fw-bold fs-5 d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-octagon"></i> Terminate Lease
+            </h4>
         </div>
 
-        <div class="card-body">
-            <div class="alert alert-warning">
-                Are you sure you want to terminate this lease?
-                The unit will become available again.
+        <div class="card-body p-4">
+            <!-- Modern Subtle Warning Box -->
+            <div class="alert bg-warning-subtle text-warning-emphasis border-0 shadow-sm mb-4 d-flex align-items-start gap-2">
+                <i class="bi bi-exclamation-triangle-fill fs-5 mt-0.5"></i>
+                <div>
+                    <span class="fw-bold d-block">Are you sure you want to terminate this lease?</span>
+                    <small>The unit will become available again.</small>
+                </div>
             </div>
 
-            <dl class="row">
-                <dt class="col-sm-4">Lease</dt>
-                <dd class="col-sm-8">#@Model.LeaseId</dd>
+            <!-- Structured Metadata Presentation List -->
+            <dl class="row g-3 border-bottom pb-3 mb-4">
+                <dt class="col-sm-4 text-navy fw-bold">Lease</dt>
+                <dd class="col-sm-8 text-navy fw-bold">#@Model.LeaseId</dd>
 
-                <dt class="col-sm-4">Tenant</dt>
-                <dd class="col-sm-8">
+                <dt class="col-sm-4 text-navy fw-bold">Tenant</dt>
+                <dd class="col-sm-8 text-dark fw-semibold">
                     @(Model.Tenant != null
                                         ? Model.Tenant.FirstName + " " + Model.Tenant.LastName
                                         : "N/A")
                 </dd>
 
-                <dt class="col-sm-4">Unit</dt>
-                <dd class="col-sm-8">@(Model.Unit?.UnitNumber ?? "N/A")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Unit</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-light text-dark border px-2.5 py-1 fw-semibold">
+                        @(Model.Unit?.UnitNumber ?? "N/A")
+                    </span>
+                </dd>
 
-                <dt class="col-sm-4">Current End Date</dt>
-                <dd class="col-sm-8">@Model.EndDate.ToString("dd MMM yyyy")</dd>
+                <dt class="col-sm-4 text-navy fw-bold">Current End Date</dt>
+                <dd class="col-sm-8 text-muted fw-medium">@Model.EndDate.ToString("dd MMM yyyy")</dd>
             </dl>
 
+            <!-- Transaction Form Actions -->
             <form asp-area="Management"
                   asp-controller="LeaseManagement"
                   asp-action="ConfirmTerminate"
@@ -42,15 +55,15 @@
 
                 @Html.AntiForgeryToken()
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-danger">
-                        Confirm Termination
+                <div class="d-flex align-items-center gap-2 pt-1">
+                    <button type="submit" class="btn btn-danger px-4 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-x-circle"></i> Confirm Termination
                     </button>
 
                     <a asp-area="Management"
                        asp-controller="LeaseManagement"
                        asp-action="Index"
-                       class="btn btn-secondary">
+                       class="btn btn-outline-secondary px-4 fw-semibold d-inline-flex align-items-center gap-2">
                         Cancel
                     </a>
                 </div>
