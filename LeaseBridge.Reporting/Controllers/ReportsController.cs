@@ -18,6 +18,30 @@ namespace LeaseBridge.Reporting.Controllers
 
         public IActionResult Index() => View();
 
+        //public async Task<IActionResult> LeaseReports()
+        //{
+        //    var occupancyTask =
+        //        _apiClient.GetOccupancyStatisticsAsync();
+
+        //    var propertyTask =
+        //        _apiClient.GetPropertyOccupancyAsync();
+
+        //    await Task.WhenAll(
+        //        occupancyTask,
+        //        propertyTask);
+
+        //    var model = new LeaseReportsViewModel
+        //    {
+        //        OccupancyStatistics =
+        //            occupancyTask.Result ?? new(),
+
+        //        PropertyOccupancies =
+        //            propertyTask.Result ?? new()
+        //    };
+
+        //    return View(model);
+        //}
+
         public async Task<IActionResult> LeaseReports()
         {
             var occupancyStats =
@@ -34,6 +58,37 @@ namespace LeaseBridge.Reporting.Controllers
 
             return View(vm);
         }
+
+        //public async Task<IActionResult> InvoiceReports()
+        //{
+        //    var statisticsTask =
+        //        _apiClient.GetPaymentStatisticsAsync();
+
+        //    var overdueTask =
+        //        _apiClient.GetOverdueInvoicesAsync();
+
+        //    var monthlyStatusTask =
+        //        _apiClient.GetInvoiceStatusByMonthAsync();
+
+        //    await Task.WhenAll(
+        //        statisticsTask,
+        //        overdueTask,
+        //        monthlyStatusTask);
+
+        //    var model = new InvoiceReportsViewModel
+        //    {
+        //        Statistics =
+        //            statisticsTask.Result ?? new(),
+
+        //        OverdueInvoices =
+        //            overdueTask.Result ?? new(),
+
+        //        MonthlyStatus =
+        //            monthlyStatusTask.Result ?? new()
+        //    };
+
+        //    return View(model);
+        //}
 
         public async Task<IActionResult> InvoiceReports()
         {
@@ -57,19 +112,30 @@ namespace LeaseBridge.Reporting.Controllers
 
         public async Task<IActionResult> MaintenanceReports()
         {
+            var statisticsTask =
+                _apiClient.GetMaintenanceStatisticsAsync();
+
+            var highPriorityTask =
+                _apiClient.GetHighPriorityRequestsAsync();
+
+            var statusTask =
+                _apiClient.GetMaintenanceStatusByMonthAsync();
+
+            var resolutionTask =
+                _apiClient.GetResolutionTimeByMonthAsync();
+
+            await Task.WhenAll(
+                statisticsTask,
+                highPriorityTask,
+                statusTask,
+                resolutionTask);
+
             var model = new MaintenanceReportsViewModel
             {
-                Statistics =
-                    await _apiClient.GetMaintenanceStatisticsAsync()
-                    ?? new(),
-
-                HighPriorityRequests =
-                    await _apiClient.GetHighPriorityRequestsAsync()
-                    ?? new(),
-
-                StatusByMonth =
-                    await _apiClient.GetMaintenanceStatusByMonthAsync()
-                    ?? new()
+                Statistics = statisticsTask.Result ?? new(),
+                HighPriorityRequests = highPriorityTask.Result ?? new(),
+                StatusByMonth = statusTask.Result ?? new(),
+                ResolutionTimeByMonth = resolutionTask.Result ?? new()
             };
 
             return View(model);

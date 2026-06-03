@@ -215,6 +215,38 @@ namespace LeaseBridge.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("resolution-time-by-month")]
+        public async Task<IActionResult> GetResolutionTimeByMonth()
+        {
+            var data = await _context.MaintenanceRequests
+                .Where(r =>
+                    r.CompletedAt != null &&
+                    r.StatusId == 3)
+                .GroupBy(r => r.CompletedAt!.Value.Month)
+                .Select(g => new
+                {
+                    MonthNumber = g.Key,
+
+                    AverageResolutionDays = g.Average(r =>
+                        EF.Functions.DateDiffDay(
+                            r.CreatedAt,
+                            r.CompletedAt!.Value))
+                })
+                .OrderBy(x => x.MonthNumber)
+                .ToListAsync();
+
+            var result = data.Select(x => new ResolutionTimeByMonthDto
+            {
+                Month = new DateTime(2026, x.MonthNumber, 1)
+                    .ToString("MMM"),
+
+                AverageResolutionDays =
+                    Math.Round(x.AverageResolutionDays, 2)
+            });
+
+            return Ok(result);
+        }
+
         [HttpGet("high-priority-requests")]
         public async Task<IActionResult> GetHighPriorityRequests()
         {

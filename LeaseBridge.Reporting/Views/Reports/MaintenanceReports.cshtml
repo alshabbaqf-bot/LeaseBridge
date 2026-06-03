@@ -23,6 +23,18 @@
 
     </div>
 
+    <div class="card-custom p-4 shadow-sm mb-4">
+
+        <h4 class="text-navy fw-bold mb-3">
+            Average Resolution Time by Month
+        </h4>
+
+        <div style="height:400px;">
+            <canvas id="resolutionChart"></canvas>
+        </div>
+
+    </div>
+
     <!-- High Priority Requests -->
     <div class="card-custom p-4 shadow-sm">
 
@@ -152,5 +164,54 @@
             }
         }
     });
+
+</script>
+
+<script>
+
+    const resolutionMonths =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.ResolutionTimeByMonth
+                                .Select(x => x.Month)));
+
+    const resolutionDays =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.ResolutionTimeByMonth
+                                .Select(x => x.AverageResolutionDays)));
+
+    new Chart(
+        document.getElementById('resolutionChart'),
+        {
+            type: 'line',
+
+            data: {
+                labels: resolutionMonths,
+
+                datasets: [{
+                    label: 'Average Resolution Days',
+                    data: resolutionDays
+                }]
+            },
+
+            options: {
+                responsive: true,
+
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Days'
+                        }
+                    }
+                }
+            }
+        });
 
 </script>

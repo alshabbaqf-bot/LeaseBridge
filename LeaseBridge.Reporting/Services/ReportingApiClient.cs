@@ -165,6 +165,22 @@ namespace LeaseBridge.Reporting.Services
                 .ReadFromJsonAsync<List<MaintenanceStatusByMonthDto>>();
         }
 
+        public async Task<List<ResolutionTimeByMonthDto>?> GetResolutionTimeByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/resolution-time-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<ResolutionTimeByMonthDto>>();
+        }
+
         public async Task<List<HighPriorityRequestDto>?> GetHighPriorityRequestsAsync()
         {
             var request = new HttpRequestMessage(

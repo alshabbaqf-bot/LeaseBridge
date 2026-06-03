@@ -10,6 +10,9 @@ namespace LeaseBridge.Reporting.ViewModels
         public List<MaintenanceStatusByMonthDto> StatusByMonth
         { get; set; } = new();
 
+        public List<ResolutionTimeByMonthDto>ResolutionTimeByMonth
+        { get; set; } = new();
+
         public List<HighPriorityRequestDto> HighPriorityRequests
         { get; set; } = new();
     }
