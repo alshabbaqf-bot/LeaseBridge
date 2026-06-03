@@ -145,7 +145,7 @@ namespace LeaseBridge.MVC.Controllers
                 return RedirectToAction("Index", "Home", new { area = "Tenant" });
             }
 
-            if (role == "Property Manager")
+            if (role == "Manager")
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "Management" });
             }
