@@ -18,93 +18,56 @@ namespace LeaseBridge.Reporting.Controllers
 
         public IActionResult Index() => View();
 
-        //public async Task<IActionResult> LeaseReports()
-        //{
-        //    var occupancyTask =
-        //        _apiClient.GetOccupancyStatisticsAsync();
-
-        //    var propertyTask =
-        //        _apiClient.GetPropertyOccupancyAsync();
-
-        //    await Task.WhenAll(
-        //        occupancyTask,
-        //        propertyTask);
-
-        //    var model = new LeaseReportsViewModel
-        //    {
-        //        OccupancyStatistics =
-        //            occupancyTask.Result ?? new(),
-
-        //        PropertyOccupancies =
-        //            propertyTask.Result ?? new()
-        //    };
-
-        //    return View(model);
-        //}
-
         public async Task<IActionResult> LeaseReports()
         {
-            var occupancyStats =
-                await _apiClient.GetOccupancyStatisticsAsync();
+            var occupancyTask =
+                _apiClient.GetOccupancyStatisticsAsync();
 
-            var propertyOccupancies =
-                await _apiClient.GetPropertyOccupancyAsync();
+            var propertyTask =
+                _apiClient.GetPropertyOccupancyAsync();
 
-            var vm = new LeaseReportsViewModel
+            await Task.WhenAll(
+                occupancyTask,
+                propertyTask);
+
+            var model = new LeaseReportsViewModel
             {
-                OccupancyStatistics = occupancyStats!,
-                PropertyOccupancies = propertyOccupancies ?? new()
+                OccupancyStatistics =
+                    occupancyTask.Result ?? new(),
+
+                PropertyOccupancies =
+                    propertyTask.Result ?? new()
             };
 
-            return View(vm);
+            return View(model);
         }
-
-        //public async Task<IActionResult> InvoiceReports()
-        //{
-        //    var statisticsTask =
-        //        _apiClient.GetPaymentStatisticsAsync();
-
-        //    var overdueTask =
-        //        _apiClient.GetOverdueInvoicesAsync();
-
-        //    var monthlyStatusTask =
-        //        _apiClient.GetInvoiceStatusByMonthAsync();
-
-        //    await Task.WhenAll(
-        //        statisticsTask,
-        //        overdueTask,
-        //        monthlyStatusTask);
-
-        //    var model = new InvoiceReportsViewModel
-        //    {
-        //        Statistics =
-        //            statisticsTask.Result ?? new(),
-
-        //        OverdueInvoices =
-        //            overdueTask.Result ?? new(),
-
-        //        MonthlyStatus =
-        //            monthlyStatusTask.Result ?? new()
-        //    };
-
-        //    return View(model);
-        //}
 
         public async Task<IActionResult> InvoiceReports()
         {
+            var statisticsTask =
+                _apiClient.GetPaymentStatisticsAsync();
+
+            var overdueTask =
+                _apiClient.GetOverdueInvoicesAsync();
+
+            var monthlyStatusTask =
+                _apiClient.GetInvoiceStatusByMonthAsync();
+
+            await Task.WhenAll(
+                statisticsTask,
+                overdueTask,
+                monthlyStatusTask);
+
             var model = new InvoiceReportsViewModel
             {
                 Statistics =
-                    await _apiClient.GetPaymentStatisticsAsync()
-                    ?? new PaymentStatisticsDto(),
+                    statisticsTask.Result ?? new(),
 
                 OverdueInvoices =
-                    await _apiClient.GetOverdueInvoicesAsync()
-                    ?? new List<OverdueInvoiceDto>(),
+                    overdueTask.Result ?? new(),
 
                 MonthlyStatus =
-                    await _apiClient.GetInvoiceStatusByMonthAsync()
-                    ?? new List<InvoiceStatusByMonthDto>()
+                    monthlyStatusTask.Result ?? new()
             };
 
             return View(model);

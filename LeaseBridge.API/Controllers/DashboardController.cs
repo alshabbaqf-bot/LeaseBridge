@@ -222,23 +222,29 @@ namespace LeaseBridge.API.Controllers
                 .Where(r =>
                     r.CompletedAt != null &&
                     r.StatusId == 3)
-                .GroupBy(r => r.CompletedAt!.Value.Month)
+                .GroupBy(r => new
+                {
+                    Year = r.CompletedAt!.Value.Year,
+                    Month = r.CompletedAt!.Value.Month
+                })
                 .Select(g => new
                 {
-                    MonthNumber = g.Key,
+                    g.Key.Year,
+                    g.Key.Month,
 
                     AverageResolutionDays = g.Average(r =>
                         EF.Functions.DateDiffDay(
                             r.CreatedAt,
                             r.CompletedAt!.Value))
                 })
-                .OrderBy(x => x.MonthNumber)
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
                 .ToListAsync();
 
             var result = data.Select(x => new ResolutionTimeByMonthDto
             {
-                Month = new DateTime(2026, x.MonthNumber, 1)
-                    .ToString("MMM"),
+                Month = new DateTime(x.Year, x.Month, 1)
+                    .ToString("MMM yyyy"),
 
                 AverageResolutionDays =
                     Math.Round(x.AverageResolutionDays, 2)
