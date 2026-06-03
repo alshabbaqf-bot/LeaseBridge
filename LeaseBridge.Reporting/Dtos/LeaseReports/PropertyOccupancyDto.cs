@@ -1,4 +1,4 @@
-﻿namespace LeaseBridge.Reporting.DTOs
+﻿namespace LeaseBridge.Reporting.Dtos.LeaseReports
 {
     public class PropertyOccupancyDto
     {

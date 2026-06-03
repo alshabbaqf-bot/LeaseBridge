@@ -92,6 +92,36 @@ namespace LeaseBridge.API.Controllers
             });
         }
 
+        [HttpGet("invoice-status-by-month")]
+        public async Task<IActionResult> GetInvoiceStatusByMonth()
+        {
+            var data = await _context.Invoices
+                .GroupBy(i => new
+                {
+                    i.IssuedDate.Year,
+                    i.IssuedDate.Month
+                })
+                .Select(g => new InvoiceStatusByMonthDto
+                {
+                    Month = new DateTime(
+                        g.Key.Year,
+                        g.Key.Month,
+                        1).ToString("MMM"),
+
+                    PaidCount =
+                        g.Count(i => i.StatusId == 2),
+
+                    PendingCount =
+                        g.Count(i => i.StatusId == 1),
+
+                    OverdueCount =
+                        g.Count(i => i.StatusId == 3)
+                })
+                .ToListAsync();
+
+            return Ok(data);
+        }
+
         [HttpGet("overdue-invoices")]
         public async Task<IActionResult> GetOverdueInvoices()
         {

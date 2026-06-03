@@ -1,4 +1,4 @@
-﻿using LeaseBridge.Reporting.Dtos;
+﻿using LeaseBridge.Reporting.Dtos.MaintenanceReports;
 
 namespace LeaseBridge.Reporting.ViewModels
 {

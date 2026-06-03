@@ -1,4 +1,5 @@
-﻿using LeaseBridge.Reporting.Services;
+﻿using LeaseBridge.Reporting.Dtos.InvoiceReports;
+using LeaseBridge.Reporting.Services;
 using LeaseBridge.Reporting.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,19 +37,22 @@ namespace LeaseBridge.Reporting.Controllers
 
         public async Task<IActionResult> InvoiceReports()
         {
-            var stats =
-                await _apiClient.GetPaymentStatisticsAsync();
-
-            var overdueInvoices =
-                await _apiClient.GetOverdueInvoicesAsync();
-
-            var vm = new InvoiceReportsViewModel
+            var model = new InvoiceReportsViewModel
             {
-                Statistics = stats!,
-                OverdueInvoices = overdueInvoices ?? new()
+                Statistics =
+                    await _apiClient.GetPaymentStatisticsAsync()
+                    ?? new PaymentStatisticsDto(),
+
+                OverdueInvoices =
+                    await _apiClient.GetOverdueInvoicesAsync()
+                    ?? new List<OverdueInvoiceDto>(),
+
+                MonthlyStatus =
+        await _apiClient.GetInvoiceStatusByMonthAsync()
+        ?? new List<InvoiceStatusByMonthDto>()
             };
 
-            return View(vm);
+            return View(model);
         }
 
         public async Task<IActionResult> MaintenanceReports()

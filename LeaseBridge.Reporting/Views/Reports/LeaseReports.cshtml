@@ -12,44 +12,10 @@
         <h1 class="text-navy fw-bold mb-0">Lease Reports</h1>
     </div>
 
-    <h3 class="text-navy fw-bold mb-4">Occupancy Report</h3>
-
     <div class="row g-3 mb-4">
 
-        <!-- Total Units -->
-        <div class="col-md-4">
-            <div class="card-custom p-3 shadow-sm border-top border-navy border-3">
-                <small class="text-muted">Total Units</small>
-                <h3 class="text-navy fw-bold">@Model.OccupancyStatistics.TotalUnits</h3>
-            </div>
-        </div>
-
-        <!-- Occupied -->
-        <div class="col-md-4">
-            <div class="card-custom p-3 shadow-sm border-top border-navy border-3">
-                <small class="text-muted">Occupied Units</small>
-                <h3 class="text-navy fw-bold">@Model.OccupancyStatistics.OccupiedUnits</h3>
-            </div>
-        </div>
-
-        <!-- Vacant -->
-        <div class="col-md-4">
-            <div class="card-custom p-3 shadow-sm border-top border-navy border-3">
-                <small class="text-muted">Available Units</small>
-                <h3 class="text-navy fw-bold">@Model.OccupancyStatistics.AvailableUnits</h3>
-            </div>
-        </div>
-
-        <!-- Occupancy Rate -->
-        <div class="col-md-4">
-            <div class="card-custom p-3 shadow-sm border-top border-navy border-3">
-                <small class="text-muted">Occupancy Rate:</small>
-                <h3 class="text-navy fw-bold">@Model.OccupancyStatistics.OccupiedPercentage%</h3>
-            </div>
-        </div>
-
         <div class="card-custom p-4 shadow-sm">
-            <h5 class="text-navy fw-bold mb-3">Unit Occupancy Distribution</h5>
+            <h5 class="text-navy fw-bold mb-3">Overall Unit Occupancy</h5>
 
             <div class="d-flex justify-content-center">
                 <div style="width:350px; height:350px;">
@@ -64,34 +30,9 @@
                 Occupancy by Property
             </h4>
 
-            <table class="table table-striped">
-
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Occupied</th>
-                        <th>Vacant</th>
-                        <th>Total</th>
-                        <th>Occupancy Rate</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    @foreach (var property in Model.PropertyOccupancies)
-                    {
-                        <tr>
-                            <td>@property.PropertyName</td>
-                            <td>@property.OccupiedUnits</td>
-                            <td>@property.AvailableUnits</td>
-                            <td>@property.TotalUnits</td>
-                            <td>@property.OccupancyRate%</td>
-                        </tr>
-                    }
-
-                </tbody>
-
-            </table>
+            <div style="height:400px;">
+                <canvas id="propertyOccupancyChart"></canvas>
+            </div>
 
         </div>
 
@@ -125,5 +66,56 @@
             }
         }
     });
+</script>
+
+<script>
+
+    const propertyNames =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.PropertyOccupancies.Select(p => p.PropertyName)));
+
+    const occupancyRates =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.PropertyOccupancies.Select(p => p.OccupancyRate)));
+
+    const propertyCtx =
+        document.getElementById('propertyOccupancyChart');
+
+    new Chart(propertyCtx, {
+        type: 'bar',
+        data: {
+            labels: propertyNames,
+            datasets: [{
+                label: 'Occupancy Rate (%)',
+                data: occupancyRates
+            }]
+        },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Properties'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                    display: true,
+                    text: 'Occupancy Rate (%)'
+                }
+            }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
 </script>
 

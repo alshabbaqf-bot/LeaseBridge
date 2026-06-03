@@ -1,4 +1,4 @@
-﻿namespace LeaseBridge.Reporting.DTOs
+﻿namespace LeaseBridge.Reporting.Dtos.InvoiceReports
 {
     public class PaymentStatisticsDto
     {

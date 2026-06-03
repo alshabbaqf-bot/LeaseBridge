@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LeaseBridge.Reporting.Dtos
+namespace LeaseBridge.Reporting.Dtos.Account
 {
     public class LoginRequest
     {

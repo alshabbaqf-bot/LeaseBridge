@@ -1,5 +1,7 @@
-﻿using LeaseBridge.Reporting.Dtos;
-using LeaseBridge.Reporting.DTOs;
+﻿using LeaseBridge.Reporting.Dtos.Account;
+using LeaseBridge.Reporting.Dtos.InvoiceReports;
+using LeaseBridge.Reporting.Dtos.LeaseReports;
+using LeaseBridge.Reporting.Dtos.MaintenanceReports;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 
@@ -10,10 +12,12 @@ namespace LeaseBridge.Reporting.Services
         private readonly HttpClient _http;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        // The constructor of the ReportingApiClient class takes an HttpClient and an IHttpContextAccessor as parameters.
-        // The HttpClient is used to make HTTP requests to the API,
-        // while the IHttpContextAccessor allows access to the current HTTP context,
-        // which is necessary for retrieving the access token for authentication.
+        /* 
+         * The constructor of the ReportingApiClient class takes an HttpClient and an IHttpContextAccessor as parameters.
+         * The HttpClient is used to make HTTP requests to the API,
+         * while the IHttpContextAccessor allows access to the current HTTP context,
+         * which is necessary for retrieving the access token for authentication. 
+         */
         public ReportingApiClient(HttpClient http, IHttpContextAccessor contextAccessor)
         {
             _http = http;
@@ -54,7 +58,7 @@ namespace LeaseBridge.Reporting.Services
             var request = new HttpRequestMessage(
                 HttpMethod.Get,
                 "api/dashboard/occupancy");
-
+            
             await AttachBearerTokenAsync(request);
 
             var response = await _http.SendAsync(request);
@@ -97,6 +101,22 @@ namespace LeaseBridge.Reporting.Services
                 .ReadFromJsonAsync<PaymentStatisticsDto>();
         }
 
+        public async Task<List<InvoiceStatusByMonthDto>?> GetInvoiceStatusByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/invoice-status-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<InvoiceStatusByMonthDto>>();
+        }
+
         public async Task<List<OverdueInvoiceDto>?> GetOverdueInvoicesAsync()
         {
             var request = new HttpRequestMessage(
@@ -128,7 +148,6 @@ namespace LeaseBridge.Reporting.Services
             return await response.Content
                 .ReadFromJsonAsync<MaintenanceStatisticsDto>();
         }
-
 
         public async Task<List<HighPriorityRequestDto>?> GetHighPriorityRequestsAsync()
         {
