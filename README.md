@@ -110,11 +110,11 @@ These credentials apply to both the local and deployed environments.
 
 ## Deployment
 
-* **Web API:** `api-leasebridge-s4g2-87-engaewbzbgghbkac.westeurope-01.azurewebsites.net`
+* **Web API:** `api-leasebridge-s4g2-88-engaewbzbgghbkac.westeurope-01.azurewebsites.net`
 
 * **Reporting Application:** `reporting-leasebridge-s4g2-88-h0bcanc8a8ewdfcz.westeurope-01.azurewebsites.net`
 
-* **Database (Azure SQL):** `sql-leasebridge-s4g2-88.database.windows.net`
+* **Database (Azure SQL):** `sql-leasebridge-s4g2-21.database.windows.net`
 
 
 The MVC Application is not currently deployed due to a Visual Studio publish conflict involving duplicate `appsettings.json` files between the MVC and API projects.
