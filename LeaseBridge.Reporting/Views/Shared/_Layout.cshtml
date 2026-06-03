@@ -24,36 +24,24 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="LeaseReports">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Reports" asp-action="LeaseReports">
                             <i class="bi bi-house-check me-2"></i> Lease Reports
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Report" asp-action="MaintenanceReports">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Reports" asp-action="InvoiceReports">
+                            <i class="bi bi-receipt me-2"></i> Invoice Reports
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link sidebar-link text-white py-2" asp-controller="Reports" asp-action="MaintenanceReports">
                             <i class="bi bi-tools me-2"></i> Maintenance Reports
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <!--Profile Section-->
-            <div class="profile-section p-3 border-top border-secondary border-opacity-25 bg-dark bg-opacity-25">
-                <!--User Fullname-->
-                <div class="d-flex align-items-center mb-3 px-2">
-                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-                        <i class="bi bi-person-fill text-navy"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p class="text-white small mb-0 fw-bold text-truncate">Manager User</p>
-                    </div>
-                </div>
-                <!--Logout Button-->
-                <form asp-controller="Account" asp-action="Logout" method="post">
-                    <button type="submit" class="btn btn-sm btn-danger w-100 opacity-75 hover-opacity-100 transition">
-                        <i class="bi bi-box-arrow-left me-2"></i> Logout
-                    </button>
-                </form>
-            </div>
+            <partial name="_LoginPartial" />
         </div>
         <div class="content flex-grow-1 bg-light">
             <main role="main" class="p-4">

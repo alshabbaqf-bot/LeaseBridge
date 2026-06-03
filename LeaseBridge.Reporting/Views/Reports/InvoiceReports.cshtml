@@ -1,0 +1,154 @@
+﻿@model LeaseBridge.Reporting.ViewModels.InvoiceReportsViewModel
+
+@{
+    ViewData["Title"] = "Invoice Reports";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4 pb-2 border-bottom">
+        <h1 class="text-navy fw-bold mb-0">Invoice Reports</h1>
+    </div>
+
+
+
+    <!-- Chart -->
+    <div class="card-custom p-4 shadow-sm mb-4">
+
+        <h4 class="text-navy fw-bold mb-3">
+            Invoice Status by Month
+        </h4>
+
+        <div style="height:400px;">
+            <canvas id="invoiceMonthlyChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Overdue Invoices Table -->
+    <div class="card-custom p-4 shadow-sm">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4 class="text-navy fw-bold mb-0">
+                Overdue Invoices
+            </h4>
+
+            <span class="badge bg-navy">
+                Total: @Model.OverdueInvoices.Count
+            </span>
+
+        </div>
+
+        <table class="table table-striped table-hover">
+
+            <thead>
+                <tr>
+                    <th>Invoice No.</th>
+                    <th>Tenant</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.OverdueInvoices.Any())
+                {
+                    @foreach (var invoice in Model.OverdueInvoices)
+                    {
+                        <tr>
+                            <td>@invoice.InvoiceNumber</td>
+                            <td>@invoice.TenantName</td>
+                            <td>@invoice.Amount.ToString("C")</td>
+                            <td>@invoice.DueDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No overdue invoices found.
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const months =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.MonthlyStatus.Select(x => x.Month)));
+
+    const paid =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MonthlyStatus.Select(x => x.PaidCount)));
+
+    const pending =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MonthlyStatus.Select(x => x.PendingCount)));
+
+    const overdue =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MonthlyStatus.Select(x => x.OverdueCount)));
+
+    const ctx =
+        document.getElementById('invoiceMonthlyChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+
+        data: {
+            labels: months,
+
+            datasets: [
+            {
+                label: 'Paid',
+                data: paid
+            },
+            {
+                label: 'Pending',
+                data: pending
+            },
+            {
+                label: 'Overdue',
+                data: overdue
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+
+                    title: {
+                        display: true,
+                        text: 'Number of Invoices'
+                    }
+                }
+            }
+        }
+    });
+
+</script>

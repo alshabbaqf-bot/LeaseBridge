@@ -1,4 +1,5 @@
 ﻿using LeaseBridge.API.Data;
+using LeaseBridge.API.DTOs.Reports;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +92,58 @@ namespace LeaseBridge.API.Controllers
             });
         }
 
+        [HttpGet("invoice-status-by-month")]
+        public async Task<IActionResult> GetInvoiceStatusByMonth()
+        {
+            var data = await _context.Invoices
+                .GroupBy(i => new
+                {
+                    i.IssuedDate.Year,
+                    i.IssuedDate.Month
+                })
+                .Select(g => new InvoiceStatusByMonthDto
+                {
+                    Month = new DateTime(
+                        g.Key.Year,
+                        g.Key.Month,
+                        1).ToString("MMM yyyy"),
+
+                    PaidCount =
+                        g.Count(i => i.StatusId == 2),
+
+                    PendingCount =
+                        g.Count(i => i.StatusId == 1),
+
+                    OverdueCount =
+                        g.Count(i => i.StatusId == 3)
+                })
+                .ToListAsync();
+
+            return Ok(data);
+        }
+
+        [HttpGet("overdue-invoices")]
+        public async Task<IActionResult> GetOverdueInvoices()
+        {
+            var invoices = await _context.Invoices
+                .Where(i => i.StatusId == 3)
+                .Select(i => new OverdueInvoiceDto
+                {
+                    InvoiceId = i.InvoiceId,
+                    InvoiceNumber = i.InvoiceNumber,
+                    Amount = i.Amount,
+                    DueDate = i.DueDate,
+
+                    TenantName =
+                        i.Lease.Tenant.FirstName + " " +
+                        i.Lease.Tenant.LastName
+                })
+                .OrderBy(i => i.DueDate)
+                .ToListAsync();
+
+            return Ok(invoices);
+        }
+
         // MAINTENANCE STATISTICS
         [HttpGet("maintenance")]
         public async Task<IActionResult> GetMaintenanceStatistics()
@@ -122,6 +175,115 @@ namespace LeaseBridge.API.Controllers
                 HighPriorityRequests = highPriorityRequests,
                 TotalAssignments = totalAssignments
             });
+        }
+
+        [HttpGet("maintenance-status-by-month")]
+        public async Task<IActionResult> GetMaintenanceStatusByMonth()
+        {
+            var data = await _context.MaintenanceRequests
+                .GroupBy(r => new
+                {
+                    r.CreatedAt.Year,
+                    r.CreatedAt.Month
+                })
+                .Select(g => new
+                {
+                    g.Key.Year,
+                    g.Key.Month,
+
+                    OpenRequests =
+                        g.Count(r => r.StatusId == 1),
+
+                    InProgressRequests =
+                        g.Count(r => r.StatusId == 2),
+
+                    CompletedRequests =
+                        g.Count(r => r.StatusId == 3)
+                })
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .ToListAsync();
+
+            var result = data.Select(x => new MaintenanceStatusByMonthDto
+            {
+                Month = new DateTime(x.Year, x.Month, 1).ToString("MMM yyyy"),
+                OpenRequests = x.OpenRequests,
+                InProgressRequests = x.InProgressRequests,
+                CompletedRequests = x.CompletedRequests
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("resolution-time-by-month")]
+        public async Task<IActionResult> GetResolutionTimeByMonth()
+        {
+            var data = await _context.MaintenanceRequests
+                .Where(r =>
+                    r.CompletedAt != null &&
+                    r.StatusId == 3)
+                .GroupBy(r => new
+                {
+                    Year = r.CompletedAt!.Value.Year,
+                    Month = r.CompletedAt!.Value.Month
+                })
+                .Select(g => new
+                {
+                    g.Key.Year,
+                    g.Key.Month,
+
+                    AverageResolutionDays = g.Average(r =>
+                        EF.Functions.DateDiffDay(
+                            r.CreatedAt,
+                            r.CompletedAt!.Value))
+                })
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .ToListAsync();
+
+            var result = data.Select(x => new ResolutionTimeByMonthDto
+            {
+                Month = new DateTime(x.Year, x.Month, 1)
+                    .ToString("MMM yyyy"),
+
+                AverageResolutionDays =
+                    Math.Round(x.AverageResolutionDays, 2)
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("average-resolution-time")]
+        public async Task<IActionResult> GetAverageResolutionTime()
+        {
+            var avgDays = await _context.MaintenanceRequests
+                .Where(r =>
+                    r.StatusId == 3 &&
+                    r.CompletedAt != null)
+                .AverageAsync(r =>
+                    (double?)EF.Functions.DateDiffDay(
+                        r.CreatedAt,
+                        r.CompletedAt!.Value))
+                ?? 0;
+
+            return Ok(Math.Round(avgDays, 2));
+        }
+
+        [HttpGet("high-priority-requests")]
+        public async Task<IActionResult> GetHighPriorityRequests()
+        {
+            var requests = await _context.MaintenanceRequests
+                .Where(r => r.PriorityId == 3)
+                .Select(r => new HighPriorityRequestDto
+                {
+                    RequestId = r.RequestId,
+                    UnitNumber = r.Unit.UnitNumber,
+                    Title = r.Title,
+                    Status = r.Status.Name
+                })
+                .ToListAsync();
+
+            return Ok(requests);
         }
 
         // APPLICATION STATISTICS
@@ -177,6 +339,36 @@ namespace LeaseBridge.API.Controllers
                 AvailableUnits = availableUnits,
                 OccupiedPercentage = Math.Round(occupiedPercentage, 2)
             });
+        }
+
+        [HttpGet("occupancy-by-property")]
+        public async Task<IActionResult> GetOccupancyByProperty()
+        {
+            var properties = await _context.Properties
+                .Select(p => new PropertyOccupancyDto
+                {
+                    PropertyName = p.Name,
+
+                    OccupiedUnits =
+                        p.Units.Count(u => u.StatusId == 2),
+
+                    AvailableUnits =
+                        p.Units.Count(u => u.StatusId == 1),
+
+                    TotalUnits =
+                        p.Units.Count(),
+
+                    OccupancyRate =
+                        p.Units.Count() == 0
+                            ? 0
+                            : Math.Round(
+                                (double)p.Units.Count(u => u.StatusId == 2)
+                                / p.Units.Count() * 100,
+                                2)
+                })
+                .ToListAsync();
+
+            return Ok(properties);
         }
     }
 }

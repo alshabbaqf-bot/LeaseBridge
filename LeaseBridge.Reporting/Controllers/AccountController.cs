@@ -1,5 +1,4 @@
-﻿using LeaseBridge.Reporting.Dtos;
-using LeaseBridge.Reporting.Services;
+﻿using LeaseBridge.Reporting.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.Data;
@@ -29,7 +28,7 @@ namespace LeaseBridge.Reporting.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // This method handles the login form submission. It validates the user's credentials by calling the API client, and if successful, it creates a claims principal and signs the user in using cookie authentication.
-        public async Task<IActionResult> Login(Dtos.LoginRequest model, string? returnUrl = null)
+        public async Task<IActionResult> Login(Dtos.Account.LoginRequest model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -54,8 +53,7 @@ namespace LeaseBridge.Reporting.Controllers
             // Store the JWT in the cookie's authentication properties
             var authProperties = new AuthenticationProperties
             {
-                // ExpiresUtc = response.ExpiresAt,
-                ExpiresUtc = DateTime.UtcNow.AddHours(1),
+                ExpiresUtc = response.ExpiresAt,
                 IsPersistent = false
             };
 

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model LeaseBridge.Reporting.ViewModels.DashboardViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -9,135 +11,304 @@
         <h1 class="text-navy fw-bold mb-0">Dashbaord</h1>
     </div>
 
-    <!-- Cards -->
+    
     <div class="row g-4">
-
+        
+        <!-- Cards -->
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Total Units</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">120</h3>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Occupied Units</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">95</h3>
+                <small class="text-muted fw-bold text-uppercase">
+                    Total Properties
+                </small>
+                
+                <h3 class="text-navy fw-bold mt-1">
+                    @Model.Overview.TotalProperties
+                </h3>
             </div>
         </div>
 
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Vacant Units</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">25</h3>
+                <small class="text-muted fw-bold text-uppercase">
+                    Total Uints
+                </small>
+                
+                <h3 class="text-navy fw-bold mt-1">
+                    @Model.Overview.TotalUnits
+                </h3>
             </div>
         </div>
 
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Active Leases</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">90</h3>
+                <small class="text-muted fw-bold text-uppercase">
+                    Active Leases
+                </small>
+                
+                <h3 class="text-navy fw-bold mt-1">
+                    @Model.Overview.ActiveLeases
+                </h3>
             </div>
         </div>
 
         <div class="col-lg-3 col-md-6">
             <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Open Maintenance Requests</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">18</h3>
+                <small class="text-muted fw-bold text-uppercase">
+                    Occupancy Rate
+                </small>
+                
+                <h3 class="text-navy fw-bold mt-1">
+                    @Model.Occupancy.OccupiedPercentage%
+                </h3>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <!-- Occupancy -->
+        <div class="col-lg-4">
+            <div class="card-custom p-4 shadow-sm h-100">
+
+                <h5 class="text-navy fw-bold mb-3">
+                    Occupancy
+                </h5>
+
+                <canvas id="occupancyChart"></canvas>
+
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card-custom p-3 border-top border-primary border-3 shadow-sm bg-white">
-                <small class="text-muted fw-bold text-uppercase">Overdue Invoices</small>
-                <!--Hardcoded-->
-                <h3 class="text-navy fw-bold mt-1">20</h3>
+        <!-- Invoice Status by Month -->
+        <div class="col-lg-8">
+            <div class="card-custom p-4 shadow-sm h-100">
+
+                <h5 class="text-navy fw-bold mb-3">
+                    Invoice Status by Month
+                </h5>
+
+                <canvas id="paymentsChart"></canvas>
+
             </div>
         </div>
 
-        <!-- Recent Activity Section -->
-        <div class="row mt-4">
-            <!-- New Maintenance Requests -->
-            <div class="col-lg-6">
-                <div class="card-custom p-4 shadow-sm bg-white">
-                    <h5 class="text-navy fw-bold mb-3"> New Maintenance Requests</h5>
-                    <table class="table table-sm">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Request ID</th>
-                                <th>Unit</th>
-                                <th>Issue</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Hardcoded sample data -->
-                            <tr>
-                                <td>MR-101</td>
-                                <td>A101</td>
-                                <td>Air Conditioning Repair</td>
-                                <td>12 May 2026</td>
-                            </tr>
-                            <tr>
-                                <td>MR-102</td>
-                                <td>B110</td>
-                                <td>Water Leak</td>
-                                <td>11 May 2026</td>
-                            </tr>
-                            <tr>
-                                <td>MR-103</td>
-                                <td>C305</td>
-                                <td>Electrical Issue</td>
-                                <td>10 May 2026</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <!-- Maintenance Status by Month -->
+        <div class="col-12">
+            <div class="card-custom p-4 shadow-sm">
 
-            <!-- Lease Expiration Soon -->
-            <div class="col-lg-6">
-                <div class="card-custom p-4 shadow-sm bg-white">
-                    <h5 class="text-navy fw-bold mb-3"> Lease Expiring Soon</h5>
-                    <table class="table table-sm">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Tenant</th>
-                                <th>Unit</th>
-                                <th>End Date</th>
+                <h5 class="text-navy fw-bold mb-3">
+                    Maintenance Requests by Month
+                </h5>
 
-                        </thead>
-                        <tbody>
-
-                            <!-- Hardcoded sample data -->
-                            <tr>
-                                <td>Ahmed Ali</td>
-                                <td>A-101</td>
-                                <td>20 May 2026</td>
-                            </tr>
-                            <tr>
-                                <td>Fatima Abdulla</td>
-                                <td>B-204</td>
-                                <td>25 May 2026</td>
-                            </tr>
-                            <tr>
-                                <td>Omar Hassan</td>
-                                <td>C-301</td>
-                                <td>28 May 2026</td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-
-                </div>
+                <canvas id="maintenanceChart"></canvas>
 
             </div>
-
         </div>
+
     </div>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    // Occupancy
+    new Chart(
+        document.getElementById('occupancyChart'),
+        {
+            type: 'doughnut',
+
+            data: {
+                labels: ['Available', 'Occupied'],
+
+                datasets: [{
+                    data: [
+                        @Model.Occupancy.AvailableUnits,
+                        @Model.Occupancy.OccupiedUnits
+                    ]
+                }]
+            }
+        });
+
+    // Payments
+    // new Chart(
+    //     document.getElementById('paymentsChart'),
+    //     {
+    //         type: 'bar',
+
+    //         data: {
+    //             labels: ['Paid', 'Pending', 'Overdue'],
+
+    //             datasets: [{
+    //                 data: [
+    //                     @Model.Payments.PaidInvoices,
+    //                     @Model.Payments.PendingInvoices,
+    //                     @Model.Payments.OverdueInvoices
+    //                 ]
+    //             }]
+    //         }
+    //     });
+
+    // Maintenance
+    // new Chart(
+    //     document.getElementById('maintenanceChart'),
+    //     {
+    //         type: 'pie',
+
+    //         data: {
+    //             labels: [
+    //                 'Open',
+    //                 'In Progress',
+    //                 'Completed'
+    //             ],
+
+    //             datasets: [{
+    //                 data: [
+    //                     @Model.Maintenance.OpenRequests,
+    //                     @Model.Maintenance.InProgressRequests,
+    //                     @Model.Maintenance.CompletedRequests
+    //                 ]
+    //             }]
+    //         }
+    //     });
+
+</script>
+
+<script>
+
+    const invoiceMonths =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.InvoiceStatusByMonth
+                    .Select(x => x.Month)));
+
+    const paidInvoices =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.InvoiceStatusByMonth
+                                .Select(x => x.PaidCount)));
+
+    const pendingInvoices =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.InvoiceStatusByMonth
+                                .Select(x => x.PendingCount)));
+
+    const overdueInvoices =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.InvoiceStatusByMonth
+                                .Select(x => x.OverdueCount)));
+
+    new Chart(
+        document.getElementById('paymentsChart'),
+        {
+            type: 'bar',
+
+            data: {
+                labels: invoiceMonths,
+
+                datasets: [
+                    {
+                        label: 'Paid',
+                        data: paidInvoices
+                    },
+                    {
+                        label: 'Pending',
+                        data: pendingInvoices
+                    },
+                    {
+                        label: 'Overdue',
+                        data: overdueInvoices
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Invoices'
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                }
+            }
+        });
+
+</script>
+
+<script>
+
+    const maintenanceMonths =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MaintenanceStatusByMonth
+                                .Select(x => x.Month)));
+
+    const openRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MaintenanceStatusByMonth
+                                .Select(x => x.OpenRequests)));
+
+    const inProgressRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MaintenanceStatusByMonth
+                                .Select(x => x.InProgressRequests)));
+
+    const completedRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.MaintenanceStatusByMonth
+                                .Select(x => x.CompletedRequests)));
+
+    new Chart(
+        document.getElementById('maintenanceChart'),
+        {
+            type: 'bar',
+
+            data: {
+                labels: maintenanceMonths,
+
+                datasets: [
+                    {
+                        label: 'Open',
+                        data: openRequests
+                    },
+                    {
+                        label: 'In Progress',
+                        data: inProgressRequests
+                    },
+                    {
+                        label: 'Completed',
+                        data: completedRequests
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Requests'
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                }
+            }
+        });
+
+</script>

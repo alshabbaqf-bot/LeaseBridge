@@ -1,4 +1,8 @@
-﻿using LeaseBridge.Reporting.Dtos;
+﻿using LeaseBridge.Reporting.Dtos.Account;
+using LeaseBridge.Reporting.Dtos.InvoiceReports;
+using LeaseBridge.Reporting.Dtos.LeaseReports;
+using LeaseBridge.Reporting.Dtos.MaintenanceReports;
+using LeaseBridge.Reporting.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 
@@ -9,10 +13,12 @@ namespace LeaseBridge.Reporting.Services
         private readonly HttpClient _http;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        // The constructor of the ReportingApiClient class takes an HttpClient and an IHttpContextAccessor as parameters.
-        // The HttpClient is used to make HTTP requests to the API,
-        // while the IHttpContextAccessor allows access to the current HTTP context,
-        // which is necessary for retrieving the access token for authentication.
+        /* 
+         * The constructor of the ReportingApiClient class takes an HttpClient and an IHttpContextAccessor as parameters.
+         * The HttpClient is used to make HTTP requests to the API,
+         * while the IHttpContextAccessor allows access to the current HTTP context,
+         * which is necessary for retrieving the access token for authentication. 
+         */
         public ReportingApiClient(HttpClient http, IHttpContextAccessor contextAccessor)
         {
             _http = http;
@@ -24,8 +30,11 @@ namespace LeaseBridge.Reporting.Services
         private async Task AttachBearerTokenAsync(HttpRequestMessage request)
         {
             var context = _contextAccessor.HttpContext;
+
             if (context == null) return;
+
             var token = await context.GetTokenAsync("access_token");
+
             if (!string.IsNullOrEmpty(token))
             {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -45,5 +54,180 @@ namespace LeaseBridge.Reporting.Services
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
 
+        public async Task<OverviewDto?> GetOverviewAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/overview");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<OverviewDto>();
+        }
+
+        public async Task<OccupancyStatisticsDto?> GetOccupancyStatisticsAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/occupancy");
+            
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<OccupancyStatisticsDto>();
+        }
+
+        public async Task<List<PropertyOccupancyDto>?> GetPropertyOccupancyAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/occupancy-by-property");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<PropertyOccupancyDto>>();
+        }
+
+        public async Task<PaymentStatisticsDto?> GetPaymentStatisticsAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/payments");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<PaymentStatisticsDto>();
+        }
+
+        public async Task<List<InvoiceStatusByMonthDto>?> GetInvoiceStatusByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/invoice-status-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<InvoiceStatusByMonthDto>>();
+        }
+
+        public async Task<List<OverdueInvoiceDto>?> GetOverdueInvoicesAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/overdue-invoices");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<OverdueInvoiceDto>>();
+        }
+
+        public async Task<MaintenanceStatisticsDto?> GetMaintenanceStatisticsAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/maintenance");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<MaintenanceStatisticsDto>();
+        }
+
+        public async Task<List<MaintenanceStatusByMonthDto>?> GetMaintenanceStatusByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/maintenance-status-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<MaintenanceStatusByMonthDto>>();
+        }
+
+        public async Task<List<ResolutionTimeByMonthDto>?> GetResolutionTimeByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/resolution-time-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<ResolutionTimeByMonthDto>>();
+        }
+
+        public async Task<double> GetAverageResolutionTimeAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/average-resolution-time");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<double>();
+        }
+
+        public async Task<List<HighPriorityRequestDto>?> GetHighPriorityRequestsAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/high-priority-requests");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<HighPriorityRequestDto>>();
+        }
     }
 }

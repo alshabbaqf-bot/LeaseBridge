@@ -1,0 +1,225 @@
+﻿@model LeaseBridge.Reporting.ViewModels.MaintenanceReportsViewModel
+
+@{
+    ViewData["Title"] = "Maintenance Reports";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4 pb-2 border-bottom">
+        <h1 class="text-navy fw-bold mb-0">Maintenance Reports</h1>
+    </div>
+
+    <!-- Chart -->
+    <div class="card-custom p-4 shadow-sm mb-4">
+
+        <h4 class="text-navy fw-bold mb-3">
+            Requests Status per Month
+        </h4>
+
+        <div style="height:400px;">
+            <canvas id="statusByMonthChart"></canvas>
+        </div>
+
+    </div>
+    
+    <div class="card-custom p-3 shadow-sm mb-4">
+
+        <small class="text-muted fw-bold text-uppercase">
+            Average Resolution Time
+        </small>
+
+        <h3 class="text-navy fw-bold mt-1">
+            @Model.AverageResolutionTime Days
+        </h3>
+
+    </div>
+
+    <div class="card-custom p-4 shadow-sm mb-4">
+
+        <h4 class="text-navy fw-bold mb-3">
+            Average Resolution Time by Month
+        </h4>
+
+        <div style="height:400px;">
+            <canvas id="resolutionChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- High Priority Requests -->
+    <div class="card-custom p-4 shadow-sm">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4 class="text-navy fw-bold mb-0">
+                Overdue Invoices
+            </h4>
+
+            <span class="badge bg-navy">
+                Total: @Model.HighPriorityRequests.Count
+            </span>
+
+        </div>
+
+        <table class="table table-striped table-hover">
+
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Unit</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.HighPriorityRequests.Any())
+                {
+                    @foreach (var request in Model.HighPriorityRequests)
+                    {
+                        <tr>
+                            <td>@request.RequestId</td>
+                            <td>@request.UnitNumber</td>
+                            <td>@request.Title</td>
+                            <td>@request.Status</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No high priority requests found.
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const months =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.StatusByMonth.Select(x => x.Month)));
+
+    const openRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.StatusByMonth.Select(x => x.OpenRequests)));
+
+    const inProgressRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.StatusByMonth.Select(x => x.InProgressRequests)));
+
+    const completedRequests =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.StatusByMonth.Select(x => x.CompletedRequests)));
+
+    const ctx =
+        document.getElementById('statusByMonthChart');
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: 'Open',
+                    data: openRequests
+                },
+                {
+                    label: 'In Progress',
+                    data: inProgressRequests
+                },
+                {
+                    label: 'Completed',
+                    data: completedRequests
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Requests'
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+<script>
+
+    const resolutionMonths =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.ResolutionTimeByMonth
+                                .Select(x => x.Month)));
+
+    const resolutionDays =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.ResolutionTimeByMonth
+                                .Select(x => x.AverageResolutionDays)));
+
+    new Chart(
+        document.getElementById('resolutionChart'),
+        {
+            type: 'line',
+
+            data: {
+                labels: resolutionMonths,
+
+                datasets: [{
+                    label: 'Average Resolution Days',
+                    data: resolutionDays
+                }]
+            },
+
+            options: {
+                responsive: true,
+
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Days'
+                        }
+                    }
+                }
+            }
+        });
+
+</script>

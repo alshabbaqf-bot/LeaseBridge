@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LeaseBridge.Reporting.Dtos
+namespace LeaseBridge.Reporting.Dtos.Account
 {
     public class LoginRequest
     {
@@ -8,6 +8,7 @@ namespace LeaseBridge.Reporting.Dtos
         public string Email { get; set; } = string.Empty;
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
     }

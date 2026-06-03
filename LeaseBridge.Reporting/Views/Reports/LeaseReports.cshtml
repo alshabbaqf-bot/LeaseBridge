@@ -1,0 +1,121 @@
+﻿@model LeaseBridge.Reporting.ViewModels.LeaseReportsViewModel
+
+@{
+    ViewData["Title"] = "Lease Reports";
+}
+
+@* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> *@
+
+<div class="container mt-4">
+    
+    <div class="mb-4 pb-2 border-bottom">
+        <h1 class="text-navy fw-bold mb-0">Lease Reports</h1>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="card-custom p-4 shadow-sm">
+            <h5 class="text-navy fw-bold mb-3">Overall Unit Occupancy</h5>
+
+            <div class="d-flex justify-content-center">
+                <div style="width:350px; height:350px;">
+                    <canvas id="occupancyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-custom p-4 shadow-sm mt-4">
+
+            <h4 class="text-navy fw-bold mb-3">
+                Occupancy by Property
+            </h4>
+
+            <div style="height:400px;">
+                <canvas id="propertyOccupancyChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('occupancyChart');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Available', 'Occupied'],
+            datasets: [{
+                data: [
+                    @Model.OccupancyStatistics.AvailableUnits,
+                    @Model.OccupancyStatistics.OccupiedUnits
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+
+    const propertyNames =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.PropertyOccupancies.Select(p => p.PropertyName)));
+
+    const occupancyRates =
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                        Model.PropertyOccupancies.Select(p => p.OccupancyRate)));
+
+    const propertyCtx =
+        document.getElementById('propertyOccupancyChart');
+
+    new Chart(propertyCtx, {
+        type: 'bar',
+        data: {
+            labels: propertyNames,
+            datasets: [{
+                label: 'Occupancy Rate (%)',
+                data: occupancyRates
+            }]
+        },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Properties'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                    display: true,
+                    text: 'Occupancy Rate (%)'
+                }
+            }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+</script>
+
