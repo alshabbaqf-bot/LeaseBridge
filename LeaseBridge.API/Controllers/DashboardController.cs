@@ -253,6 +253,22 @@ namespace LeaseBridge.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("average-resolution-time")]
+        public async Task<IActionResult> GetAverageResolutionTime()
+        {
+            var avgDays = await _context.MaintenanceRequests
+                .Where(r =>
+                    r.StatusId == 3 &&
+                    r.CompletedAt != null)
+                .AverageAsync(r =>
+                    (double?)EF.Functions.DateDiffDay(
+                        r.CreatedAt,
+                        r.CompletedAt!.Value))
+                ?? 0;
+
+            return Ok(Math.Round(avgDays, 2));
+        }
+
         [HttpGet("high-priority-requests")]
         public async Task<IActionResult> GetHighPriorityRequests()
         {

@@ -13,6 +13,9 @@ namespace LeaseBridge.Reporting.ViewModels
         public List<ResolutionTimeByMonthDto>ResolutionTimeByMonth
         { get; set; } = new();
 
+        public double AverageResolutionTime
+        { get; set; }
+
         public List<HighPriorityRequestDto> HighPriorityRequests
         { get; set; } = new();
     }

@@ -2,6 +2,7 @@
 using LeaseBridge.Reporting.Dtos.InvoiceReports;
 using LeaseBridge.Reporting.Dtos.LeaseReports;
 using LeaseBridge.Reporting.Dtos.MaintenanceReports;
+using LeaseBridge.Reporting.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 
@@ -51,6 +52,22 @@ namespace LeaseBridge.Reporting.Services
             }
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
+        }
+
+        public async Task<OverviewDto?> GetOverviewAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/overview");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<OverviewDto>();
         }
 
         public async Task<OccupancyStatisticsDto?> GetOccupancyStatisticsAsync()
@@ -179,6 +196,22 @@ namespace LeaseBridge.Reporting.Services
 
             return await response.Content
                 .ReadFromJsonAsync<List<ResolutionTimeByMonthDto>>();
+        }
+
+        public async Task<double> GetAverageResolutionTimeAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/average-resolution-time");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<double>();
         }
 
         public async Task<List<HighPriorityRequestDto>?> GetHighPriorityRequestsAsync()

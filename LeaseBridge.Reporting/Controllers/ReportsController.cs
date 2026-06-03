@@ -16,8 +16,6 @@ namespace LeaseBridge.Reporting.Controllers
             _apiClient = apiClient;
         }
 
-        public IActionResult Index() => View();
-
         public async Task<IActionResult> LeaseReports()
         {
             var occupancyTask =
@@ -81,24 +79,38 @@ namespace LeaseBridge.Reporting.Controllers
             var highPriorityTask =
                 _apiClient.GetHighPriorityRequestsAsync();
 
-            var statusTask =
+            var statusByMonthTask =
                 _apiClient.GetMaintenanceStatusByMonthAsync();
 
-            var resolutionTask =
+            var resolutionByMonthTask =
                 _apiClient.GetResolutionTimeByMonthAsync();
+
+            var avgResolutionTask =
+                _apiClient.GetAverageResolutionTimeAsync();
 
             await Task.WhenAll(
                 statisticsTask,
                 highPriorityTask,
-                statusTask,
-                resolutionTask);
+                statusByMonthTask,
+                resolutionByMonthTask,
+                avgResolutionTask);
 
             var model = new MaintenanceReportsViewModel
             {
-                Statistics = statisticsTask.Result ?? new(),
-                HighPriorityRequests = highPriorityTask.Result ?? new(),
-                StatusByMonth = statusTask.Result ?? new(),
-                ResolutionTimeByMonth = resolutionTask.Result ?? new()
+                Statistics =
+                    statisticsTask.Result ?? new(),
+
+                HighPriorityRequests =
+                    highPriorityTask.Result ?? new(),
+
+                StatusByMonth =
+                    statusByMonthTask.Result ?? new(),
+
+                ResolutionTimeByMonth =
+                    resolutionByMonthTask.Result ?? new(),
+
+                AverageResolutionTime =
+                    avgResolutionTask.Result
             };
 
             return View(model);
