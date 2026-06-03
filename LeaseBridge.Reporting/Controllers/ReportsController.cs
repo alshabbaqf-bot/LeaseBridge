@@ -48,8 +48,8 @@ namespace LeaseBridge.Reporting.Controllers
                     ?? new List<OverdueInvoiceDto>(),
 
                 MonthlyStatus =
-        await _apiClient.GetInvoiceStatusByMonthAsync()
-        ?? new List<InvoiceStatusByMonthDto>()
+                    await _apiClient.GetInvoiceStatusByMonthAsync()
+                    ?? new List<InvoiceStatusByMonthDto>()
             };
 
             return View(model);
@@ -57,19 +57,22 @@ namespace LeaseBridge.Reporting.Controllers
 
         public async Task<IActionResult> MaintenanceReports()
         {
-            var stats =
-                await _apiClient.GetMaintenanceStatisticsAsync();
-
-            var requests =
-                await _apiClient.GetHighPriorityRequestsAsync();
-
-            var vm = new MaintenanceReportsViewModel
+            var model = new MaintenanceReportsViewModel
             {
-                Statistics = stats!,
-                HighPriorityRequests = requests ?? new()
+                Statistics =
+                    await _apiClient.GetMaintenanceStatisticsAsync()
+                    ?? new(),
+
+                HighPriorityRequests =
+                    await _apiClient.GetHighPriorityRequestsAsync()
+                    ?? new(),
+
+                StatusByMonth =
+                    await _apiClient.GetMaintenanceStatusByMonthAsync()
+                    ?? new()
             };
 
-            return View(vm);
+            return View(model);
         }
     }
 }

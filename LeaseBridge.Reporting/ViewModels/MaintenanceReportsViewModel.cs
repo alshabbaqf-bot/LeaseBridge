@@ -7,6 +7,9 @@ namespace LeaseBridge.Reporting.ViewModels
         public MaintenanceStatisticsDto Statistics
         { get; set; } = new();
 
+        public List<MaintenanceStatusByMonthDto> StatusByMonth
+        { get; set; } = new();
+
         public List<HighPriorityRequestDto> HighPriorityRequests
         { get; set; } = new();
     }

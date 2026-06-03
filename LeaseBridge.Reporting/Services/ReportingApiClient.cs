@@ -149,6 +149,22 @@ namespace LeaseBridge.Reporting.Services
                 .ReadFromJsonAsync<MaintenanceStatisticsDto>();
         }
 
+        public async Task<List<MaintenanceStatusByMonthDto>?> GetMaintenanceStatusByMonthAsync()
+        {
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                "api/dashboard/maintenance-status-by-month");
+
+            await AttachBearerTokenAsync(request);
+
+            var response = await _http.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content
+                .ReadFromJsonAsync<List<MaintenanceStatusByMonthDto>>();
+        }
+
         public async Task<List<HighPriorityRequestDto>?> GetHighPriorityRequestsAsync()
         {
             var request = new HttpRequestMessage(

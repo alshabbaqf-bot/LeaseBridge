@@ -106,7 +106,7 @@ namespace LeaseBridge.API.Controllers
                     Month = new DateTime(
                         g.Key.Year,
                         g.Key.Month,
-                        1).ToString("MMM"),
+                        1).ToString("MMM yyyy"),
 
                     PaidCount =
                         g.Count(i => i.StatusId == 2),
@@ -175,6 +175,44 @@ namespace LeaseBridge.API.Controllers
                 HighPriorityRequests = highPriorityRequests,
                 TotalAssignments = totalAssignments
             });
+        }
+
+        [HttpGet("maintenance-status-by-month")]
+        public async Task<IActionResult> GetMaintenanceStatusByMonth()
+        {
+            var data = await _context.MaintenanceRequests
+                .GroupBy(r => new
+                {
+                    r.CreatedAt.Year,
+                    r.CreatedAt.Month
+                })
+                .Select(g => new
+                {
+                    g.Key.Year,
+                    g.Key.Month,
+
+                    OpenRequests =
+                        g.Count(r => r.StatusId == 1),
+
+                    InProgressRequests =
+                        g.Count(r => r.StatusId == 2),
+
+                    CompletedRequests =
+                        g.Count(r => r.StatusId == 3)
+                })
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .ToListAsync();
+
+            var result = data.Select(x => new MaintenanceStatusByMonthDto
+            {
+                Month = new DateTime(x.Year, x.Month, 1).ToString("MMM yyyy"),
+                OpenRequests = x.OpenRequests,
+                InProgressRequests = x.InProgressRequests,
+                CompletedRequests = x.CompletedRequests
+            });
+
+            return Ok(result);
         }
 
         [HttpGet("high-priority-requests")]
