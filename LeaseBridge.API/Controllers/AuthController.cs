@@ -78,11 +78,14 @@ namespace LeaseBridge.API.Controllers
             if (existingUser != null)
                 return BadRequest("Email already exists.");
 
-            // Create roles if they do not exist
-            if (!await _roleManager.RoleExistsAsync(dto.Role))
+            
+
+            const string role = "Tenant";
+
+            if (!await _roleManager.RoleExistsAsync(role))
             {
                 await _roleManager.CreateAsync(
-                    new IdentityRole(dto.Role));
+                    new IdentityRole(role));
             }
 
             // Create Identity user
@@ -99,14 +102,13 @@ namespace LeaseBridge.API.Controllers
                 dto.Password
             );
 
-            // Check creation result
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            // Assign role
+            // Assign Tenant role
             await _userManager.AddToRoleAsync(
                 identityUser,
-                dto.Role
+                role
             );
 
             // Create AppUser record
@@ -117,7 +119,7 @@ namespace LeaseBridge.API.Controllers
                 LastName = dto.LastName,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
-                IsAvailable = dto.Role == "Staff"
+                IsAvailable = false
             };
 
             // Save AppUser
